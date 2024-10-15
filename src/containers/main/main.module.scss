@@ -1,0 +1,35 @@
+.main{
+  position: relative;
+  padding: 16px;
+  height: 100vh;
+  width: 100vw;
+}
+
+.tabs{
+  display: flex;
+
+  >div{
+    padding: 0 16px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    &.active{
+      cursor: default;
+      background: #82e18a;
+      &:hover{
+        background: #82e18a;
+      }
+    }
+
+    &:hover{
+      background-color: rgba(236, 232, 232, 0.38);
+    }
+  }
+}
+
+.content{
+  padding: 16px;
+}

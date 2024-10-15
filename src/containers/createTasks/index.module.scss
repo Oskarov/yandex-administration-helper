@@ -1,0 +1,43 @@
+.dropContainer {
+  width: 600px;
+}
+
+.autoInput {
+  margin-bottom: 16px;
+}
+
+.sprintButtons {
+  padding-top: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  > * {
+    width: 49%;
+  }
+}
+.performers{
+  margin: 24px 0;
+  border: 1px solid #8fc851;
+  border-radius: 8px;
+  width: 400px
+}
+.performerItem{
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.name{
+  padding: 16px 0;
+  display: flex;
+  align-items: center;
+
+  >*{
+    padding: 8px 8px;
+  }
+}
+
+.optionName{
+  margin: 8px 0
+}

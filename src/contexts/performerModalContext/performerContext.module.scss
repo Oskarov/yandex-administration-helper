@@ -1,0 +1,19 @@
+.getTask {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.trackerInfo{
+  padding-top: 16px;
+
+  >div{
+    &:first-child{
+      padding-bottom: 8px;
+      font-size: 12px;
+    }
+    &:last-child{
+      font-weight: bold;
+    }
+  }
+}

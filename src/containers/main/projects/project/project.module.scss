@@ -1,0 +1,42 @@
+.list {
+
+  &.closed{
+    display: none;
+  }
+
+  > div {
+    &:last-child {
+      flex-direction: inherit;
+      flex-wrap: wrap;
+
+      > div {
+
+      }
+    }
+  }
+}
+
+.listRow {
+  min-height: 64px;
+  border: 3px solid rgba(0, 60, 255, 0.32);
+  border-radius: 8px;
+  margin-bottom: 16px;
+  flex-direction: column;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin: 8px 0;
+
+  >svg{
+    cursor: pointer;
+  }
+  >a{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-right: 10px;
+  }
+}

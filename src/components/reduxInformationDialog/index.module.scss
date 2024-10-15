@@ -1,0 +1,52 @@
+
+.content {
+  position: relative;
+  width: 489px;
+  padding: 56px 32px 40px !important;
+
+  &.big{
+    width: 600px;
+  }
+
+  .roundButton {
+    position: absolute;
+    right: 8px;
+    top: 8px;
+    text-align: right;
+
+    > * {
+      display: block;
+      width: 30px;
+      height: 30px;
+      border-radius: 50% !important;
+    }
+  }
+}
+
+.title {
+  margin-bottom: 40px;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 32px;
+  text-align: center;
+}
+
+.onlyDone{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  > * {
+    width: 200px;
+  }
+}
+
+.area{
+  min-width: 424px;
+}

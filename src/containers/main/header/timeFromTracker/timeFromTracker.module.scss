@@ -1,0 +1,48 @@
+.queueModal {
+  height: 600px;
+}
+
+.autoInput{
+  margin-bottom: 16px;
+}
+
+.sprintButtons{
+  padding-top: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  >*{
+    width: 49%;
+  }
+}
+
+.timeTable{
+  padding-top: 8px;
+}
+
+.timeItem{
+  padding: 8px 0;
+}
+
+.timeName{
+  padding-bottom: 4px;
+  font-weight: bold;
+}
+
+.timeNumber{
+  padding-bottom: 4px;
+  color: #59dd25;
+}
+
+
+.timeTasks {
+  > div {
+    white-space: nowrap;
+    font-weight: normal;
+
+    >span {
+      padding-left: 8px;
+    }
+  }
+}
