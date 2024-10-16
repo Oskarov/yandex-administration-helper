@@ -20,13 +20,13 @@
     "@types/react-redux": "^7.1.25",
     "axios": "^0.21.1",
     "classnames": "^2.3.2",
-    "node-sass": "^8.0.0",
     "react": "^18.2.0",
     "react-beautiful-dnd": "^13.1.1",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
     "redux": "^4.2.1",
     "redux-persist": "^6.0.0",
+    "sass": "^1.79.5",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },
@@ -34,6 +34,7 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -b ghp2 -d build",
     "start": "set PORT=3030 && react-scripts start",
+    "dev": "yarn start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
