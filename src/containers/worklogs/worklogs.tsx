@@ -10,6 +10,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import httpClient from 'api/httpClient';
 
 export const FORMAT_TYPE = 'YYYY-MM-DDThh:mm:ss.sss±hhmm';
 
@@ -24,8 +25,28 @@ const Worklogs: React.FC = () =>  {
   const [dateFrom, setDateFrom] = useState<Dayjs | null>(dayjs(new Date())); 
   const [dateTo, setDateTo] = useState<Dayjs | null>(dayjs(new Date()));
 
-  // const a = dayjs(dateFrom).format(FORMAT_TYPE);
-  // console.log('a', a);
+  const [response, setResponse] = useState<any>(null);
+
+  const getWorkLogs = async () => {
+    try {
+      const response = await httpClient.post('/worklogs/_search', {
+        createdBy: selectedId,
+        createdAt: {
+          from: dayjs(dateFrom).format(FORMAT_TYPE),
+          to: dayjs(dateTo).format(FORMAT_TYPE),
+        }
+      });
+
+      if (response) {
+        setResponse(response);
+      }
+      
+      console.log('response', response);
+    } catch (e) {
+      console.error('e', e);
+      setResponse(e);
+    }
+  }
 
   return (
     <div className={styles.Worklogs}>
@@ -76,7 +97,7 @@ const Worklogs: React.FC = () =>  {
             variant="outlined"
             color="primary"
             disabled={!selectedId}
-            onClick={() => alert('Отправить запрос')}
+            onClick={getWorkLogs}
             className="medium primary outlined"
           >
             Получить
@@ -86,7 +107,8 @@ const Worklogs: React.FC = () =>  {
 
       {/* bottom */}
       <div className={styles.Worklogs__bottom}>
-
+        {/* show content here */}
+        {response && JSON.stringify(response)}
       </div>
     </div>
   );
