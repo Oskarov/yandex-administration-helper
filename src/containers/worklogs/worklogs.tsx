@@ -16,7 +16,7 @@ export const FORMAT_TYPE = 'YYYY-MM-DDThh:mm:ss.sss±hhmm';
 
 const Worklogs: React.FC = () =>  {
   // selectors
-  const performersOptions = useSelector((store: TStore) => store.performers.items);
+  const performers = useSelector((store: TStore) => store.performers.items);
 
   // local state
   const [selectedId, setSelectedId] = useState<string>('');
@@ -30,7 +30,7 @@ const Worklogs: React.FC = () =>  {
   const getWorkLogs = async () => {
     try {
       const response = await httpClient.post('/worklogs/_search', {
-        createdBy: selectedId,
+        // createdBy: selectedId,
         createdAt: {
           from: dayjs(dateFrom).format(FORMAT_TYPE),
           to: dayjs(dateTo).format(FORMAT_TYPE),
@@ -40,10 +40,7 @@ const Worklogs: React.FC = () =>  {
       if (response) {
         setResponse(response);
       }
-      
-      console.log('response', response);
     } catch (e) {
-      console.error('e', e);
       setResponse(e);
     }
   }
@@ -59,7 +56,7 @@ const Worklogs: React.FC = () =>  {
           <Autocomplete
             disablePortal
             sx={{ width: 300 }}
-            options={performersOptions.map(item => ({
+            options={performers.map(item => ({
               label: `${item.lastName} ${item.firstName}`,
               key: item.trackerId,
             }))}
