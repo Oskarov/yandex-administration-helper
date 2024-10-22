@@ -10,9 +10,7 @@ import Worklogs         from 'containers/worklogs/worklogs';
 import CN               from "classnames";
 import styles           from "./main.module.scss";
 
-interface MainProps {
-
-}
+interface MainProps {}
 
 export const tabs: string[] = [
     'Статистика по спринту', 
@@ -21,14 +19,18 @@ export const tabs: string[] = [
     'Ворклоги',
 ];
 
-const Main: React.FC<MainProps> = ({}) => {
+const Main: React.FC<MainProps> = () => {
     const [tab, setTab] = React.useState<number>(1);
 
     return (
         <div className={styles.main}>
             <div className={styles.tabs}>
                 {tabs.map((item, index) => (
-                    <div className={CN({[styles.active]: tab === index + 1})} onClick={() => setTab(index + 1)}>
+                    <div
+                        key={`${index + 1} - ${item}`} 
+                        onClick={() => setTab(index + 1)}
+                        className={CN({[styles.active]: tab === index + 1})} 
+                    >
                         <span>{item}</span>
                     </div>
                 ))}
