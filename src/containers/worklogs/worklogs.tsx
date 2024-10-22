@@ -60,7 +60,7 @@ const Worklogs: React.FC = () =>  {
               label: `${item.lastName} ${item.firstName}`,
               key: item.trackerId,
             }))}
-            renderInput={(params) => <TextField {...params} label="ID исполнителя" value={selectedId} />}
+            renderInput={(params) => <TextField {...params} label="Исполнитель" value={selectedId} />}
             onChange={(_event, value) => setSelectedId(value?.key ? `${value.key}` : '')}
           />
         </div>
