@@ -30,7 +30,7 @@ const Worklogs: React.FC = () =>  {
   const getWorkLogs = async () => {
     try {
       const response = await httpClient.post('/worklogs/_search', {
-        // createdBy: selectedId,
+        createdBy: selectedId,
         createdAt: {
           from: dayjs(dateFrom).format(FORMAT_TYPE),
           to: dayjs(dateTo).format(FORMAT_TYPE),
