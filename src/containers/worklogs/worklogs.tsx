@@ -11,36 +11,45 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import httpClient from 'api/httpClient';
+import Loader from 'components/loader';
 
-export const FORMAT_TYPE = 'YYYY-MM-DDThh:mm:ss.sss±hhmm';
+// 2024-10-20T16:07:17+03:00 - full valid date
+export const FORMAT_TYPE = 'YYYY-MM-DD';
 
 const Worklogs: React.FC = () =>  {
   // selectors
   const performers = useSelector((store: TStore) => store.performers.items);
 
-  // local state
+  // selected performer id
   const [selectedId, setSelectedId] = useState<string>('');
 
-  // dayjs('2022-04-17')
+  // dates
   const [dateFrom, setDateFrom] = useState<Dayjs | null>(dayjs(new Date())); 
   const [dateTo, setDateTo] = useState<Dayjs | null>(dayjs(new Date()));
 
+  // response
+  const [loading, setLoading] = useState<boolean>(false);
   const [response, setResponse] = useState<any>(null);
 
-  const getWorkLogs = async () => {
+  const getWorkLog = async () => {
+    setLoading(true);
+    setResponse(null);
+
     try {
-      const response = await httpClient.post('/worklogs/_search', {
+      const response = await httpClient.post('/worklog/_search', {
         createdBy: selectedId,
         createdAt: {
-          from: dayjs(dateFrom).format(FORMAT_TYPE),
-          to: dayjs(dateTo).format(FORMAT_TYPE),
+          from: `${dayjs(dateFrom).format(FORMAT_TYPE)}T00:00:00`,
+          to: `${dayjs(dateTo).format(FORMAT_TYPE)}T23:59:59`,
         }
       });
 
       if (response) {
+        setLoading(false);
         setResponse(response);
       }
     } catch (e) {
+      setLoading(false);
       setResponse(e);
     }
   }
@@ -94,7 +103,7 @@ const Worklogs: React.FC = () =>  {
             variant="outlined"
             color="primary"
             disabled={!selectedId}
-            onClick={getWorkLogs}
+            onClick={getWorkLog}
             className="medium primary outlined"
           >
             Получить
@@ -104,6 +113,9 @@ const Worklogs: React.FC = () =>  {
 
       {/* bottom */}
       <div className={styles.Worklogs__bottom}>
+        {/* loader */}
+        <Loader loading={loading} />
+
         {/* show content here */}
         {response && JSON.stringify(response)}
       </div>
