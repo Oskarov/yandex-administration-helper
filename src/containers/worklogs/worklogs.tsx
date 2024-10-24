@@ -12,6 +12,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import httpClient from 'api/httpClient';
 import Loader from 'components/loader';
+import CalculateHoursFromTrackerTask from 'utils/calculateHoursFromTrackerTack';
 
 // 2024-10-20T16:07:17+03:00 - full valid date
 export const FORMAT_TYPE = 'YYYY-MM-DD';
@@ -36,7 +37,7 @@ const Worklogs: React.FC = () =>  {
     setResponse(null);
 
     try {
-      const response = await httpClient.post('/worklog/_search', {
+      const { data }  = await httpClient.post('/worklog/_search', {
         createdBy: selectedId,
         createdAt: {
           from: `${dayjs(dateFrom).format(FORMAT_TYPE)}T00:00:00`,
@@ -44,15 +45,38 @@ const Worklogs: React.FC = () =>  {
         }
       });
 
-      if (response) {
+      if (data) {
         setLoading(false);
-        setResponse(response);
+        console.log('data', data);
+
+        const newData = data.reduce((total: any, item: any) => {
+          // обрезаем строку даты до формата YYYY-MM-DD
+          const logDay = item.createdAt.slice(0, 10);
+          
+          // создаем объект задач с нужными нам полями
+          const logTask = {
+            code: item.issue.key,
+            name: item.issue.display,
+            link: item.issue.self,
+            comment: item.comment,
+            duration: CalculateHoursFromTrackerTask(item.duration),
+          };
+
+          // добавляем день как поле объекта со значениям массива залогированных задач
+          total[logDay] = [...total[logDay] || [], logTask];
+
+          return total;
+        }, {});
+
+        setResponse(newData);
       }
     } catch (e) {
       setLoading(false);
       setResponse(e);
     }
   }
+
+  console.log('response', response);
 
   return (
     <div className={styles.Worklogs}>
