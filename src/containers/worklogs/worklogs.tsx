@@ -58,7 +58,8 @@ const Worklogs: React.FC = () =>  {
             code: item.issue.key,
             name: item.issue.display,
             link: item.issue.self,
-            comment: item.comment,
+            comment: item.comment || null,
+            createdAt: item.createdAt,
             duration: CalculateHoursFromTrackerTask(item.duration),
           };
 
@@ -107,7 +108,7 @@ const Worklogs: React.FC = () =>  {
               disableFuture
               value={dateFrom}
               label="Дата с"
-              onChange={(newValue) => setDateFrom(newValue)}
+              onChange={newValue => setDateFrom(newValue)}
             />
 
             &nbsp;&nbsp;
@@ -117,7 +118,8 @@ const Worklogs: React.FC = () =>  {
               disableFuture
               value={dateTo}
               label="Дата по"
-              onChange={(newValue) => setDateTo(newValue)}
+              minDate={dayjs(dateFrom)}
+              onChange={newValue => setDateTo(newValue)}
             />
           </LocalizationProvider>
         </div>
@@ -152,3 +154,29 @@ const Worklogs: React.FC = () =>  {
 };
 
 export default Worklogs;
+
+// TODO:
+
+// 0. Сохранить запрос в сервисе 
+// 1. Сделать из селекта выбрать исполнителя мультиселект 
+// 2. Отправлять запрос через таймаут по остальным исполнителям, так как этот эндпоинт не поддреживает массив исполнителей в поле createdBy
+// 3. После получения данных по первому запросу, нужно сделать второй запрос, чтобы получить данные по типу задачи, так как в первом запросе нет поле type у issues
+
+// Примерный формат данных после обработки
+// {
+//   имя_исполнителя1: {
+//     день_1: [задача1, задача2,...], // должно быть поле type у задачи после второго запроса
+//     день_2: [задача1, задача2,...],
+//     ...,
+//     день_n: [задача1, задача2,...],
+//   },
+//
+//   имя_исполнителя2: {
+//     день_1: [задача1, задача2,...],
+//     день_2: [задача1, задача2,...],
+//     ...,
+//     день_n: [задача1, задача2,...],
+//   },
+//
+//   ...,
+// }
