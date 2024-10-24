@@ -141,7 +141,11 @@ const Worklogs: React.FC = () =>  {
         <Loader loading={loading} />
 
         {/* show content here */}
-        {response && JSON.stringify(response)}
+        {response && (
+          <div>
+            <pre>{JSON.stringify(response, null, 2)}</pre>
+          </div>
+        )}
       </div>
     </div>
   );
