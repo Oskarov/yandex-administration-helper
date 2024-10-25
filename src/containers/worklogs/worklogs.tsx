@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import styles from './worklogs.module.scss';
 import { Autocomplete, Button, TextField } from '@mui/material';
 import { useSelector } from 'react-redux';
@@ -17,7 +17,7 @@ import CalculateHoursFromTrackerTask from 'utils/calculateHoursFromTrackerTack';
 // 2024-10-20T16:07:17+03:00 - full valid date
 export const FORMAT_TYPE = 'YYYY-MM-DD';
 
-const Worklogs: React.FC = () =>  {
+const Worklogs: React.FC = () => {
   // selectors
   const performers = useSelector((store: TStore) => store.performers.items);
 
@@ -25,7 +25,7 @@ const Worklogs: React.FC = () =>  {
   const [selectedId, setSelectedId] = useState<string>('');
 
   // dates
-  const [dateFrom, setDateFrom] = useState<Dayjs | null>(dayjs(new Date())); 
+  const [dateFrom, setDateFrom] = useState<Dayjs | null>(dayjs(new Date()));
   const [dateTo, setDateTo] = useState<Dayjs | null>(dayjs(new Date()));
 
   // response
@@ -37,12 +37,12 @@ const Worklogs: React.FC = () =>  {
     setResponse(null);
 
     try {
-      const { data }  = await httpClient.post('/worklog/_search', {
+      const { data } = await httpClient.post('/worklog/_search', {
         createdBy: selectedId,
         createdAt: {
           from: `${dayjs(dateFrom).format(FORMAT_TYPE)}T00:00:00`,
           to: `${dayjs(dateTo).format(FORMAT_TYPE)}T23:59:59`,
-        }
+        },
       });
 
       if (data) {
@@ -52,7 +52,7 @@ const Worklogs: React.FC = () =>  {
         const newData = data.reduce((total: any, item: any) => {
           // обрезаем строку даты до формата YYYY-MM-DD
           const logDay = item.createdAt.slice(0, 10);
-          
+
           // создаем объект задач с нужными нам полями
           const logTask = {
             code: item.issue.key,
@@ -64,7 +64,7 @@ const Worklogs: React.FC = () =>  {
           };
 
           // добавляем день как поле объекта со значениям массива залогированных задач
-          total[logDay] = [...total[logDay] || [], logTask];
+          total[logDay] = [...(total[logDay] || []), logTask];
 
           return total;
         }, {});
@@ -75,7 +75,7 @@ const Worklogs: React.FC = () =>  {
       setLoading(false);
       setResponse(e);
     }
-  }
+  };
 
   console.log('response', response);
 
@@ -94,43 +94,44 @@ const Worklogs: React.FC = () =>  {
               label: `${item.lastName} ${item.firstName}`,
               key: item.trackerId,
             }))}
-            renderInput={(params) => <TextField {...params} label="Исполнитель" value={selectedId} />}
-            onChange={(_event, value) => setSelectedId(value?.key ? `${value.key}` : '')}
+            renderInput={params => (
+              <TextField {...params} label='Исполнитель' value={selectedId} />
+            )}
+            onChange={(_event, value) =>
+              setSelectedId(value?.key ? `${value.key}` : '')
+            }
           />
         </div>
 
         <div className={styles.Worklogs__dates}>
-          <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ru">
+          <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='ru'>
             <h2>Укажите даты</h2>
-
             {/* dateFrom */}
             <DatePicker
               disableFuture
               value={dateFrom}
-              label="Дата с"
+              label='Дата с'
               onChange={newValue => setDateFrom(newValue)}
             />
-
             &nbsp;&nbsp;
-
             {/* dateFrom */}
             <DatePicker
               disableFuture
               value={dateTo}
-              label="Дата по"
+              label='Дата по'
               minDate={dayjs(dateFrom)}
               onChange={newValue => setDateTo(newValue)}
             />
           </LocalizationProvider>
         </div>
-        
+
         <div className={styles.Worklogs__action}>
           <Button
-            variant="outlined"
-            color="primary"
+            variant='outlined'
+            color='primary'
             disabled={!selectedId}
             onClick={getWorkLog}
-            className="medium primary outlined"
+            className='medium primary outlined'
           >
             Получить
           </Button>
@@ -158,7 +159,7 @@ export default Worklogs;
 // TODO:
 
 // 0. Сохранить запрос в сервисе + добавить новый слайс для ворклогов
-// 1. Сделать из селекта выбрать исполнителя мультиселект 
+// 1. Сделать из селекта выбрать исполнителя мультиселект
 // 2. Отправлять запрос через таймаут по остальным исполнителям, так как этот эндпоинт не поддреживает массив исполнителей в поле createdBy
 // 3. После получения данных по первому запросу, нужно сделать второй запрос, чтобы получить данные по типу задачи, так как в первом запросе нет поле type у issues
 
