@@ -11,7 +11,12 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import Loader from 'components/loader';
-import { setDates, setPerformers, TPerformetOption } from 'slices/worklogs';
+import {
+  resetState,
+  setDates,
+  setPerformers,
+  TPerformetOption,
+} from 'slices/worklogs';
 import { getWorklogs } from 'effects/worklogsEffects';
 
 const Worklogs: React.FC = () => {
@@ -44,7 +49,7 @@ const Worklogs: React.FC = () => {
 
   // интервальные запросы для получения логов
   const getWorklogsClick = () => {
-    // если выбран один исполнитель
+    // если выбран только один исполнитель
     if (selectedPerformers.length === 1) {
       return dispatch(getWorklogs(selectedPerformers, dateFrom, dateTo));
 
@@ -79,6 +84,7 @@ const Worklogs: React.FC = () => {
             disablePortal
             sx={{ width: 430 }}
             noOptionsText='Нет доступных исполнителей'
+            value={selectedPerformers}
             options={performersOptions.filter(option => {
               const selectedPerformerIds = selectedPerformers.map(
                 item => item.key,
@@ -129,13 +135,22 @@ const Worklogs: React.FC = () => {
 
         <div className={styles.Worklogs__action}>
           <Button
-            variant='outlined'
+            variant='contained'
             color='primary'
             disabled={!selectedPerformers.length}
             onClick={getWorklogsClick}
             className='medium primary outlined'
           >
             Получить
+          </Button>
+
+          <Button
+            variant='outlined'
+            color='secondary'
+            onClick={() => dispatch(resetState())}
+            className='medium primary outlined'
+          >
+            Сбросить
           </Button>
         </div>
       </div>

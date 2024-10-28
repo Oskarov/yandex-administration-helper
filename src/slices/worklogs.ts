@@ -35,8 +35,10 @@ type TDate = {
 
 const worklogsSlice = createSlice({
   name: 'worklogs',
-  initialState: initialState,
+  initialState,
   reducers: {
+    resetState: () => initialState,
+
     setLoading(state, { payload }: PayloadAction<boolean>) {
       state.loading = payload;
     },
@@ -68,5 +70,11 @@ const worklogsSlice = createSlice({
 
 export const worklogsReducer = worklogsSlice.reducer;
 
-export const { setLoading, setError, setPerformers, setDates, setWorklogs } =
-  worklogsSlice.actions;
+export const {
+  resetState,
+  setLoading,
+  setError,
+  setPerformers,
+  setDates,
+  setWorklogs,
+} = worklogsSlice.actions;

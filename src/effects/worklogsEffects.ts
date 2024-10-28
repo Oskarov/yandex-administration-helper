@@ -35,6 +35,7 @@ export const getWorklogs = (
       );
 
       if (success && data) {
+        // чтобы загрузка не оставливалась при промежуточных запросах
         dispatch(setLoading(false));
 
         const newData = data.reduce((total: any, item: any) => {
