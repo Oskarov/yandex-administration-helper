@@ -15,7 +15,7 @@ export const FORMAT_TYPE = 'YYYY-MM-DD';
 export const REQUEST_INTERVAL = 300;
 
 // точеные экшены для получения ворклога одного исполнителя
-export const getWorklogs = (
+export const getWorklogSingle = (
   selectedPerformers: TPerformetOption[],
   dateFrom: Dayjs | null,
   dateTo: Dayjs | null,
@@ -28,7 +28,7 @@ export const getWorklogs = (
 
     try {
       const { data, success } = await WorklogService.searchWorklogs(
-        `${selectedPerformers[index].key}`,
+        `${selectedPerformers[index].key}`, // id исполнителя
         _dateFrom,
         _dateTo,
       );
@@ -87,20 +87,22 @@ export const getWorklogsMultiply = (
     setTimeout(() => {
       // если выбран только один исполнитель - делаем только один запрос
       if (selectedPerformers.length === 1) {
-        return dispatch(getWorklogs(selectedPerformers, dateFrom, dateTo));
+        return dispatch(getWorklogSingle(selectedPerformers, dateFrom, dateTo));
 
         // если выбрано несколько исполнителей
       } else {
         // то сразу делаем запрос для первого
-        dispatch(getWorklogs(selectedPerformers, dateFrom, dateTo));
+        dispatch(getWorklogSingle(selectedPerformers, dateFrom, dateTo));
 
-        // а для остальных запросов делаем через интервалы 300мс
+        // а для остальных запросов делаем через интервалы REQUEST_INTERVAL
         let counter = 0;
         const intervalId = setInterval(() => {
           counter++;
 
           // counter - хранит индекс исполнителя
-          dispatch(getWorklogs(selectedPerformers, dateFrom, dateTo, counter));
+          dispatch(
+            getWorklogSingle(selectedPerformers, dateFrom, dateTo, counter),
+          );
 
           if (counter === selectedPerformers.length) {
             clearInterval(intervalId);
