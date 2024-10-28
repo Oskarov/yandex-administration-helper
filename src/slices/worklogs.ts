@@ -1,34 +1,37 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import dayjs, { Dayjs } from 'dayjs';
 
-type IWorklogsState = {
+type TState = {
   loading: boolean;
   error: string | null;
-  filter: {
+  filters: {
     performers: string[];
     dateFrom: Dayjs | null;
     dateTo: Dayjs | null;
   };
-  worklogs: any[]; // TODO: Define type for worklogs array
+  worklogs: any; // TODO: Define type for worklogs array
 };
 
-const initialState: IWorklogsState = {
+const initialState: TState = {
   loading: false,
   error: null,
-  filter: {
+  filters: {
     performers: [],
     dateFrom: dayjs(new Date()),
     dateTo: dayjs(new Date()),
   },
-  worklogs: [],
+  worklogs: null,
+};
+
+type TDate = {
+  name: 'dateFrom' | 'dateTo';
+  value: Dayjs | null;
 };
 
 const worklogsSlice = createSlice({
   name: 'worklogs',
-  initialState,
-
+  initialState: initialState,
   reducers: {
-    // setLoading
     setLoading(state, { payload }: PayloadAction<boolean>) {
       state.loading = payload;
     },
@@ -39,24 +42,17 @@ const worklogsSlice = createSlice({
     },
 
     // setPerformers
-    setPerformers(state, { payload }: PayloadAction<string>) {
-      const { performers } = state.filter;
-      const isInclude = state.filter.performers.includes(payload);
-
-      if (isInclude) {
-        state.filter.performers = performers.filter(id => id !== payload);
-      } else {
-        state.filter.performers = [...performers, payload];
-      }
+    setPerformers(state, { payload }: PayloadAction<string[]>) {
+      state.filters.performers = payload;
     },
 
     // setDates
-    setDates(state, { payload }: PayloadAction<string>) {
-      const { dateFrom, dateTo } = state.filter;
+    setDates(state, { payload }: PayloadAction<TDate>) {
+      state.filters[payload.name] = payload.value;
     },
 
     // setWorklogs
-    setWorklogs(state, { payload }: PayloadAction<any[]>) {
+    setWorklogs(state, { payload }: PayloadAction<any>) {
       state.worklogs = payload;
     },
   },
@@ -64,5 +60,5 @@ const worklogsSlice = createSlice({
 
 export const worklogsReducer = worklogsSlice.reducer;
 
-export const { setLoading, setError, setDates, setPerformers, setWorklogs } =
+export const { setLoading, setError, setPerformers, setDates, setWorklogs } =
   worklogsSlice.actions;
