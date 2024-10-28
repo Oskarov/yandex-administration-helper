@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 
 type TGetWorklogsResponse = {
   success: boolean;
-  data: any[];
+  data: any[] | null;
   error: string;
 };
 
@@ -16,12 +16,9 @@ const WorklogService = {
     dateTo: string,
   ): Promise<TGetWorklogsResponse> => {
     try {
-      const { data } = await httpClient.post(`/worklogs/_search`, {
+      const { data } = await httpClient.post(`/worklog/_search`, {
         createdBy: id,
-        createdAt: {
-          from: `${dayjs(dateFrom).format(FORMAT_TYPE)}T00:00:00`,
-          to: `${dayjs(dateTo).format(FORMAT_TYPE)}T23:59:59`,
-        },
+        createdAt: { from: dateFrom, to: dateTo },
       });
 
       return {
@@ -31,7 +28,7 @@ const WorklogService = {
       };
     } catch (error: any) {
       return {
-        data: [],
+        data: null,
         success: false,
         error: `Error fetching worklogs: ${error.message} (${error.status})`,
       };

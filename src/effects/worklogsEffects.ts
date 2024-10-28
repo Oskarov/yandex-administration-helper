@@ -1,6 +1,7 @@
+import WorklogService from 'api/worklog-service';
 import dayjs, { Dayjs } from 'dayjs';
 import { Dispatch } from 'react';
-import { setLoading, setWorklogs } from 'slices/worklogs';
+import { setError, setLoading, setWorklogs } from 'slices/worklogs';
 
 // 2024-10-20T16:07:17+03:00 - full valid date
 export const FORMAT_TYPE = 'YYYY-MM-DD';
@@ -13,16 +14,29 @@ export const getWorklogs = (
   return async function (dispatch: Dispatch<any>) {
     // reset state before fetching new data
     dispatch(setLoading(true));
+    dispatch(setError(''));
     dispatch(setWorklogs(null));
 
     // fix date format to API request
     const _dateFrom = `${dayjs(dateFrom).format(FORMAT_TYPE)}T00:00:00`;
     const _dateTo = `${dayjs(dateTo).format(FORMAT_TYPE)}T23:59:59`;
 
-    // fetch data
-    console.log('performersIds', performersIds);
-    console.log('_dateFrom', _dateFrom);
-    console.log('_dateTo', _dateTo);
+    const { data, success, error } = await WorklogService.searchWorklogs(
+      performersIds[0],
+      _dateFrom,
+      _dateTo,
+    );
+
+    // success
+    if (success && data) {
+      dispatch(setLoading(false));
+      dispatch(setWorklogs(data));
+
+      // error
+    } else {
+      dispatch(setLoading(false));
+      dispatch(setError(error));
+    }
   };
 };
 
