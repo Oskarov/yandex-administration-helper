@@ -11,7 +11,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import Loader from 'components/loader';
-import { setDates, setPerformers } from 'slices/worklogs';
+import { setDates, setPerformers, TPerformetOption } from 'slices/worklogs';
 import { getWorklogs } from 'effects/worklogsEffects';
 
 const Worklogs: React.FC = () => {
@@ -60,9 +60,7 @@ const Worklogs: React.FC = () => {
             disablePortal
             sx={{ width: 300 }}
             noOptionsText='Нет доступных исполнителей'
-            options={performersOptions.filter(
-              option => !selectedPerformerIds.includes(`${option.key}`), // убираем выделенные опции
-            )}
+            options={performersOptions}
             renderInput={params => (
               <TextField
                 {...params}
@@ -71,10 +69,7 @@ const Worklogs: React.FC = () => {
               />
             )}
             onChange={(_event, state) => {
-              const selectedIds = state.map(option => `${option.key}`);
-
-              // save data to Redux store
-              dispatch(setPerformers(selectedIds));
+              dispatch(setPerformers(state as TPerformetOption[]));
             }}
           />
         </div>

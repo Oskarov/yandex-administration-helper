@@ -1,13 +1,18 @@
 import WorklogService from 'api/worklog-service';
 import dayjs, { Dayjs } from 'dayjs';
 import { Dispatch } from 'react';
-import { setError, setLoading, setWorklogs } from 'slices/worklogs';
+import {
+  setError,
+  setLoading,
+  setWorklogs,
+  TPerformetOption,
+} from 'slices/worklogs';
 
 // 2024-10-20T16:07:17+03:00 - full valid date
 export const FORMAT_TYPE = 'YYYY-MM-DD';
 
 export const getWorklogs = (
-  performersIds: string[],
+  selectedPerformers: TPerformetOption[],
   dateFrom: Dayjs | null,
   dateTo: Dayjs | null,
 ) => {
@@ -22,7 +27,7 @@ export const getWorklogs = (
     const _dateTo = `${dayjs(dateTo).format(FORMAT_TYPE)}T23:59:59`;
 
     const { data, success, error } = await WorklogService.searchWorklogs(
-      performersIds[0],
+      `${selectedPerformers[0].key}`,
       _dateFrom,
       _dateTo,
     );

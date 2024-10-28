@@ -1,11 +1,16 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import dayjs, { Dayjs } from 'dayjs';
 
+export type TPerformetOption = {
+  label: string;
+  key: number;
+};
+
 type TState = {
   loading: boolean;
   error: string | null;
   filters: {
-    performers: string[];
+    performers: TPerformetOption[];
     dateFrom: Dayjs | null;
     dateTo: Dayjs | null;
   };
@@ -42,7 +47,7 @@ const worklogsSlice = createSlice({
     },
 
     // setPerformers
-    setPerformers(state, { payload }: PayloadAction<string[]>) {
+    setPerformers(state, { payload }: PayloadAction<TPerformetOption[]>) {
       state.filters.performers = payload;
     },
 
