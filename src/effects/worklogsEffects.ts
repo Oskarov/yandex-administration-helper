@@ -16,12 +16,12 @@ export const getWorklogs = (
   selectedPerformers: TPerformetOption[],
   dateFrom: Dayjs | null,
   dateTo: Dayjs | null,
+  index: number = 0,
 ) => {
   return async function (dispatch: Dispatch<any>) {
     // reset state before fetching new data
     dispatch(setError(''));
     dispatch(setLoading(true));
-    dispatch(setWorklogs(null));
 
     // fix date format to API request
     const _dateFrom = `${dayjs(dateFrom).format(FORMAT_TYPE)}T00:00:00`;
@@ -29,7 +29,7 @@ export const getWorklogs = (
 
     try {
       const { data, success } = await WorklogService.searchWorklogs(
-        `${selectedPerformers[0].key}`,
+        `${selectedPerformers[index].key}`,
         _dateFrom,
         _dateTo,
       );
@@ -57,11 +57,15 @@ export const getWorklogs = (
           return total;
         }, {});
 
-        dispatch(setWorklogs(newData));
+        dispatch(
+          setWorklogs({
+            performer: selectedPerformers[index].label,
+            data: newData,
+          }),
+        );
       }
     } catch (e) {
       dispatch(setLoading(false));
-      dispatch(setWorklogs(e));
       dispatch(setError(`${e} - Error fetching worklogs`));
     }
   };
