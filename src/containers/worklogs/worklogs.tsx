@@ -19,7 +19,12 @@ export const FORMAT_TYPE = 'YYYY-MM-DD';
 
 const Worklogs: React.FC = () => {
   // selectors
-  const performers = useSelector((store: TStore) => store.performers.items);
+  const { performersOptions } = useSelector((store: TStore) => ({
+    performersOptions: store.performers.items.map(item => ({
+      label: `${item.lastName} ${item.firstName}`,
+      key: item.trackerId,
+    })),
+  }));
 
   // selected performer id
   const [selectedId, setSelectedId] = useState<string>('');
@@ -90,10 +95,7 @@ const Worklogs: React.FC = () => {
           <Autocomplete
             disablePortal
             sx={{ width: 300 }}
-            options={performers.map(item => ({
-              label: `${item.lastName} ${item.firstName}`,
-              key: item.trackerId,
-            }))}
+            options={performersOptions}
             renderInput={params => (
               <TextField {...params} label='Исполнитель' value={selectedId} />
             )}
