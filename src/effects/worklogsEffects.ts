@@ -2,6 +2,7 @@ import WorklogService from 'api/worklog-service';
 import dayjs, { Dayjs } from 'dayjs';
 import { Dispatch } from 'react';
 import {
+  resetWorklogs,
   setError,
   setLoading,
   setWorklogs,
@@ -12,6 +13,7 @@ import CalculateHoursFromTrackerTask from 'utils/calculateHoursFromTrackerTack';
 // 2024-10-20T16:07:17+03:00 - full valid date
 export const FORMAT_TYPE = 'YYYY-MM-DD';
 
+// точеные экшены для получения ворклога одного исполнителя
 export const getWorklogs = (
   selectedPerformers: TPerformetOption[],
   dateFrom: Dayjs | null,
@@ -19,10 +21,6 @@ export const getWorklogs = (
   index: number = 0,
 ) => {
   return async function (dispatch: Dispatch<any>) {
-    // reset state before fetching new data
-    dispatch(setError(''));
-    dispatch(setLoading(true));
-
     // fix date format to API request
     const _dateFrom = `${dayjs(dateFrom).format(FORMAT_TYPE)}T00:00:00`;
     const _dateTo = `${dayjs(dateTo).format(FORMAT_TYPE)}T23:59:59`;
@@ -69,5 +67,45 @@ export const getWorklogs = (
       dispatch(setLoading(false));
       dispatch(setError(`${e} - Error fetching worklogs`));
     }
+  };
+};
+
+// интервальные экшены для получения ворклогов всех переданных пользователей
+export const getWorklogsMultiply = (
+  selectedPerformers: TPerformetOption[],
+  dateFrom: Dayjs | null,
+  dateTo: Dayjs | null,
+) => {
+  return async function (dispatch: Dispatch<any>) {
+    // сбрасываем сохраненные ворклоги
+    dispatch(resetWorklogs());
+    dispatch(setError(''));
+    dispatch(setLoading(true));
+
+    // через таймаут делаем запросы, чтобы поле ворклогов успело очиститься
+    setTimeout(() => {
+      // если выбран только один исполнитель
+      if (selectedPerformers.length === 1) {
+        return dispatch(getWorklogs(selectedPerformers, dateFrom, dateTo));
+
+        // если выбрано несколько исполнителей
+      } else {
+        // сразу делаем запрос для первого
+        dispatch(getWorklogs(selectedPerformers, dateFrom, dateTo));
+
+        // и добавляем запросы для остальных с интервалом 300 мс
+        let counter = 0;
+        const intervalId = setInterval(() => {
+          counter++;
+
+          // counter - хранит индекс исполнителя
+          dispatch(getWorklogs(selectedPerformers, dateFrom, dateTo, counter));
+
+          if (counter === selectedPerformers.length) {
+            clearInterval(intervalId);
+          }
+        }, 300);
+      }
+    }, 50);
   };
 };

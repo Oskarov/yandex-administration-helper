@@ -65,6 +65,11 @@ const worklogsSlice = createSlice({
         [payload.performer]: payload.data,
       };
     },
+
+    // resetWorklogs
+    resetWorklogs(state) {
+      state.worklogs = null;
+    },
   },
 });
 
@@ -77,4 +82,5 @@ export const {
   setPerformers,
   setDates,
   setWorklogs,
+  resetWorklogs,
 } = worklogsSlice.actions;
