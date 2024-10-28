@@ -58,9 +58,15 @@ const Worklogs: React.FC = () => {
           <Autocomplete
             multiple
             disablePortal
-            sx={{ width: 300 }}
+            sx={{ width: 430 }}
             noOptionsText='Нет доступных исполнителей'
-            options={performersOptions}
+            options={performersOptions.filter(option => {
+              const selectedPerformerIds = selectedPerformers.map(
+                item => item.key,
+              );
+
+              return !selectedPerformerIds.includes(option.key as number);
+            })}
             renderInput={params => (
               <TextField
                 {...params}
