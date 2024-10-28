@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from './worklogs.module.scss';
 import { Autocomplete, Button, TextField } from '@mui/material';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { TStore } from 'store/store';
 
 // datepicker
@@ -18,6 +18,8 @@ import CalculateHoursFromTrackerTask from 'utils/calculateHoursFromTrackerTack';
 export const FORMAT_TYPE = 'YYYY-MM-DD';
 
 const Worklogs: React.FC = () => {
+  const dispatch = useDispatch();
+
   // selectors
   const { performersOptions } = useSelector((store: TStore) => ({
     performersOptions: store.performers.items.map(item => ({
