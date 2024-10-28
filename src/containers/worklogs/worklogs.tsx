@@ -20,7 +20,7 @@ const Worklogs: React.FC = () => {
   // selectors
   const {
     performersOptions,
-    selectedPerformerIds,
+    selectedPerformers,
     dateFrom,
     dateTo,
     loading,
@@ -34,7 +34,7 @@ const Worklogs: React.FC = () => {
       })),
 
       // selectedPerformerIds
-      selectedPerformerIds: store.worklogs.filters.performers,
+      selectedPerformers: store.worklogs.filters.performers,
       dateFrom: store.worklogs.filters.dateFrom,
       dateTo: store.worklogs.filters.dateTo,
       loading: store.worklogs.loading,
@@ -44,7 +44,7 @@ const Worklogs: React.FC = () => {
 
   // get data from API request
   const getWorklogsClick = () => {
-    dispatch(getWorklogs(selectedPerformerIds, dateFrom, dateTo));
+    dispatch(getWorklogs(selectedPerformers, dateFrom, dateTo));
   };
 
   return (
@@ -65,12 +65,12 @@ const Worklogs: React.FC = () => {
               <TextField
                 {...params}
                 label='Исполнители'
-                value={selectedPerformerIds}
+                value={selectedPerformers}
               />
             )}
-            onChange={(_event, state) => {
-              dispatch(setPerformers(state as TPerformetOption[]));
-            }}
+            onChange={(_event, state) =>
+              dispatch(setPerformers(state as TPerformetOption[]))
+            }
           />
         </div>
 
@@ -106,7 +106,7 @@ const Worklogs: React.FC = () => {
           <Button
             variant='outlined'
             color='primary'
-            disabled={!selectedPerformerIds.length}
+            disabled={!selectedPerformers.length}
             onClick={getWorklogsClick}
             className='medium primary outlined'
           >
@@ -136,8 +136,10 @@ export default Worklogs;
 // TODO:
 // 0. Сохранить запрос в сервисе + добавить новый слайс для ворклогов +++
 // 1. Сделать из селекта выбрать исполнителя мультиселект +++
-// 2. Сделать эффект для ворклогов
-// 3. Отправлять запрос через таймаут по остальным исполнителям, так как этот эндпоинт не поддреживает массив исполнителей в поле createdBy
+// 2. Сделать эффект для ворклогов +++
+
+// 3. Отправлять запрос через таймаут по остальным исполнителям, так как этот эндпоинт не поддреживает массив исполнителей в поле createdBy ---
+
 // 4. После получения данных по первому запросу, нужно сделать второй запрос, чтобы получить данные по типу задачи, так как в первом запросе нет поле type у issues
 
 // Примерный формат данных после обработки
