@@ -12,6 +12,7 @@ import CalculateHoursFromTrackerTask from 'utils/calculateHoursFromTrackerTack';
 
 // 2024-10-20T16:07:17+03:00 - full valid date
 export const FORMAT_TYPE = 'YYYY-MM-DD';
+export const REQUEST_INTERVAL = 300;
 
 // точеные экшены для получения ворклога одного исполнителя
 export const getWorklogs = (
@@ -84,16 +85,16 @@ export const getWorklogsMultiply = (
 
     // через таймаут делаем запросы, чтобы поле ворклогов успело очиститься
     setTimeout(() => {
-      // если выбран только один исполнитель
+      // если выбран только один исполнитель - делаем только один запрос
       if (selectedPerformers.length === 1) {
         return dispatch(getWorklogs(selectedPerformers, dateFrom, dateTo));
 
         // если выбрано несколько исполнителей
       } else {
-        // сразу делаем запрос для первого
+        // то сразу делаем запрос для первого
         dispatch(getWorklogs(selectedPerformers, dateFrom, dateTo));
 
-        // и добавляем запросы для остальных с интервалом 300 мс
+        // а для остальных запросов делаем через интервалы 300мс
         let counter = 0;
         const intervalId = setInterval(() => {
           counter++;
@@ -104,7 +105,7 @@ export const getWorklogsMultiply = (
           if (counter === selectedPerformers.length) {
             clearInterval(intervalId);
           }
-        }, 300);
+        }, REQUEST_INTERVAL);
       }
     }, 50);
   };
