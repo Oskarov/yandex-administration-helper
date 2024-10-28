@@ -59,7 +59,7 @@ const worklogsSlice = createSlice({
     // setWorklogs
     setWorklogs(state, { payload }: PayloadAction<Record<string, any>>) {
       state.worklogs = {
-        // ...state.worklogs,
+        ...state.worklogs,
         [payload.performer]: payload.data,
       };
     },

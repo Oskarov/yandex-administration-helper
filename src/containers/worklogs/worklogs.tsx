@@ -42,9 +42,28 @@ const Worklogs: React.FC = () => {
     };
   });
 
-  // get data from API request
+  // интервальные запросы для получения логов
   const getWorklogsClick = () => {
-    dispatch(getWorklogs(selectedPerformers, dateFrom, dateTo));
+    // если выбран один исполнитель
+    if (selectedPerformers.length === 1) {
+      return dispatch(getWorklogs(selectedPerformers, dateFrom, dateTo));
+
+      // если выбрано несколько исполнителей
+    } else {
+      // сразу делаем запрос для первого
+      dispatch(getWorklogs(selectedPerformers, dateFrom, dateTo));
+
+      // и добавляем запросы для остальных с интервалом 300 мс
+      let counter = 0;
+      const intervalId = setInterval(() => {
+        counter++;
+        dispatch(getWorklogs(selectedPerformers, dateFrom, dateTo, counter));
+
+        if (counter === selectedPerformers.length) {
+          clearInterval(intervalId);
+        }
+      }, 300);
+    }
   };
 
   return (
