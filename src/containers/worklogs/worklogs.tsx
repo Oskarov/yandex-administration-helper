@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styles from './worklogs.module.scss';
 import { Autocomplete, Button, TextField } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,18 +10,9 @@ import dayjs from 'dayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import httpClient from 'api/httpClient';
 import Loader from 'components/loader';
-import CalculateHoursFromTrackerTask from 'utils/calculateHoursFromTrackerTack';
-import {
-  setDates,
-  setLoading,
-  setPerformers,
-  setWorklogs,
-} from 'slices/worklogs';
-
-// 2024-10-20T16:07:17+03:00 - full valid date
-export const FORMAT_TYPE = 'YYYY-MM-DD';
+import { setDates, setPerformers } from 'slices/worklogs';
+import { getWorklogs } from 'effects/worklogsEffects';
 
 const Worklogs: React.FC = () => {
   const dispatch = useDispatch();
@@ -33,7 +24,7 @@ const Worklogs: React.FC = () => {
     dateFrom,
     dateTo,
     loading,
-    response,
+    worklogs,
   } = useSelector((store: TStore) => {
     return {
       // performersOptions
@@ -47,54 +38,13 @@ const Worklogs: React.FC = () => {
       dateFrom: store.worklogs.filters.dateFrom,
       dateTo: store.worklogs.filters.dateTo,
       loading: store.worklogs.loading,
-      response: store.worklogs.worklogs,
+      worklogs: store.worklogs.worklogs,
     };
   });
 
-  // getWorkLog
-  const getWorkLog = async () => {
-    dispatch(setLoading(true));
-    dispatch(setWorklogs(null));
-
-    try {
-      const { data } = await httpClient.post('/worklog/_search', {
-        createdBy: selectedPerformerIds[0],
-        createdAt: {
-          from: `${dayjs(dateFrom).format(FORMAT_TYPE)}T00:00:00`,
-          to: `${dayjs(dateTo).format(FORMAT_TYPE)}T23:59:59`,
-        },
-      });
-
-      if (data) {
-        dispatch(setLoading(false));
-        console.log('data', data);
-
-        const newData = data.reduce((total: any, item: any) => {
-          // обрезаем строку даты до формата YYYY-MM-DD
-          const logDay = item.createdAt.slice(0, 10);
-
-          // создаем объект задач с нужными нам полями
-          const logTask = {
-            code: item.issue.key,
-            name: item.issue.display,
-            link: item.issue.self,
-            comment: item.comment || null,
-            createdAt: item.createdAt,
-            duration: CalculateHoursFromTrackerTask(item.duration),
-          };
-
-          // добавляем день как поле объекта со значениям массива залогированных задач
-          total[logDay] = [...(total[logDay] || []), logTask];
-
-          return total;
-        }, {});
-
-        dispatch(setWorklogs(newData));
-      }
-    } catch (e) {
-      dispatch(setLoading(false));
-      dispatch(setWorklogs(e));
-    }
+  // get data from API request
+  const getWorklogsClick = () => {
+    dispatch(getWorklogs(selectedPerformerIds, dateFrom, dateTo));
   };
 
   return (
@@ -162,7 +112,7 @@ const Worklogs: React.FC = () => {
             variant='outlined'
             color='primary'
             disabled={!selectedPerformerIds.length}
-            onClick={getWorkLog}
+            onClick={getWorklogsClick}
             className='medium primary outlined'
           >
             Получить
@@ -176,9 +126,9 @@ const Worklogs: React.FC = () => {
         <Loader loading={loading} />
 
         {/* show content here */}
-        {response && (
+        {worklogs && (
           <div>
-            <pre>{JSON.stringify(response, null, 2)}</pre>
+            <pre>{JSON.stringify(worklogs, null, 2)}</pre>
           </div>
         )}
       </div>

@@ -1,5 +1,4 @@
 import httpClient from './httpClient';
-import { AxiosError } from 'axios';
 import dayjs from 'dayjs';
 
 type TGetWorklogsResponse = {
