@@ -46,4 +46,19 @@
     display: flex;
     // outline: 1px solid red;
   }
+
+  &__content {
+    width: 100%;
+    & > section {
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 10px;
+      margin-bottom: 15px;
+
+      h2 {
+        margin-top: 0;
+        margin-bottom: 5px;
+      }
+    }
+  }
 }

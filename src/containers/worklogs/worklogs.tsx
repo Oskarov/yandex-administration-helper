@@ -30,6 +30,7 @@ const Worklogs: React.FC = () => {
     dateTo,
     loading,
     worklogs,
+    selectedTasks,
   } = useSelector((store: TStore) => {
     return {
       // performersOptions
@@ -38,12 +39,12 @@ const Worklogs: React.FC = () => {
         key: item.trackerId,
       })),
 
-      // selectedPerformerIds
       selectedPerformers: store.worklogs.filters.performers,
       dateFrom: store.worklogs.filters.dateFrom,
       dateTo: store.worklogs.filters.dateTo,
       loading: store.worklogs.loading,
       worklogs: store.worklogs.worklogs,
+      selectedTasks: store.worklogs.selectedTasks,
     };
   });
 
@@ -141,12 +142,33 @@ const Worklogs: React.FC = () => {
         {/* loader */}
         <Loader loading={loading} />
 
-        {/* show content here */}
-        {worklogs && (
-          <div>
-            <pre>{JSON.stringify(worklogs, null, 2)}</pre>
-          </div>
-        )}
+        <main className={styles.Worklogs__content}>
+          {/* selectedTasksCodes */}
+          {selectedTasks && (
+            <section>
+              <h2>Список задач из ворклогов</h2>
+
+              <div>
+                <div>
+                  <pre>{JSON.stringify(selectedTasks, null, 2)}</pre>
+                </div>
+              </div>
+            </section>
+          )}
+
+          {/* worklogs */}
+          {worklogs && (
+            <section>
+              <h2>Ворклоги</h2>
+
+              <div>
+                <div>
+                  <pre>{JSON.stringify(worklogs, null, 2)}</pre>
+                </div>
+              </div>
+            </section>
+          )}
+        </main>
       </div>
     </div>
   );
@@ -159,7 +181,7 @@ export default Worklogs;
 // 1. Сделать из селекта выбрать исполнителя мультиселект +++
 // 2. Сделать эффект для ворклогов +++
 
-// 3. Отправлять запрос через таймаут по остальным исполнителям, так как этот эндпоинт не поддреживает массив исполнителей в поле createdBy ---
+// 3. Отправлять запрос через таймаут по остальным исполнителям, так как этот эндпоинт не поддреживает массив исполнителей в поле createdBy +++
 
 // 4. После получения данных по первому запросу, нужно сделать второй запрос, чтобы получить данные по типу задачи, так как в первом запросе нет поле type у issues
 

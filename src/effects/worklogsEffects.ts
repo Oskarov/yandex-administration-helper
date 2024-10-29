@@ -2,9 +2,11 @@ import WorklogService from 'api/worklog-service';
 import dayjs, { Dayjs } from 'dayjs';
 import { Dispatch } from 'react';
 import {
+  resetTasksCodes,
   resetWorklogs,
   setError,
   setLoading,
+  setTasksCodes,
   setWorklogs,
   TPerformetOption,
 } from 'slices/worklogs';
@@ -22,6 +24,8 @@ export const getWorklogSingle = (
   dateTo: Dayjs | null,
 ) => {
   return async function (dispatch: Dispatch<any>) {
+    let tasksCodes: string[] = [];
+
     // fix date format to API request
     const _dateFrom = `${dayjs(dateFrom).format(FORMAT_TYPE)}T00:00:00`;
     const _dateTo = `${dayjs(dateTo).format(FORMAT_TYPE)}T23:59:59`;
@@ -56,6 +60,10 @@ export const getWorklogSingle = (
           duration: CalculateHoursFromTrackerTask(item.duration),
         };
 
+        if (!tasksCodes.includes(logTask.code)) {
+          tasksCodes.push(logTask.code);
+        }
+
         // добавляем день как поле объекта со значениям массива залогированных задач
         total[logDay] = [...(total[logDay] || []), logTask];
 
@@ -68,6 +76,9 @@ export const getWorklogSingle = (
           data: newData,
         }),
       );
+
+      dispatch(setTasksCodes(tasksCodes));
+
       // error
     } else {
       const errorMessage = error?.message || 'Ошибка загрузки ворклогов';
@@ -87,6 +98,9 @@ export const getWorklogsMultiply = (
   return async function (dispatch: Dispatch<any>) {
     // сбрасываем сохраненные ворклоги
     dispatch(resetWorklogs());
+
+    // сбрасываем сохранные выделенные задачи
+    dispatch(resetTasksCodes());
     dispatch(setError(''));
     dispatch(setLoading(true));
 
@@ -119,6 +133,9 @@ export const getWorklogsMultiply = (
 
           if (counter === selectedPerformers.length) {
             clearInterval(intervalId);
+
+            // запросы на получение типов задач
+            // TODO
           }
         }, REQUEST_INTERVAL);
       }

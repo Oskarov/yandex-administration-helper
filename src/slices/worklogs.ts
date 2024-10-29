@@ -15,6 +15,7 @@ type TState = {
     dateTo: Dayjs | null;
   };
   worklogs: any; // TODO: Define type for worklogs array
+  selectedTasks: Record<string, string> | null;
 };
 
 const initialState: TState = {
@@ -26,6 +27,7 @@ const initialState: TState = {
     dateTo: dayjs(new Date()),
   },
   worklogs: null,
+  selectedTasks: null,
 };
 
 type TDate = {
@@ -70,6 +72,24 @@ const worklogsSlice = createSlice({
     resetWorklogs(state) {
       state.worklogs = null;
     },
+
+    // resetWorklogs
+    resetTasksCodes(state) {
+      state.selectedTasks = null;
+    },
+
+    setTasksCodes(state, { payload }: PayloadAction<string[]>) {
+      const dataObj = payload.reduce<Record<string, string>>((total, item) => {
+        total[item] = '';
+
+        return total;
+      }, {});
+
+      state.selectedTasks = {
+        ...state.selectedTasks,
+        ...dataObj,
+      };
+    },
   },
 });
 
@@ -83,4 +103,6 @@ export const {
   setDates,
   setWorklogs,
   resetWorklogs,
+  setTasksCodes,
+  resetTasksCodes,
 } = worklogsSlice.actions;
