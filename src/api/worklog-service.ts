@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 type TGetWorklogsResponse = {
   success: boolean;
   data: any[] | null;
-  error: string;
+  error: any;
 };
 
 export const FORMAT_TYPE = 'YYYY-MM-DD';
