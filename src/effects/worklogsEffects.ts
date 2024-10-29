@@ -26,6 +26,11 @@ export const getWorklogSingle = (
     const _dateFrom = `${dayjs(dateFrom).format(FORMAT_TYPE)}T00:00:00`;
     const _dateTo = `${dayjs(dateTo).format(FORMAT_TYPE)}T23:59:59`;
 
+    // find current perfomer data
+    const selectedPerformer = store
+      .getState()
+      .performers.items.find(item => Number(item.trackerId) === Number(id));
+
     const { data, success, error } = await WorklogService.searchWorklogs(
       id, // id исполнителя
       _dateFrom,
@@ -59,8 +64,7 @@ export const getWorklogSingle = (
 
       dispatch(
         setWorklogs({
-          // performer: selectedPerformers[index].label,
-          performer: id, // TODO - performer label
+          performer: selectedPerformer?.trackerDisplay || id,
           data: newData,
         }),
       );
