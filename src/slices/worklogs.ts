@@ -90,6 +90,19 @@ const worklogsSlice = createSlice({
         ...dataObj,
       };
     },
+
+    setSingleTaskCode(
+      state,
+      {
+        payload,
+      }: PayloadAction<{
+        code: string;
+        type: string;
+      }>,
+    ) {
+      (state.selectedTasks as Record<string, string>)[payload.code] =
+        payload.type;
+    },
   },
 });
 
@@ -104,5 +117,6 @@ export const {
   setWorklogs,
   resetWorklogs,
   setTasksCodes,
+  setSingleTaskCode,
   resetTasksCodes,
 } = worklogsSlice.actions;

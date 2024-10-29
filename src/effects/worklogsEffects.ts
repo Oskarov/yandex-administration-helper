@@ -1,3 +1,4 @@
+import QueueService from 'api/queue-service';
 import WorklogService from 'api/worklog-service';
 import dayjs, { Dayjs } from 'dayjs';
 import { Dispatch } from 'react';
@@ -6,6 +7,7 @@ import {
   resetWorklogs,
   setError,
   setLoading,
+  setSingleTaskCode,
   setTasksCodes,
   setWorklogs,
   TPerformetOption,
@@ -16,6 +18,58 @@ import CalculateHoursFromTrackerTask from 'utils/calculateHoursFromTrackerTack';
 // 2024-10-20T16:07:17+03:00 - full valid date
 export const FORMAT_TYPE = 'YYYY-MM-DD';
 export const REQUEST_INTERVAL = 300;
+
+export const getTasksTypesSingle = (taskCode: string) => {
+  return async function (dispatch: Dispatch<any>) {
+    const { data, success, error } = await QueueService.getTaskByKey(taskCode);
+
+    if (success && data) {
+      dispatch(
+        setSingleTaskCode({
+          code: taskCode,
+          type: data.type.key,
+        }),
+      );
+    } else {
+      const errorMessage = error?.message || 'Ошибка загрузки типа задачи';
+      alert(errorMessage);
+      dispatch(setLoading(false));
+      dispatch(setError(errorMessage));
+    }
+  };
+};
+
+// интервальные экшены для получения ворклогов всех переданных пользователей
+export const getTasksTypesMulti = () => {
+  return async function (dispatch: Dispatch<any>) {
+    // find current perfomer data
+    const selectedTasks = Object.keys(
+      store.getState().worklogs.selectedTasks || [],
+    );
+
+    if (!selectedTasks.length) return;
+
+    // если задача одни
+    if (selectedTasks.length === 1) {
+      dispatch(getTasksTypesSingle(selectedTasks[0]));
+    } else {
+      dispatch(getTasksTypesSingle(selectedTasks[0]));
+      let counter = 1;
+
+      const intervalId = setInterval(() => {
+        dispatch(getTasksTypesSingle(selectedTasks[counter]));
+
+        // counter - увеличваем счетчик на 1
+        counter++;
+
+        if (counter === selectedTasks.length) {
+          clearInterval(intervalId);
+          dispatch(setLoading(false));
+        }
+      }, REQUEST_INTERVAL / 2);
+    }
+  };
+};
 
 // точеные экшены для получения ворклога одного исполнителя
 export const getWorklogSingle = (
@@ -44,7 +98,7 @@ export const getWorklogSingle = (
     // success
     if (success && data) {
       // чтобы загрузка не оставливалась при промежуточных запросах
-      dispatch(setLoading(false));
+      // dispatch(setLoading(false));
 
       const newData = data.reduce((total: any, item: any) => {
         // обрезаем строку даты до формата YYYY-MM-DD
@@ -106,39 +160,37 @@ export const getWorklogsMultiply = (
 
     const firstPerformerId = `${selectedPerformers[0].key}`;
 
-    // через таймаут делаем запросы, чтобы поле ворклогов успело очиститься
-    setTimeout(() => {
-      // если выбран только один исполнитель - делаем только один запрос
-      if (selectedPerformers.length === 1) {
-        return dispatch(getWorklogSingle(firstPerformerId, dateFrom, dateTo));
+    // если выбран только один исполнитель - делаем только один запрос
+    if (selectedPerformers.length === 1) {
+      dispatch(getWorklogSingle(firstPerformerId, dateFrom, dateTo));
 
-        // если выбрано несколько исполнителей
-      } else {
-        // то сразу делаем запрос для первого
-        dispatch(getWorklogSingle(firstPerformerId, dateFrom, dateTo));
+      // если выбрано несколько исполнителей
+    } else {
+      // то сразу делаем запрос для первого
+      dispatch(getWorklogSingle(firstPerformerId, dateFrom, dateTo));
 
-        // а для остальных запросов делаем через интервалы REQUEST_INTERVAL
-        let counter = 1;
-        const intervalId = setInterval(() => {
-          dispatch(
-            getWorklogSingle(
-              `${selectedPerformers[counter].key}`, // counter - хранит индекс исполнителя
-              dateFrom,
-              dateTo,
-            ),
-          );
+      // а для остальных запросов делаем через интервалы REQUEST_INTERVAL
+      let counter = 1;
+      const intervalId = setInterval(() => {
+        dispatch(
+          getWorklogSingle(
+            `${selectedPerformers[counter].key}`, // counter - хранит индекс исполнителя
+            dateFrom,
+            dateTo,
+          ),
+        );
 
-          // counter - увеличваем счетчик на 1
-          counter++;
+        // counter - увеличваем счетчик на 1
+        counter++;
 
-          if (counter === selectedPerformers.length) {
-            clearInterval(intervalId);
+        if (counter === selectedPerformers.length) {
+          clearInterval(intervalId);
 
-            // запросы на получение типов задач
-            // TODO
-          }
-        }, REQUEST_INTERVAL);
-      }
-    }, 50);
+          setTimeout(() => {
+            dispatch(getTasksTypesMulti());
+          }, REQUEST_INTERVAL);
+        }
+      }, REQUEST_INTERVAL);
+    }
   };
 };
