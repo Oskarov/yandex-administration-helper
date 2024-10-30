@@ -53,9 +53,15 @@ export const getTasksTypesMulti = () => {
       return;
     }
 
-    // если задача одни
+    // если задача одна
     if (selectedTasks.length === 1) {
+      // делаем запрос на первую выделенную задачу
       dispatch(getTasksTypesSingle(selectedTasks[0]));
+
+      // а затем через таймаут останавливаем загрузку
+      setTimeout(() => {
+        dispatch(setLoading(false));
+      }, REQUEST_INTERVAL);
     } else {
       dispatch(getTasksTypesSingle(selectedTasks[0]));
       let counter = 1;
