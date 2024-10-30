@@ -1,7 +1,7 @@
 {
   "name": "sprint_administration",
   "version": "0.1.0",
-  "homepage": "https://oskarov.github.io",
+  "homepage": "./sprint-planning",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.10.5",
