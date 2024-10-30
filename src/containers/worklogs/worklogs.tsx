@@ -18,7 +18,7 @@ import {
   TPerformetOption,
 } from 'slices/worklogs';
 import { getWorklogsMultiply } from 'effects/worklogsEffects';
-import Debug from './parts/Debug/Debug';
+// import Debug from './parts/Debug/Debug';
 import WorklogsData from './parts/WorklogsData/WorklogsData';
 
 const Worklogs: React.FC = () => {
@@ -32,8 +32,6 @@ const Worklogs: React.FC = () => {
     dateTo,
     loading,
     errors,
-    worklogs,
-    selectedTasks,
   } = useSelector((store: TStore) => {
     return {
       // performersOptions
