@@ -3,9 +3,8 @@ import WorklogService from 'api/worklog-service';
 import dayjs, { Dayjs } from 'dayjs';
 import { Dispatch } from 'react';
 import {
-  resetTasksCodes,
-  resetWorklogs,
-  setError,
+  resetState,
+  setErrors,
   setLoading,
   setSingleTaskCode,
   setTasksCodes,
@@ -34,7 +33,7 @@ export const getTasksTypesSingle = (taskCode: string) => {
       const errorMessage = error?.message || 'Ошибка загрузки типа задачи';
       alert(errorMessage);
       dispatch(setLoading(false));
-      dispatch(setError(errorMessage));
+      dispatch(setErrors(errorMessage));
     }
   };
 };
@@ -47,7 +46,10 @@ export const getTasksTypesMulti = () => {
       store.getState().worklogs.selectedTasks || [],
     );
 
-    if (!selectedTasks.length) return;
+    if (!selectedTasks.length) {
+      dispatch(setLoading(false));
+      return;
+    }
 
     // если задача одни
     if (selectedTasks.length === 1) {
@@ -66,7 +68,7 @@ export const getTasksTypesMulti = () => {
           clearInterval(intervalId);
           dispatch(setLoading(false));
         }
-      }, REQUEST_INTERVAL / 2);
+      }, REQUEST_INTERVAL);
     }
   };
 };
@@ -97,8 +99,16 @@ export const getWorklogSingle = (
 
     // success
     if (success && data) {
-      // чтобы загрузка не оставливалась при промежуточных запросах
-      // dispatch(setLoading(false));
+      // если данные пустые, то отменяем последующие действия
+      if (!data.length) {
+        dispatch(setLoading(false));
+        dispatch(
+          setErrors(
+            `${selectedPerformer?.lastName} ${selectedPerformer?.firstName} - данных в указанный период не найдено`,
+          ),
+        );
+        return;
+      }
 
       const newData = data.reduce((total: any, item: any) => {
         // обрезаем строку даты до формата YYYY-MM-DD
@@ -136,9 +146,8 @@ export const getWorklogSingle = (
       // error
     } else {
       const errorMessage = error?.message || 'Ошибка загрузки ворклогов';
-      alert(errorMessage);
       dispatch(setLoading(false));
-      dispatch(setError(errorMessage));
+      dispatch(setErrors(errorMessage));
     }
   };
 };
@@ -150,12 +159,8 @@ export const getWorklogsMultiply = (
   dateTo: Dayjs | null,
 ) => {
   return async function (dispatch: Dispatch<any>) {
-    // сбрасываем сохраненные ворклоги
-    dispatch(resetWorklogs());
-
-    // сбрасываем сохранные выделенные задачи
-    dispatch(resetTasksCodes());
-    dispatch(setError(''));
+    // pre-request reset state
+    dispatch(resetState());
     dispatch(setLoading(true));
 
     const firstPerformerId = `${selectedPerformers[0].key}`;
@@ -163,6 +168,11 @@ export const getWorklogsMultiply = (
     // если выбран только один исполнитель - делаем только один запрос
     if (selectedPerformers.length === 1) {
       dispatch(getWorklogSingle(firstPerformerId, dateFrom, dateTo));
+
+      // и спустя таймаут делаем запросы по типам задач
+      setTimeout(() => {
+        dispatch(getTasksTypesMulti());
+      }, REQUEST_INTERVAL);
 
       // если выбрано несколько исполнителей
     } else {
@@ -184,8 +194,10 @@ export const getWorklogsMultiply = (
         counter++;
 
         if (counter === selectedPerformers.length) {
+          // очищаем интервал
           clearInterval(intervalId);
 
+          // и спустя таймаут делаем запросы по типам задач
           setTimeout(() => {
             dispatch(getTasksTypesMulti());
           }, REQUEST_INTERVAL);

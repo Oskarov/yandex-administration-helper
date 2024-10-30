@@ -18,6 +18,8 @@ import {
   TPerformetOption,
 } from 'slices/worklogs';
 import { getWorklogsMultiply } from 'effects/worklogsEffects';
+import Debug from './parts/Debug/Debug';
+import WorklogsData from './parts/WorklogsData/WorklogsData';
 
 const Worklogs: React.FC = () => {
   const dispatch = useDispatch();
@@ -29,6 +31,7 @@ const Worklogs: React.FC = () => {
     dateFrom,
     dateTo,
     loading,
+    errors,
     worklogs,
     selectedTasks,
   } = useSelector((store: TStore) => {
@@ -43,6 +46,7 @@ const Worklogs: React.FC = () => {
       dateFrom: store.worklogs.filters.dateFrom,
       dateTo: store.worklogs.filters.dateTo,
       loading: store.worklogs.loading,
+      errors: store.worklogs.errors,
       worklogs: store.worklogs.worklogs,
       selectedTasks: store.worklogs.selectedTasks,
     };
@@ -143,31 +147,23 @@ const Worklogs: React.FC = () => {
         <Loader loading={loading} />
 
         <main className={styles.Worklogs__content}>
-          {/* selectedTasksCodes */}
-          {selectedTasks && (
-            <section>
-              <h2>Список задач из ворклогов</h2>
-
-              <div>
+          {/* error */}
+          {!!errors.length &&
+            errors.map(error => (
+              <section>
                 <div>
-                  <pre>{JSON.stringify(selectedTasks, null, 2)}</pre>
+                  <div style={{ color: 'red' }}>
+                    <pre>{JSON.stringify(error, null, 2)}</pre>
+                  </div>
                 </div>
-              </div>
-            </section>
-          )}
+              </section>
+            ))}
 
           {/* worklogs */}
-          {worklogs && (
-            <section>
-              <h2>Ворклоги</h2>
+          <WorklogsData data={worklogs} />
 
-              <div>
-                <div>
-                  <pre>{JSON.stringify(worklogs, null, 2)}</pre>
-                </div>
-              </div>
-            </section>
-          )}
+          {/* JSON debug output */}
+          <Debug />
         </main>
       </div>
     </div>
@@ -175,31 +171,3 @@ const Worklogs: React.FC = () => {
 };
 
 export default Worklogs;
-
-// TODO:
-// 0. Сохранить запрос в сервисе + добавить новый слайс для ворклогов +++
-// 1. Сделать из селекта выбрать исполнителя мультиселект +++
-// 2. Сделать эффект для ворклогов +++
-
-// 3. Отправлять запрос через таймаут по остальным исполнителям, так как этот эндпоинт не поддреживает массив исполнителей в поле createdBy +++
-
-// 4. После получения данных по первому запросу, нужно сделать второй запрос, чтобы получить данные по типу задачи, так как в первом запросе нет поле type у issues
-
-// Примерный формат данных после обработки
-// {
-//   имя_исполнителя1: {
-//     день_1: [задача1, задача2,...], // должно быть поле type у задачи после второго запроса
-//     день_2: [задача1, задача2,...],
-//     ...,
-//     день_n: [задача1, задача2,...],
-//   },
-//
-//   имя_исполнителя2: {
-//     день_1: [задача1, задача2,...],
-//     день_2: [задача1, задача2,...],
-//     ...,
-//     день_n: [задача1, задача2,...],
-//   },
-//
-//   ...,
-// }

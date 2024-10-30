@@ -8,7 +8,7 @@ export type TPerformetOption = {
 
 type TState = {
   loading: boolean;
-  error: string | null;
+  errors: string[];
   filters: {
     performers: TPerformetOption[];
     dateFrom: Dayjs | null;
@@ -20,7 +20,7 @@ type TState = {
 
 const initialState: TState = {
   loading: false,
-  error: null,
+  errors: [],
   filters: {
     performers: [],
     dateFrom: dayjs(new Date()),
@@ -39,15 +39,20 @@ const worklogsSlice = createSlice({
   name: 'worklogs',
   initialState,
   reducers: {
-    resetState: () => initialState,
+    // resetState
+    resetState(state) {
+      state.errors = [];
+      state.worklogs = null;
+      state.selectedTasks = null;
+    },
 
     setLoading(state, { payload }: PayloadAction<boolean>) {
       state.loading = payload;
     },
 
     // setError
-    setError(state, { payload }: PayloadAction<string>) {
-      state.error = payload;
+    setErrors(state, { payload }: PayloadAction<string>) {
+      state.errors = [...state.errors, payload];
     },
 
     // setPerformers
@@ -66,16 +71,6 @@ const worklogsSlice = createSlice({
         ...state.worklogs,
         [payload.performer]: payload.data,
       };
-    },
-
-    // resetWorklogs
-    resetWorklogs(state) {
-      state.worklogs = null;
-    },
-
-    // resetWorklogs
-    resetTasksCodes(state) {
-      state.selectedTasks = null;
     },
 
     setTasksCodes(state, { payload }: PayloadAction<string[]>) {
@@ -111,12 +106,10 @@ export const worklogsReducer = worklogsSlice.reducer;
 export const {
   resetState,
   setLoading,
-  setError,
+  setErrors,
   setPerformers,
   setDates,
   setWorklogs,
-  resetWorklogs,
   setTasksCodes,
   setSingleTaskCode,
-  resetTasksCodes,
 } = worklogsSlice.actions;
