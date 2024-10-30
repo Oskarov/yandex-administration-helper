@@ -46,6 +46,12 @@ const worklogsSlice = createSlice({
       state.selectedTasks = null;
     },
 
+    resetFilters(state) {
+      state.filters = initialState.filters;
+      state.worklogs = null;
+      state.errors = [];
+    },
+
     setLoading(state, { payload }: PayloadAction<boolean>) {
       state.loading = payload;
     },
@@ -105,6 +111,7 @@ export const worklogsReducer = worklogsSlice.reducer;
 
 export const {
   resetState,
+  resetFilters,
   setLoading,
   setErrors,
   setPerformers,

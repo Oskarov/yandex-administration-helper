@@ -12,7 +12,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import Loader from 'components/loader';
 import {
-  resetState,
+  resetFilters,
   setDates,
   setPerformers,
   TPerformetOption,
@@ -133,7 +133,7 @@ const Worklogs: React.FC = () => {
           <Button
             variant='outlined'
             color='secondary'
-            onClick={() => dispatch(resetState())}
+            onClick={() => dispatch(resetFilters())}
             className='medium primary outlined'
           >
             Сбросить
