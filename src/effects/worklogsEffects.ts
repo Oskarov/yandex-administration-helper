@@ -30,7 +30,8 @@ export const getTasksTypesSingle = (taskCode: string) => {
         }),
       );
     } else {
-      const errorMessage = error?.message || 'Ошибка загрузки типа задачи';
+      const errorMessage =
+        error?.message || `${taskCode} - Ошибка загрузки типа задачи`;
       alert(errorMessage);
       dispatch(setLoading(false));
       dispatch(setErrors(errorMessage));
@@ -48,6 +49,7 @@ export const getTasksTypesMulti = () => {
 
     if (!selectedTasks.length) {
       dispatch(setLoading(false));
+      dispatch(setErrors('Задач не найдено'));
       return;
     }
 
