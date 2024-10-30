@@ -1,3 +1,65 @@
 .WorklogsData {
   color: inherit;
+  display: flex;
+  flex-direction: column;
+
+  &__daysContainer {
+    display: flex;
+    align-items: stretch;
+  }
+
+  &__day {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    width: 300px;
+    flex-grow: 0;
+    flex-shrink: 0;
+    margin-right: 15px;
+    &:last-child {
+      margin-right: 0;
+    }
+
+    // Дата дня
+    & > h3 {
+      background-color: #eee;
+      text-align: center;
+      margin-top: 0;
+      margin-bottom: 5px;
+      border-radius: 10px 10px 0 0;
+    }
+
+    // Итого время на день
+    & > h4 {
+      background-color: #eee;
+      text-align: right;
+      margin: 0;
+      border-radius: 0 0 10px 10px;
+      padding-right: 10px;
+    }
+  }
+
+  &__dayData {
+    margin-bottom: 10px;
+    flex-grow: 1;
+  }
+
+  &__task {
+    display: flex;
+    width: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+    justify-content: space-between;
+
+    & > span {
+      &:first-child {
+      }
+      &:nth-child(2) {
+      }
+      &:last-child {
+        margin-left: auto;
+      }
+    }
+  }
 }

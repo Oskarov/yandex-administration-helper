@@ -16,7 +16,7 @@ import CalculateHoursFromTrackerTask from 'utils/calculateHoursFromTrackerTack';
 
 // 2024-10-20T16:07:17+03:00 - full valid date
 export const FORMAT_TYPE = 'YYYY-MM-DD';
-export const REQUEST_INTERVAL = 300;
+export const REQUEST_INTERVAL = 330;
 
 export const getTasksTypesSingle = (taskCode: string) => {
   return async function (dispatch: Dispatch<any>) {

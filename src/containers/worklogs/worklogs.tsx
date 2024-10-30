@@ -160,10 +160,10 @@ const Worklogs: React.FC = () => {
             ))}
 
           {/* worklogs */}
-          <WorklogsData data={worklogs} />
+          <WorklogsData />
 
           {/* JSON debug output */}
-          <Debug />
+          {/* <Debug /> */}
         </main>
       </div>
     </div>
