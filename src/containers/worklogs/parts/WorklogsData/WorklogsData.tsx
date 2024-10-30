@@ -1,12 +1,12 @@
+import dayjs from 'dayjs';
 import styles from './WorklogsData.module.scss';
 import { useSelector } from 'react-redux';
 import { TStore } from 'store/store';
 
 const WorklogsData = () => {
   // selectors
-  const { loading, worklogs, selectedTasks } = useSelector((store: TStore) => {
+  const { worklogs, selectedTasks } = useSelector((store: TStore) => {
     return {
-      loading: store.worklogs.loading,
       worklogs: store.worklogs.worklogs,
       selectedTasks: store.worklogs.selectedTasks,
     };
@@ -36,7 +36,7 @@ const WorklogsData = () => {
                     return (
                       <div className={styles.WorklogsData__day}>
                         {/* Дата дня */}
-                        <h3>{day}</h3>
+                        <h3>{dayjs(day).format('DD.MM.YYYY')}</h3>
 
                         {/* Данные по дням */}
                         <div className={styles.WorklogsData__dayData}>
@@ -62,7 +62,9 @@ const WorklogsData = () => {
                                   </a>
                                 </span>
                                 <span>{`(${taskType})`}</span>
-                                <span>{task.duration}</span>
+                                <span>
+                                  {Number.parseFloat(task.duration).toFixed(2)}
+                                </span>
                               </div>
                             );
                           })}
@@ -70,9 +72,11 @@ const WorklogsData = () => {
 
                         {/* Итого время на день */}
                         <h4>
-                          {dayTasks.reduce((total: number, item: any) => {
-                            return total + item.duration;
-                          }, 0)}
+                          {Number.parseFloat(
+                            dayTasks.reduce((total: number, item: any) => {
+                              return total + item.duration;
+                            }, 0),
+                          ).toFixed(2)}
                         </h4>
                       </div>
                     );

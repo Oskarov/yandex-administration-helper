@@ -3,9 +3,16 @@
   display: flex;
   flex-direction: column;
 
+  // performer name
+  & > h2 {
+    color: #1976d2;
+    padding-bottom: 10px;
+  }
+
   &__daysContainer {
     display: flex;
     align-items: stretch;
+    flex-wrap: wrap;
   }
 
   &__day {
@@ -17,6 +24,7 @@
     flex-grow: 0;
     flex-shrink: 0;
     margin-right: 15px;
+    margin-bottom: 15px;
     &:last-child {
       margin-right: 0;
     }
