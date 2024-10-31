@@ -46,7 +46,7 @@ const Worklogs: React.FC = () => {
       loading: store.worklogs.loading,
       errors: store.worklogs.errors,
       worklogs: store.worklogs.worklogs,
-      selectedTasks: store.worklogs.selectedTasks,
+      tasksData: store.worklogs.tasksData,
     };
   });
 

@@ -1,14 +1,12 @@
-import QueueService from 'api/queue-service';
 import SearchService from 'api/search-service';
 import dayjs, { Dayjs } from 'dayjs';
 import { Dispatch } from 'react';
 import {
   resetData,
   setErrors,
+  setFillTasksData,
   setLoading,
-  setSingleTaskCode,
-  setTasksCodes,
-  setTasksData,
+  setPrepareTasksData,
   setWorklogs,
   TPerformetOption,
 } from 'slices/worklogs';
@@ -20,100 +18,35 @@ export const FORMAT_TYPE = 'YYYY-MM-DD';
 export const REQUEST_INTERVAL = 330;
 
 export type TTaskData = {
-  id: string;
-  name: string;
   key: string;
-  status: string;
+  name: string;
   originalEstimation: string;
   totalDuration: number;
-  type: string;
-  priority: string;
-  assignee: string;
   createdAt: string;
-  createdBy: string;
-  sprint: string;
+
+  // status: string;
+  // type: string;
+  // priority: string;
+  // assignee: string;
+  // createdBy: string;
 };
 
-// 4-old - точечный экшен для получения типа задачи
-export const getTasksTypesSingle = (taskCode: string) => {
-  return async function (dispatch: Dispatch<any>) {
-    const { data, success, error } = await QueueService.getTaskByKey(taskCode);
-
-    if (success && data) {
-      dispatch(
-        setSingleTaskCode({
-          code: taskCode,
-          type: data.type.key,
-        }),
-      );
-    } else {
-      const errorMessage =
-        error?.message || `${taskCode} - Ошибка загрузки типа задачи`;
-      alert(errorMessage);
-      dispatch(setLoading(false));
-      dispatch(setErrors(errorMessage));
-    }
-  };
-};
-
-// 3-old - генерирует интервальные экшены для типов задач
-export const getTasksTypesMulti = () => {
-  return async function (dispatch: Dispatch<any>) {
-    // find current perfomer data
-    const selectedTasks = Object.keys(
-      store.getState().worklogs.selectedTasks || [],
-    );
-
-    if (!selectedTasks.length) {
-      dispatch(setLoading(false));
-      dispatch(setErrors('Задач не найдено'));
-      return;
-    }
-
-    // если задача одна
-    if (selectedTasks.length === 1) {
-      // делаем запрос на первую выделенную задачу
-      dispatch(getTasksTypesSingle(selectedTasks[0]));
-
-      // а затем через таймаут останавливаем загрузку
-      setTimeout(() => {
-        dispatch(setLoading(false));
-      }, REQUEST_INTERVAL);
-    } else {
-      dispatch(getTasksTypesSingle(selectedTasks[0]));
-      let counter = 1;
-
-      const intervalId = setInterval(() => {
-        dispatch(getTasksTypesSingle(selectedTasks[counter]));
-
-        // counter - увеличваем счетчик на 1
-        counter++;
-
-        if (counter === selectedTasks.length) {
-          clearInterval(intervalId);
-          dispatch(setLoading(false));
-        }
-      }, REQUEST_INTERVAL);
-    }
-  };
-};
-
-// 3-new - получение типов задача
+// 3 - получение типов задача
 export const searchTasksTypes = () => {
   return async function (dispatch: Dispatch<any>) {
     // find current perfomer data
-    const selectedTasks = Object.keys(
-      store.getState().worklogs.selectedTasks || [],
+    const preparedTasks = Object.keys(
+      store.getState().worklogs.tasksData || [],
     );
 
-    if (!selectedTasks.length) {
+    if (!preparedTasks.length) {
       dispatch(setLoading(false));
       dispatch(setErrors('Выбранные задачи отсутствуют'));
       return;
     }
 
     const { data, success, error } =
-      await SearchService.searchTasks(selectedTasks);
+      await SearchService.searchTasks(preparedTasks);
 
     // success
     if (success && data) {
@@ -124,29 +57,11 @@ export const searchTasksTypes = () => {
         return;
       }
 
-      // data
-      const _data = data.reduce<Record<string, TTaskData>>((total, item) => {
-        const _item: TTaskData = {
-          id: item.id,
-          name: item.summary,
-          key: item.key,
-          status: item.status.display,
-          originalEstimation: item.originalEstimation,
-          totalDuration: CalculateHoursFromTrackerTask(item.spent),
-          type: item.type.key,
-          priority: item.priority.key,
-          assignee: item.assignee.display,
-          createdAt: item.createdAt,
-          createdBy: item.createdBy.display,
-          sprint: item.sprint[0].display,
-        };
+      console.log('data', data);
 
-        total[item.key] = _item;
+      // fill data to store
+      data.forEach(task => dispatch(setFillTasksData(task)));
 
-        return total;
-      }, {});
-
-      dispatch(setTasksData(_data));
       dispatch(setLoading(false));
       // error
     } else {
@@ -225,8 +140,8 @@ export const getWorklogSingle = (
         }),
       );
 
-      // сохраняем коды полученных задач
-      dispatch(setTasksCodes(tasksCodes));
+      // сохраняем коды полученных задач как ключи объекта с пустыми данными
+      dispatch(setPrepareTasksData(tasksCodes));
 
       // error
     } else {

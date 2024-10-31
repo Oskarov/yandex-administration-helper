@@ -5,10 +5,10 @@ import { TStore } from 'store/store';
 
 const WorklogsData = () => {
   // selectors
-  const { worklogs, selectedTasks } = useSelector((store: TStore) => {
+  const { worklogs, tasksData } = useSelector((store: TStore) => {
     return {
       worklogs: store.worklogs.worklogs,
-      selectedTasks: store.worklogs.selectedTasks,
+      tasksData: store.worklogs.tasksData,
     };
   });
 
@@ -42,8 +42,8 @@ const WorklogsData = () => {
                         <div className={styles.WorklogsData__dayData}>
                           {/* task code and duration */}
                           {dayTasks.map((task: any) => {
-                            const taskType = selectedTasks
-                              ? selectedTasks[task.code]
+                            const taskType = tasksData
+                              ? tasksData[task.code]
                               : '-';
 
                             return (

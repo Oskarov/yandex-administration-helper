@@ -3,22 +3,22 @@ import { TStore } from 'store/store';
 
 const Debug = () => {
   // selectors
-  const { worklogs, selectedTasks } = useSelector((store: TStore) => {
+  const { worklogs, tasksData } = useSelector((store: TStore) => {
     return {
       worklogs: store.worklogs.worklogs,
-      selectedTasks: store.worklogs.selectedTasks,
+      tasksData: store.worklogs.tasksData,
     };
   });
 
   return (
     <>
-      {selectedTasks && (
+      {tasksData && (
         <section>
           <h2>Список задач из ворклогов</h2>
 
           <div>
             <div>
-              <pre>{JSON.stringify(selectedTasks, null, 2)}</pre>
+              <pre>{JSON.stringify(tasksData, null, 2)}</pre>
             </div>
           </div>
         </section>

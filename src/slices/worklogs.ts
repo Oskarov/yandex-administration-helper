@@ -16,8 +16,7 @@ type TState = {
     dateTo: Dayjs | null;
   };
   worklogs: any; // TODO: Define type for worklogs array
-  selectedTasks: Record<string, string> | null;
-  tasksData: Record<string, TTaskData> | null;
+  tasksData: Record<string, TTaskData | null> | null;
 };
 
 const initialState: TState = {
@@ -29,7 +28,6 @@ const initialState: TState = {
     dateTo: dayjs(new Date()),
   },
   worklogs: null,
-  selectedTasks: null,
   tasksData: null,
 };
 
@@ -46,7 +44,6 @@ const worklogsSlice = createSlice({
     resetData(state) {
       state.errors = [];
       state.worklogs = null;
-      state.selectedTasks = null;
       state.tasksData = null;
     },
 
@@ -83,37 +80,22 @@ const worklogsSlice = createSlice({
       };
     },
 
-    // setTasksCodes
-    setTasksCodes(state, { payload }: PayloadAction<string[]>) {
-      const dataObj = payload.reduce<Record<string, string>>((total, item) => {
-        total[item] = '';
+    // setPrepareTaskData
+    setPrepareTasksData(state, { payload }: PayloadAction<string[]>) {
+      payload.forEach(code => {
+        state.tasksData = {
+          // возвращаем уже сохранненные данные
+          ...state.tasksData,
 
-        return total;
-      }, {});
-
-      state.selectedTasks = {
-        ...state.selectedTasks,
-        ...dataObj,
-      };
+          // добавляем ключи с названием задачи со значением null
+          [code]: null,
+        };
+      });
     },
 
-    // setSingleTaskCode
-    setSingleTaskCode(
-      state,
-      {
-        payload,
-      }: PayloadAction<{
-        code: string;
-        type: string;
-      }>,
-    ) {
-      (state.selectedTasks as Record<string, string>)[payload.code] =
-        payload.type;
-    },
-
-    // setTasksData
-    setTasksData(state, { payload }: PayloadAction<Record<string, TTaskData>>) {
-      state.tasksData = payload;
+    // setPrepareTaskData
+    setFillTasksData(state, { payload }: PayloadAction<any>) {
+      (state.tasksData as Record<string, any>)[payload.key] = payload;
     },
   },
 });
@@ -128,7 +110,6 @@ export const {
   setPerformers,
   setDates,
   setWorklogs,
-  setTasksCodes,
-  setTasksData,
-  setSingleTaskCode,
+  setPrepareTasksData,
+  setFillTasksData,
 } = worklogsSlice.actions;
