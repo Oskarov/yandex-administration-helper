@@ -195,7 +195,7 @@ export const getWorklogsMultiply = (
       // и спустя таймаут делаем запросы по типам задач
       setTimeout(() => {
         dispatch(searchTasksTypes()); // получение типов задач одним запросом
-      }, REQUEST_INTERVAL);
+      }, REQUEST_INTERVAL + 100);
 
       // если выбрано несколько исполнителей
     } else {
@@ -223,7 +223,7 @@ export const getWorklogsMultiply = (
           // и спустя таймаут делаем запросы по типам задач
           setTimeout(() => {
             dispatch(searchTasksTypes()); // получение типов задач одним запросом
-          }, REQUEST_INTERVAL);
+          }, REQUEST_INTERVAL + 100);
         }
       }, REQUEST_INTERVAL);
     }

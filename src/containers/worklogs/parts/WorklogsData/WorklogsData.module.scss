@@ -20,14 +20,13 @@
     flex-direction: column;
     border: 1px solid #ccc;
     border-radius: 10px;
-    width: 300px;
+    flex-basis: 19%;
+    max-width: 330px;
+    min-width: 250px;
     flex-grow: 0;
     flex-shrink: 0;
-    margin-right: 15px;
-    margin-bottom: 15px;
-    &:last-child {
-      margin-right: 0;
-    }
+    margin-right: 12px;
+    margin-bottom: 12px;
 
     // Дата дня
     & > h3 {
@@ -63,12 +62,14 @@
 
     & > span {
       &:first-child {
+        flex-shrink: 0;
         margin-right: 3px;
       }
       &:nth-child(2) {
-        font-size: 14px;
+        font-size: 13px;
       }
       &:last-child {
+        flex-shrink: 0;
         margin-left: auto;
       }
     }

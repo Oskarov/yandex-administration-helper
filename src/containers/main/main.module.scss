@@ -1,14 +1,14 @@
-.main{
+.main {
   position: relative;
   padding: 16px;
   height: 100vh;
-  width: 100vw;
+  // width: 100vw;
 }
 
-.tabs{
+.tabs {
   display: flex;
 
-  >div{
+  & > div {
     padding: 0 16px;
     height: 48px;
     display: flex;
@@ -16,20 +16,20 @@
     justify-content: center;
     cursor: pointer;
 
-    &.active{
+    &.active {
       cursor: default;
       background: #82e18a;
-      &:hover{
+      &:hover {
         background: #82e18a;
       }
     }
 
-    &:hover{
+    &:hover {
       background-color: rgba(236, 232, 232, 0.38);
     }
   }
 }
 
-.content{
+.content {
   padding: 16px;
 }
