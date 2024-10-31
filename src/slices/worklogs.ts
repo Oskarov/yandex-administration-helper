@@ -94,7 +94,7 @@ const worklogsSlice = createSlice({
     },
 
     // setPrepareTaskData
-    setFillTasksData(state, { payload }: PayloadAction<any>) {
+    setFillTaskData(state, { payload }: PayloadAction<TTaskData>) {
       (state.tasksData as Record<string, any>)[payload.key] = payload;
     },
   },
@@ -111,5 +111,5 @@ export const {
   setDates,
   setWorklogs,
   setPrepareTasksData,
-  setFillTasksData,
+  setFillTaskData,
 } = worklogsSlice.actions;

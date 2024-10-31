@@ -4,7 +4,7 @@ import { Dispatch } from 'react';
 import {
   resetData,
   setErrors,
-  setFillTasksData,
+  setFillTaskData,
   setLoading,
   setPrepareTasksData,
   setWorklogs,
@@ -19,16 +19,15 @@ export const REQUEST_INTERVAL = 330;
 
 export type TTaskData = {
   key: string;
+  type: string;
   name: string;
-  originalEstimation: string;
+  assignee: string;
+  status: string;
   totalDuration: number;
   createdAt: string;
-
-  // status: string;
-  // type: string;
-  // priority: string;
-  // assignee: string;
-  // createdBy: string;
+  createdBy: string;
+  originalEstimation: string;
+  priority: string;
 };
 
 // 3 - получение типов задача
@@ -57,10 +56,26 @@ export const searchTasksTypes = () => {
         return;
       }
 
-      console.log('data', data);
-
       // fill data to store
-      data.forEach(task => dispatch(setFillTasksData(task)));
+      data.forEach(task =>
+        // custom fields
+        dispatch(
+          setFillTaskData({
+            key: task.key,
+            type: task.type.display,
+            name: task.summary,
+            assignee: task.assignee.display,
+            status: task.status.display,
+            totalDuration: +CalculateHoursFromTrackerTask(task.spent).toFixed(
+              2,
+            ),
+            createdAt: task.createdAt,
+            createdBy: task.createdBy.display,
+            originalEstimation: task.originalEstimation,
+            priority: task.priority.display,
+          }),
+        ),
+      );
 
       dispatch(setLoading(false));
       // error
