@@ -30,7 +30,7 @@ export type TTaskData = {
   priority: string;
 };
 
-// 3 - получение типов задача
+// 3 - получение типов задач
 export const searchTasksTypes = () => {
   return async function (dispatch: Dispatch<any>) {
     // find current perfomer data
@@ -150,7 +150,9 @@ export const getWorklogSingle = (
       // сохраняем видоизмененные данные ворклога
       dispatch(
         setWorklogs({
-          performer: selectedPerformer?.trackerDisplay || id,
+          performer:
+            `${selectedPerformer?.lastName} ${selectedPerformer?.firstName}` ||
+            id,
           data: newData,
         }),
       );
@@ -192,8 +194,7 @@ export const getWorklogsMultiply = (
 
       // и спустя таймаут делаем запросы по типам задач
       setTimeout(() => {
-        // dispatch(getTasksTypesMulti()); // так было раньше --> отдельные запросы по каждой задаче
-        dispatch(searchTasksTypes()); // так сейчас --> получение типов задач одним запросом
+        dispatch(searchTasksTypes()); // получение типов задач одним запросом
       }, REQUEST_INTERVAL);
 
       // если выбрано несколько исполнителей
@@ -221,8 +222,7 @@ export const getWorklogsMultiply = (
 
           // и спустя таймаут делаем запросы по типам задач
           setTimeout(() => {
-            // dispatch(getTasksTypesMulti()); // так было раньше --> отдельные запросы по каждой задаче
-            dispatch(searchTasksTypes()); // так сейчас --> получение типов задач одним запросом
+            dispatch(searchTasksTypes()); // получение типов задач одним запросом
           }, REQUEST_INTERVAL);
         }
       }, REQUEST_INTERVAL);

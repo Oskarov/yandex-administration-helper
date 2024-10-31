@@ -40,7 +40,7 @@
 
     // Итого время на день
     & > h4 {
-      background-color: #eee;
+      border-top: 1px solid #ddd;
       text-align: right;
       margin: 0;
       border-radius: 0 0 10px 10px;
@@ -55,6 +55,7 @@
 
   &__task {
     display: flex;
+    align-items: center;
     width: 100%;
     padding-left: 10px;
     padding-right: 10px;
@@ -62,8 +63,10 @@
 
     & > span {
       &:first-child {
+        margin-right: 3px;
       }
       &:nth-child(2) {
+        font-size: 14px;
       }
       &:last-child {
         margin-left: auto;

@@ -18,7 +18,7 @@ const WorklogsData = () => {
     return (
       <>
         {Object.keys(worklogs).map((performer, index) => {
-          console.log('data[performer]', worklogs[performer]);
+          // console.log('data[performer]', worklogs[performer]);
 
           const performersLogDays = Object.keys(worklogs[performer]);
 
@@ -43,7 +43,7 @@ const WorklogsData = () => {
                           {/* task code and duration */}
                           {dayTasks.map((task: any) => {
                             const taskType = tasksData
-                              ? tasksData[task.code]
+                              ? tasksData[task.code]?.type
                               : '-';
 
                             return (
@@ -52,16 +52,26 @@ const WorklogsData = () => {
                                 className={styles.WorklogsData__task}
                               >
                                 <span>
+                                  {/* code */}
                                   <a
-                                    href={`${task.link}`}
+                                    href={`https://tracker.yandex.ru/${task.key}`}
                                     target='_blank'
                                     rel='noreferrer'
-                                    title={task.comment || 'Без комментариев'}
+                                    title={
+                                      `Комментарий: ${task.comment}` ||
+                                      'Без комментариев'
+                                    }
                                   >
                                     {task.code}
                                   </a>
                                 </span>
-                                <span>{`(${taskType})`}</span>
+
+                                {/* name */}
+                                <span
+                                  title={`Название: ${task.name}`}
+                                >{`(${taskType})`}</span>
+
+                                {/* duration */}
                                 <span>
                                   {Number.parseFloat(task.duration).toFixed(2)}
                                 </span>

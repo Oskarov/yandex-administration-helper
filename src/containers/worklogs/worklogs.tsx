@@ -169,3 +169,9 @@ const Worklogs: React.FC = () => {
 };
 
 export default Worklogs;
+
+// TODO:
+
+// 1. Добавить типизацию
+// 2. Разбить на под-компоненты файл WorklogsData.tsx
+// 3. Проверить worklogsEffects.ts в плане тестирования запросов
