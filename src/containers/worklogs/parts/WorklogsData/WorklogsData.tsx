@@ -54,7 +54,7 @@ const WorklogsData = () => {
                                 <span>
                                   {/* code */}
                                   <a
-                                    href={`https://tracker.yandex.ru/${task.key}`}
+                                    href={`https://tracker.yandex.ru/${task.code}`}
                                     target='_blank'
                                     rel='noreferrer'
                                     title={
