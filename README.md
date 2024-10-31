@@ -12,10 +12,10 @@ Personal project of [Dmitriy Oskarov](#)
 
 Technology stack:
 
-* React
-* Redux-Toolkit
-* Redux-Persist
-* Beautiful-drug-and-drop
+- React
+- Redux-Toolkit
+- Redux-Persist
+- Beautiful-drug-and-drop
 
 ---
 
@@ -37,3 +37,11 @@ This project is not a demonstration of optimal solutions and is aimed at studyin
 2. npm install
 3. npm run dev
 
+---
+
+### Build script
+
+1. `npm run build` - react-scripts build
+2. `npm run build-for-php` - react-scripts build with custom path and .env.php file for php-framework
+
+---
