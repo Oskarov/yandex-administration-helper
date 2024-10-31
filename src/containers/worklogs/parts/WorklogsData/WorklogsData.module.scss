@@ -27,6 +27,9 @@
     flex-shrink: 0;
     margin-right: 12px;
     margin-bottom: 12px;
+    @media (max-width: 1410px) {
+      min-width: 220px;
+    }
 
     // Дата дня
     & > h3 {
@@ -67,10 +70,17 @@
       }
       &:nth-child(2) {
         font-size: 13px;
+        @media (max-width: 1410px) {
+          font-size: 12px;
+        }
       }
       &:last-child {
         flex-shrink: 0;
         margin-left: auto;
+        @media (max-width: 1410px) {
+          font-size: 12px;
+          font-weight: bold;
+        }
       }
     }
   }
