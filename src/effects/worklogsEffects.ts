@@ -1,13 +1,14 @@
 import QueueService from 'api/queue-service';
-import WorklogService from 'api/worklog-service';
+import SearchService from 'api/search-service';
 import dayjs, { Dayjs } from 'dayjs';
 import { Dispatch } from 'react';
 import {
-  resetState,
+  resetData,
   setErrors,
   setLoading,
   setSingleTaskCode,
   setTasksCodes,
+  setTasksData,
   setWorklogs,
   TPerformetOption,
 } from 'slices/worklogs';
@@ -18,6 +19,22 @@ import CalculateHoursFromTrackerTask from 'utils/calculateHoursFromTrackerTack';
 export const FORMAT_TYPE = 'YYYY-MM-DD';
 export const REQUEST_INTERVAL = 330;
 
+export type TTaskData = {
+  id: string;
+  name: string;
+  key: string;
+  status: string;
+  originalEstimation: string;
+  totalDuration: number;
+  type: string;
+  priority: string;
+  assignee: string;
+  createdAt: string;
+  createdBy: string;
+  sprint: string;
+};
+
+// 4-old - точечный экшен для получения типа задачи
 export const getTasksTypesSingle = (taskCode: string) => {
   return async function (dispatch: Dispatch<any>) {
     const { data, success, error } = await QueueService.getTaskByKey(taskCode);
@@ -39,7 +56,7 @@ export const getTasksTypesSingle = (taskCode: string) => {
   };
 };
 
-// интервальные экшены для получения ворклогов всех переданных пользователей
+// 3-old - генерирует интервальные экшены для типов задач
 export const getTasksTypesMulti = () => {
   return async function (dispatch: Dispatch<any>) {
     // find current perfomer data
@@ -81,7 +98,65 @@ export const getTasksTypesMulti = () => {
   };
 };
 
-// точеные экшены для получения ворклога одного исполнителя
+// 3-new - получение типов задача
+export const searchTasksTypes = () => {
+  return async function (dispatch: Dispatch<any>) {
+    // find current perfomer data
+    const selectedTasks = Object.keys(
+      store.getState().worklogs.selectedTasks || [],
+    );
+
+    if (!selectedTasks.length) {
+      dispatch(setLoading(false));
+      dispatch(setErrors('Выбранные задачи отсутствуют'));
+      return;
+    }
+
+    const { data, success, error } =
+      await SearchService.searchTasks(selectedTasks);
+
+    // success
+    if (success && data) {
+      // no data
+      if (!data.length) {
+        dispatch(setLoading(false));
+        dispatch(setErrors('Отсутсвуют данные по выбранным задачам'));
+        return;
+      }
+
+      // data
+      const _data = data.reduce<Record<string, TTaskData>>((total, item) => {
+        const _item: TTaskData = {
+          id: item.id,
+          name: item.summary,
+          key: item.key,
+          status: item.status.display,
+          originalEstimation: item.originalEstimation,
+          totalDuration: CalculateHoursFromTrackerTask(item.spent),
+          type: item.type.key,
+          priority: item.priority.key,
+          assignee: item.assignee.display,
+          createdAt: item.createdAt,
+          createdBy: item.createdBy.display,
+          sprint: item.sprint[0].display,
+        };
+
+        total[item.key] = _item;
+
+        return total;
+      }, {});
+
+      dispatch(setTasksData(_data));
+      dispatch(setLoading(false));
+      // error
+    } else {
+      dispatch(setLoading(false));
+      dispatch(setErrors(`${error} - Ошибка загрузки данных типов задач`));
+    }
+  };
+};
+
+// 2 - точеный экшен для получения ворклога одного исполнителя
 export const getWorklogSingle = (
   id: string,
   dateFrom: Dayjs | null,
@@ -99,7 +174,7 @@ export const getWorklogSingle = (
       .getState()
       .performers.items.find(item => Number(item.trackerId) === Number(id));
 
-    const { data, success, error } = await WorklogService.searchWorklogs(
+    const { data, success, error } = await SearchService.searchWorklogs(
       id, // id исполнителя
       _dateFrom,
       _dateTo,
@@ -142,6 +217,7 @@ export const getWorklogSingle = (
         return total;
       }, {});
 
+      // сохраняем видоизмененные данные ворклога
       dispatch(
         setWorklogs({
           performer: selectedPerformer?.trackerDisplay || id,
@@ -149,6 +225,7 @@ export const getWorklogSingle = (
         }),
       );
 
+      // сохраняем коды полученных задач
       dispatch(setTasksCodes(tasksCodes));
 
       // error
@@ -160,7 +237,7 @@ export const getWorklogSingle = (
   };
 };
 
-// интервальные экшены для получения ворклогов всех переданных пользователей
+// 1 - генерирует интервальные экшены для получения ворклога
 export const getWorklogsMultiply = (
   selectedPerformers: TPerformetOption[],
   dateFrom: Dayjs | null,
@@ -168,8 +245,14 @@ export const getWorklogsMultiply = (
 ) => {
   return async function (dispatch: Dispatch<any>) {
     // pre-request reset state
-    dispatch(resetState());
+    dispatch(resetData());
     dispatch(setLoading(true));
+
+    if (!selectedPerformers.length) {
+      dispatch(setLoading(false));
+      dispatch(setErrors('Отсутсвуют выбранные исполнители'));
+      return;
+    }
 
     const firstPerformerId = `${selectedPerformers[0].key}`;
 
@@ -179,7 +262,8 @@ export const getWorklogsMultiply = (
 
       // и спустя таймаут делаем запросы по типам задач
       setTimeout(() => {
-        dispatch(getTasksTypesMulti());
+        // dispatch(getTasksTypesMulti()); // так было раньше --> отдельные запросы по каждой задаче
+        dispatch(searchTasksTypes()); // так сейчас --> получение типов задач одним запросом
       }, REQUEST_INTERVAL);
 
       // если выбрано несколько исполнителей
@@ -207,7 +291,8 @@ export const getWorklogsMultiply = (
 
           // и спустя таймаут делаем запросы по типам задач
           setTimeout(() => {
-            dispatch(getTasksTypesMulti());
+            // dispatch(getTasksTypesMulti()); // так было раньше --> отдельные запросы по каждой задаче
+            dispatch(searchTasksTypes()); // так сейчас --> получение типов задач одним запросом
           }, REQUEST_INTERVAL);
         }
       }, REQUEST_INTERVAL);

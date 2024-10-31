@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import dayjs, { Dayjs } from 'dayjs';
+import { TTaskData } from 'effects/worklogsEffects';
 
 export type TPerformetOption = {
   label: string;
@@ -16,6 +17,7 @@ type TState = {
   };
   worklogs: any; // TODO: Define type for worklogs array
   selectedTasks: Record<string, string> | null;
+  tasksData: Record<string, TTaskData> | null;
 };
 
 const initialState: TState = {
@@ -28,6 +30,7 @@ const initialState: TState = {
   },
   worklogs: null,
   selectedTasks: null,
+  tasksData: null,
 };
 
 type TDate = {
@@ -40,10 +43,11 @@ const worklogsSlice = createSlice({
   initialState,
   reducers: {
     // resetState
-    resetState(state) {
+    resetData(state) {
       state.errors = [];
       state.worklogs = null;
       state.selectedTasks = null;
+      state.tasksData = null;
     },
 
     resetFilters(state) {
@@ -79,6 +83,7 @@ const worklogsSlice = createSlice({
       };
     },
 
+    // setTasksCodes
     setTasksCodes(state, { payload }: PayloadAction<string[]>) {
       const dataObj = payload.reduce<Record<string, string>>((total, item) => {
         total[item] = '';
@@ -92,6 +97,7 @@ const worklogsSlice = createSlice({
       };
     },
 
+    // setSingleTaskCode
     setSingleTaskCode(
       state,
       {
@@ -104,13 +110,18 @@ const worklogsSlice = createSlice({
       (state.selectedTasks as Record<string, string>)[payload.code] =
         payload.type;
     },
+
+    // setTasksData
+    setTasksData(state, { payload }: PayloadAction<Record<string, TTaskData>>) {
+      state.tasksData = payload;
+    },
   },
 });
 
 export const worklogsReducer = worklogsSlice.reducer;
 
 export const {
-  resetState,
+  resetData,
   resetFilters,
   setLoading,
   setErrors,
@@ -118,5 +129,6 @@ export const {
   setDates,
   setWorklogs,
   setTasksCodes,
+  setTasksData,
   setSingleTaskCode,
 } = worklogsSlice.actions;
