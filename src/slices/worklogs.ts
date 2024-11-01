@@ -17,6 +17,7 @@ type TState = {
   };
   worklogs: any; // TODO: Define type for worklogs array
   tasksData: Record<string, TTaskData | null> | null;
+  foundTasks: string[];
 };
 
 const initialState: TState = {
@@ -29,6 +30,7 @@ const initialState: TState = {
   },
   worklogs: null,
   tasksData: null,
+  foundTasks: [],
 };
 
 type TDate = {
@@ -45,6 +47,7 @@ const worklogsSlice = createSlice({
       state.errors = [];
       state.worklogs = null;
       state.tasksData = null;
+      state.foundTasks = [];
     },
 
     resetFilters(state) {
@@ -80,22 +83,22 @@ const worklogsSlice = createSlice({
       };
     },
 
-    // setPrepareTaskData
-    setPrepareTasksData(state, { payload }: PayloadAction<string[]>) {
-      payload.forEach(code => {
-        state.tasksData = {
-          // возвращаем уже сохранненные данные
-          ...state.tasksData,
+    // setFindedTasks
+    setFoundTasks(state, { payload }: PayloadAction<string[]>) {
+      // убираем дубликаты из массива
+      const withoutDublicates = payload.filter(
+        item => !state.foundTasks.includes(item),
+      );
 
-          // добавляем ключи с названием задачи со значением null
-          [code]: null,
-        };
-      });
+      // объединяем и сортируем
+      state.foundTasks = [...state.foundTasks, ...withoutDublicates].sort(
+        (a, b) => a.localeCompare(b),
+      );
     },
 
-    // setPrepareTaskData
-    setFillTaskData(state, { payload }: PayloadAction<TTaskData>) {
-      (state.tasksData as Record<string, any>)[payload.key] = payload;
+    // setTasksData
+    setTasksData(state, { payload }: PayloadAction<Record<string, TTaskData>>) {
+      state.tasksData = payload;
     },
   },
 });
@@ -110,6 +113,6 @@ export const {
   setPerformers,
   setDates,
   setWorklogs,
-  setPrepareTasksData,
-  setFillTaskData,
+  setFoundTasks,
+  setTasksData,
 } = worklogsSlice.actions;

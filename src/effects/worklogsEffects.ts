@@ -4,9 +4,9 @@ import { Dispatch } from 'react';
 import {
   resetData,
   setErrors,
-  setFillTaskData,
   setLoading,
-  setPrepareTasksData,
+  setFoundTasks,
+  setTasksData,
   setWorklogs,
   TPerformetOption,
 } from 'slices/worklogs';
@@ -34,18 +34,16 @@ export type TTaskData = {
 export const searchTasksTypes = () => {
   return async function (dispatch: Dispatch<any>) {
     // find current perfomer data
-    const preparedTasks = Object.keys(
-      store.getState().worklogs.tasksData || [],
-    );
+    const foundTasks = store.getState().worklogs.foundTasks;
 
-    if (!preparedTasks.length) {
+    if (!foundTasks.length) {
       dispatch(setLoading(false));
       dispatch(setErrors('Выбранные задачи отсутствуют'));
       return;
     }
 
     const { data, success, error } =
-      await SearchService.searchTasks(preparedTasks);
+      await SearchService.searchTasks(foundTasks);
 
     // success
     if (success && data) {
@@ -56,26 +54,26 @@ export const searchTasksTypes = () => {
         return;
       }
 
-      // fill data to store
-      data.forEach(task =>
-        // custom fields
-        dispatch(
-          setFillTaskData({
-            key: task.key,
-            type: task.type.display,
-            name: task.summary,
-            assignee: task.assignee.display,
-            status: task.status.display,
-            totalDuration: +CalculateHoursFromTrackerTask(task.spent).toFixed(
-              2,
-            ),
-            createdAt: task.createdAt,
-            createdBy: task.createdBy.display,
-            originalEstimation: task.originalEstimation,
-            priority: task.priority.display,
-          }),
-        ),
-      );
+      // conver data to hash-object
+      const _data: Record<string, TTaskData> = data.reduce((total, task) => {
+        total[task.key] = {
+          key: task.key,
+          type: task.type.display,
+          name: task.summary,
+          assignee: task.assignee.display,
+          status: task.status.display,
+          totalDuration: +CalculateHoursFromTrackerTask(task.spent).toFixed(2),
+          createdAt: task.createdAt,
+          createdBy: task.createdBy.display,
+          originalEstimation: task.originalEstimation,
+          priority: task.priority.display,
+        };
+
+        return total;
+      }, {});
+
+      // save data to store
+      dispatch(setTasksData(_data));
 
       dispatch(setLoading(false));
       // error
@@ -158,7 +156,7 @@ export const getWorklogSingle = (
       );
 
       // сохраняем коды полученных задач как ключи объекта с пустыми данными
-      dispatch(setPrepareTasksData(tasksCodes));
+      dispatch(setFoundTasks(tasksCodes));
 
       // error
     } else {
