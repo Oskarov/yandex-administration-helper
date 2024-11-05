@@ -123,7 +123,7 @@ export const getWorklogSingle = (
 
       const newData = data.reduce((total: any, item: any) => {
         // обрезаем строку даты до формата YYYY-MM-DD
-        const logDay = item.createdAt.slice(0, 10);
+        const logDay = item.start.slice(0, 10);
 
         // создаем объект задач с нужными нам полями
         const logTask = {
