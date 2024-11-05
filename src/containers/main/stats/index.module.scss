@@ -1,0 +1,113 @@
+.control {
+  width: 600px;
+
+  > * {
+    margin-bottom: 16px;
+  }
+}
+
+.timeTable {
+  padding: 18px 0;
+}
+
+.timeItem {
+  margin-bottom: 16px;
+
+  .timeName {
+    margin-bottom: 8px;
+    font-size: 18px;
+    font-weight: bold;
+  }
+}
+
+.table {
+  width: 400px;
+  margin-bottom: 8px;
+}
+
+.taskTitle{
+  font-weight: bolder;
+}
+
+.timeLine{
+  margin-bottom: 8px;
+  position: relative;
+  width:600px;
+
+  .timeDevider{
+
+    .center{
+      position: absolute;
+      bottom: 0;
+      height: 40px;
+      right: 50%;
+      border-right: 2px solid red;
+    }
+
+    .left{
+      font-size: 12px;
+      right: 51%;
+      bottom: 27px;
+      position: absolute;
+    }
+    .right{
+      font-size: 12px;
+      left: 51%;
+      bottom: 27px;
+      position: absolute;
+    }
+  }
+
+  .timeLineTitle{
+    font-weight: bolder;
+    margin-bottom: 4px;
+
+
+  }
+
+  .timeLineTable{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width:600px;
+    position: relative;
+    border: 1px solid #30a309;
+    border-radius: 8px;
+
+    >*{
+      height: 24px;
+    }
+
+    .orgTimesegment{
+      background: #fadb56;
+    }
+
+    .specTimesegment{
+      background: #30a309;
+    }
+  }
+}
+
+.taskRaw{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  >*{
+    margin-right: 8px;
+  }
+}
+
+.fastLinks{
+  display: flex;
+
+  >*{
+    cursor: pointer;
+    margin-right: 24px;
+    color: #26c314;
+    &:first-child{
+      color: #103eea;
+    }
+  }
+}

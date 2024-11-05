@@ -3,6 +3,7 @@ import styles           from "./main.module.scss";
 import CN from "classnames";
 import ListOfPerformers from "./listOfPerformers/listOfPerformers";
 import {CreateTasks} from "../createTasks";
+import {Stats} from "./stats/stats";
 
 interface MainProps {
 
@@ -31,6 +32,7 @@ const Main: React.FC<MainProps> = ({}) => {
         </div>
 
         <div className={styles.content}>
+            {tab === 1 && <Stats/>}
             {tab === 2 && <CreateTasks/>}
             {tab === 3 && <ListOfPerformers/>}
         </div>
