@@ -11,15 +11,11 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import Loader from 'components/loader';
-import {
-  resetFilters,
-  setDates,
-  setPerformers,
-  TPerformetOption,
-} from 'slices/worklogs';
+import { resetFilters, setDates, setPerformers } from 'slices/worklogs';
 import { getWorklogsMultiply } from 'effects/worklogsEffects';
 // import Debug from './parts/Debug/Debug';
 import WorklogsData from './parts/WorklogsData/WorklogsData';
+import { TPerformetOption } from 'interfaces/IWorklogs';
 
 const Worklogs: React.FC = () => {
   const dispatch = useDispatch();

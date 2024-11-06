@@ -1,5 +1,10 @@
 import SearchService from 'api/search-service';
 import dayjs, { Dayjs } from 'dayjs';
+import {
+  TPerformetOption,
+  TTaskData,
+  TWorklogTaskData,
+} from 'interfaces/IWorklogs';
 import { Dispatch } from 'react';
 import {
   resetData,
@@ -8,7 +13,6 @@ import {
   setFoundTasks,
   setTasksData,
   setWorklogs,
-  TPerformetOption,
 } from 'slices/worklogs';
 import { store } from 'store/store';
 import CalculateHoursFromTrackerTask from 'utils/calculateHoursFromTrackerTack';
@@ -16,19 +20,6 @@ import CalculateHoursFromTrackerTask from 'utils/calculateHoursFromTrackerTack';
 // 2024-10-20T16:07:17+03:00 - full valid date
 export const FORMAT_TYPE = 'YYYY-MM-DD';
 export const REQUEST_INTERVAL = 330;
-
-export type TTaskData = {
-  key: string;
-  type: string;
-  name: string;
-  assignee: string;
-  status: string;
-  totalDuration: number;
-  createdAt: string;
-  createdBy: string;
-  originalEstimation: string;
-  priority: string;
-};
 
 // 3 - получение типов задач
 export const searchTasksTypes = () => {
@@ -121,29 +112,32 @@ export const getWorklogSingle = (
         return;
       }
 
-      const newData = data.reduce((total: any, item: any) => {
-        // обрезаем строку даты до формата YYYY-MM-DD
-        const logDay = item.start.slice(0, 10);
+      const _data = data.reduce<Record<string, TWorklogTaskData[]>>(
+        (total, item) => {
+          // обрезаем строку даты до формата YYYY-MM-DD
+          const logDay = item.start.slice(0, 10); // createdAt | start
 
-        // создаем объект задач с нужными нам полями
-        const logTask = {
-          code: item.issue.key,
-          name: item.issue.display,
-          link: item.issue.self,
-          comment: item.comment || null,
-          createdAt: item.createdAt,
-          duration: CalculateHoursFromTrackerTask(item.duration),
-        };
+          // создаем объект задач с нужными нам полями
+          const logTask: TWorklogTaskData = {
+            code: item.issue.key,
+            name: item.issue.display,
+            link: item.issue.self,
+            comment: item.comment || null,
+            createdAt: item.createdAt,
+            duration: CalculateHoursFromTrackerTask(item.duration),
+          };
 
-        if (!tasksCodes.includes(logTask.code)) {
-          tasksCodes.push(logTask.code);
-        }
+          if (!tasksCodes.includes(logTask.code)) {
+            tasksCodes.push(logTask.code);
+          }
 
-        // добавляем день как поле объекта со значениям массива залогированных задач
-        total[logDay] = [...(total[logDay] || []), logTask];
+          // добавляем день как поле объекта со значениям массива залогированных задач
+          total[logDay] = [...(total[logDay] || []), logTask];
 
-        return total;
-      }, {});
+          return total;
+        },
+        {},
+      );
 
       // сохраняем видоизмененные данные ворклога
       dispatch(
@@ -151,7 +145,7 @@ export const getWorklogSingle = (
           performer:
             `${selectedPerformer?.lastName} ${selectedPerformer?.firstName}` ||
             id,
-          data: newData,
+          data: _data,
         }),
       );
 

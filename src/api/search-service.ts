@@ -1,5 +1,6 @@
 import httpClient from './httpClient';
 
+// TODO: data typisation
 type TSearchWorklogsResponse = {
   success: boolean;
   data: any[] | null;

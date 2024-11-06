@@ -1,24 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import dayjs, { Dayjs } from 'dayjs';
-import { TTaskData } from 'effects/worklogsEffects';
-
-export type TPerformetOption = {
-  label: string;
-  key: number;
-};
-
-type TState = {
-  loading: boolean;
-  errors: string[];
-  filters: {
-    performers: TPerformetOption[];
-    dateFrom: Dayjs | null;
-    dateTo: Dayjs | null;
-  };
-  worklogs: any; // TODO: Define type for worklogs array
-  tasksData: Record<string, TTaskData | null> | null;
-  foundTasks: string[];
-};
+import {
+  TPerformetOption,
+  TState,
+  TTaskData,
+  TWorklogTaskData,
+} from 'interfaces/IWorklogs';
 
 const initialState: TState = {
   loading: false,
@@ -76,7 +63,15 @@ const worklogsSlice = createSlice({
     },
 
     // setWorklogs
-    setWorklogs(state, { payload }: PayloadAction<Record<string, any>>) {
+    setWorklogs(
+      state,
+      {
+        payload,
+      }: PayloadAction<{
+        performer: string;
+        data: Record<string, TWorklogTaskData[]>;
+      }>,
+    ) {
       state.worklogs = {
         ...state.worklogs,
         [payload.performer]: payload.data,
