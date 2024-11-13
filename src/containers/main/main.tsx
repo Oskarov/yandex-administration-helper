@@ -1,44 +1,58 @@
-import React            from 'react';
-import styles           from "./main.module.scss";
-import CN from "classnames";
-import ListOfPerformers from "./listOfPerformers/listOfPerformers";
-import {CreateTasks} from "../createTasks";
-import {Stats} from "./stats/stats";
+import React from 'react';
 
-interface MainProps {
+// constent
+import ListOfPerformers from './listOfPerformers/listOfPerformers';
+import { CreateTasks } from '../createTasks';
+import Statistics from '../statistics/statistics';
+import Worklogs from 'containers/worklogs/worklogs';
+// import {CreateTasks} from "../createTasks";
+import { Stats } from './stats/stats';
 
-}
+// styles
+import CN from 'classnames';
+import styles from './main.module.scss';
 
-const Main: React.FC<MainProps> = ({}) => {
-    const [tab, setTab] = React.useState<number>(1);
+interface MainProps {}
 
-    return <div className={styles.main}>
-        <div className={styles.tabs}>
-            <div className={CN({[styles.active]: tab === 1})} onClick={() => setTab(1)}>
-                <span>
-                    Статистика по спринту
-                </span>
-            </div>
-            <div className={CN({[styles.active]: tab === 2})} onClick={() => setTab(2)}>
-                <span>
-                    Создание задач на спринт
-                </span>
-            </div>
-            <div className={CN({[styles.active]: tab === 3})} onClick={() => setTab(3)}>
-                <span>
-                    Заведение исполнителей
-                </span>
-            </div>
-        </div>
+export const tabs: string[] = [
+  'Статистика по спринту',
+  'Создание задач на спринт',
+  'Заведение исполнителей',
+  'Ворклоги',
+];
 
-        <div className={styles.content}>
-            {tab === 1 && <Stats/>}
-            {tab === 2 && <CreateTasks/>}
-            {tab === 3 && <ListOfPerformers/>}
-        </div>
+const Main: React.FC<MainProps> = () => {
+  const [tab, setTab] = React.useState<number>(1);
 
+  return (
+    <div className={styles.main}>
+      <div className={styles.tabs}>
+        {tabs.map((item, index) => (
+          <div
+            key={`${index + 1} - ${item}`}
+            onClick={() => setTab(index + 1)}
+            className={CN({ [styles.active]: tab === index + 1 })}
+          >
+            <span>{item}</span>
+          </div>
+        ))}
+      </div>
 
-    </div>;
-}
+      <div className={styles.content}>
+        {/* Статистика по спринту */}
+        {tab === 1 && <Stats />}
+
+        {/* Создание задач на спринт */}
+        {tab === 2 && <CreateTasks />}
+
+        {/* Заведение исполнителей */}
+        {tab === 3 && <ListOfPerformers />}
+
+        {/* Ворклоги */}
+        {tab === 4 && <Worklogs />}
+      </div>
+    </div>
+  );
+};
 
 export default Main;
