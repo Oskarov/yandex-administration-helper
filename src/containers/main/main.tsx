@@ -11,6 +11,7 @@ import { Stats } from './stats/stats';
 // styles
 import CN from 'classnames';
 import styles from './main.module.scss';
+import {TaskDirect} from "../TaskDirect/taskDirect";
 
 interface MainProps {}
 
@@ -19,6 +20,7 @@ export const tabs: string[] = [
   'Создание задач на спринт',
   'Заведение исполнителей',
   'Ворклоги',
+  'Отслеживание задач'
 ];
 
 const Main: React.FC<MainProps> = () => {
@@ -50,6 +52,9 @@ const Main: React.FC<MainProps> = () => {
 
         {/* Ворклоги */}
         {tab === 4 && <Worklogs />}
+
+        {/* Отслеживание задач */}
+        {tab === 5 && <TaskDirect />}
       </div>
     </div>
   );

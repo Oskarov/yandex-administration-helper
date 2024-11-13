@@ -16,7 +16,8 @@ export interface ITask {
 }
 
 export interface ITasksState {
-    items: ITask[]
+    items: ITask[],
+    directTasks: ITask[],
 }
 
 export const TASK_TYPES_ENUM = {
