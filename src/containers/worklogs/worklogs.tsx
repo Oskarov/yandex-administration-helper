@@ -16,6 +16,7 @@ import { getWorklogsMultiply } from 'effects/worklogsEffects';
 // import Debug from './parts/Debug/Debug';
 import WorklogsData from './parts/WorklogsData/WorklogsData';
 import { TPerformetOption } from 'interfaces/IWorklogs';
+import CalendarGrid from './parts/CalendarGrid/CalendarGrid';
 
 const Worklogs: React.FC = () => {
   const dispatch = useDispatch();
@@ -153,6 +154,11 @@ const Worklogs: React.FC = () => {
               </section>
             ))}
 
+          <CalendarGrid
+            dateTo={dateTo as dayjs.Dayjs}
+            dateFrom={dateFrom as dayjs.Dayjs}
+          />
+
           {/* worklogs */}
           <WorklogsData />
 
@@ -168,7 +174,9 @@ export default Worklogs;
 
 // TODO:
 
-// 1. Добавить типизацию
-// 2. Разбить на под-компоненты файл WorklogsData.tsx
-// 3. Проверить worklogsEffects.ts в плане тестирования запросов
-// 4. Сделать динамически меняющийся homepage в package.json в зависимости от запущенного скрипта
+// 1. Добавить типизацию +++
+// 2. Разбить на под-компоненты файл WorklogsData.tsx ---
+// 3. Проверить worklogsEffects.ts в плане тестирования запросов +++
+// 4. Сделать динамически меняющийся homepage в package.json в зависимости от запущенного скрипта +++
+
+// 5. Add calendar-grid
