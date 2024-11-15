@@ -1,5 +1,3 @@
-import { ReactElement } from 'react';
-
 type TProps = {
   errors: string[];
 };

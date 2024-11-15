@@ -4,49 +4,8 @@
   display: flex;
   flex-direction: column;
 
-  &__top {
-    display: flex;
-    margin-bottom: 20px;
-    // outline: 1px solid red;
-
-    & > div {
-      padding: 10px;
-      flex-shrink: 0;
-      flex-grow: 0;
-      border: 1px solid $gray-middle;
-      border-radius: 10px;
-
-      & > h2 {
-        margin-top: 0;
-      }
-    }
-  }
-
-  &__id {
-    margin-right: 20px;
-  }
-
-  &__dates {
-    margin-right: 10px;
-  }
-
-  &__action[class] {
-    display: flex;
-    padding: 0;
-    border: none;
-
-    button {
-      border-radius: 10px;
-
-      &:first-child {
-        margin-right: 10px;
-      }
-    }
-  }
-
   &__bottom {
     display: flex;
-    // outline: 1px solid red;
 
     // loader
     & > div {
@@ -60,6 +19,7 @@
 
   &__content {
     width: 100%;
+
     & > section {
       border: 1px solid $gray-middle;
       border-radius: 10px;
