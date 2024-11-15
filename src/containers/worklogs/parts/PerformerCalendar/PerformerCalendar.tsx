@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import dayjs from 'dayjs';
 import { returnCalendarInterval, ruNamesOfDays } from 'utils/date';
 import { TWorklogTaskData } from 'interfaces/IWorklogs';
@@ -24,10 +25,12 @@ const PerformerCalendar: React.FC<TProps> = ({
     tasksData: store.worklogs.tasksData,
   }));
 
-  const performerInterval = returnCalendarInterval(
-    dateFrom as dayjs.Dayjs,
-    dateTo as dayjs.Dayjs,
-  );
+  const performerInterval = useMemo(() => {
+    return returnCalendarInterval(
+      dateFrom as dayjs.Dayjs,
+      dateTo as dayjs.Dayjs,
+    );
+  }, [tasksData]);
 
   return (
     <div className={styles.PerformerCalendar}>
