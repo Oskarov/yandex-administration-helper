@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import { TStore } from 'store/store';
-import PerformerCalendar from '../PerformerCalendar/PerformerCalendar';
+import { PerformerCalendar } from '..';
 import styles from './WorklogsData.module.scss';
 
 const WorklogsData = () => {

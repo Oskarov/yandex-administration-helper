@@ -1,10 +1,12 @@
 import dayjs from 'dayjs';
 import { returnCalendarInterval, ruNamesOfDays } from 'utils/date';
-import cn from 'classnames';
-import styles from './PerformerCalendar.module.scss';
 import { TWorklogTaskData } from 'interfaces/IWorklogs';
 import { useSelector } from 'react-redux';
 import { TStore } from 'store/store';
+
+// styles
+import cn from 'classnames';
+import styles from './PerformerCalendar.module.scss';
 
 type TProps = {
   performer: string;
@@ -26,8 +28,6 @@ const PerformerCalendar: React.FC<TProps> = ({
     dateFrom as dayjs.Dayjs,
     dateTo as dayjs.Dayjs,
   );
-
-  console.log('performerInterval', performerInterval);
 
   return (
     <div className={styles.PerformerCalendar}>
