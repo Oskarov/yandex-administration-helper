@@ -61,12 +61,13 @@
       text-align: center;
       border-bottom: 1px solid #000;
       background-color: #eee;
-      // font-weight: 600;
+      font-weight: 600;
     }
 
     // day worklog content
     & > div {
       min-height: 100px;
+      padding-bottom: 30px;
     }
   }
 
