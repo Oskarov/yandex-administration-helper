@@ -14,9 +14,8 @@ import Loader from 'components/loader';
 import { resetFilters, setDates, setPerformers } from 'slices/worklogs';
 import { getWorklogsMultiply } from 'effects/worklogsEffects';
 // import Debug from './parts/Debug/Debug';
-import WorklogsData from './parts/WorklogsData/WorklogsData';
 import { TPerformetOption } from 'interfaces/IWorklogs';
-import CalendarGrid from './parts/CalendarGrid/CalendarGrid';
+import { WorklogsData } from './parts';
 
 const Worklogs: React.FC = () => {
   const dispatch = useDispatch();
@@ -153,11 +152,6 @@ const Worklogs: React.FC = () => {
                 </div>
               </section>
             ))}
-
-          <CalendarGrid
-            dateTo={dateTo as dayjs.Dayjs}
-            dateFrom={dateFrom as dayjs.Dayjs}
-          />
 
           {/* worklogs */}
           <WorklogsData />

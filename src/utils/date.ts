@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import { FORMAT_TYPE } from 'effects/worklogsEffects';
 
 export const ruNamesOfDays: string[] = [
   'Пн',
@@ -70,7 +71,7 @@ export const returnDate = (day: dayjs.Dayjs | null): TDate | null => {
     year: day?.year(),
 
     // value
-    value: day?.format('DD.MM.YYYY'),
+    value: day?.format(FORMAT_TYPE),
 
     // direction,
 
@@ -104,8 +105,8 @@ export function returnCalendarInterval(
   }
 
   // номера дней dayFrom и dateTo
-  const firstIntervalDay = result[0].dayOrder;
-  const lastIntervalDay = result[result.length - 1].dayOrder;
+  const firstIntervalDay = result[0]?.dayOrder;
+  const lastIntervalDay = result[result.length - 1]?.dayOrder;
 
   // вставка пустых дат в начало, если dayFrom не Понедельник
   if (firstIntervalDay !== ruNamesOfDays.indexOf('Пн')) {
