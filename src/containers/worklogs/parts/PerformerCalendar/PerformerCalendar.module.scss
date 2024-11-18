@@ -31,13 +31,6 @@
     }
   }
 
-  &__calendarTop {
-    text-align: center;
-    &.holiday {
-      color: $error;
-    }
-  }
-
   &__day {
     position: relative;
     margin-bottom: 25px;

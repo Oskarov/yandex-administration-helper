@@ -5,21 +5,16 @@ import styles from './WorklogsData.module.scss';
 
 const WorklogsData = () => {
   // selectors
-  const { worklogs } = useSelector((store: TStore) => ({
-    worklogs: store.worklogs.worklogs,
-  }));
+  const worklogs = useSelector((store: TStore) => store.worklogs.worklogs);
+  const performerList = worklogs && Object.keys(worklogs);
 
-  const performersList = worklogs && Object.keys(worklogs);
-
-  if (worklogs && !!performersList?.length) {
+  // чтобы отображать данные только тогда, когда данные (worklogs и performerList) уже загрузились
+  if (worklogs && !!performerList?.length) {
     return (
       <>
-        {Object.keys(worklogs).map((performer, index) => (
+        {Object.keys(worklogs).map((performerName, index) => (
           <section key={index} className={styles.WorklogsData}>
-            <PerformerCalendar
-              performer={performer}
-              performerData={worklogs[performer]}
-            />
+            <PerformerCalendar performerName={performerName} />
           </section>
         ))}
       </>

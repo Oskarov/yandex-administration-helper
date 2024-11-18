@@ -26,9 +26,9 @@ const ruNamesOfMounts: string[] = [
   'Декабрь',
 ];
 
-type TCellType = 'from' | 'to' | 'space' | 'empty';
+export type TCellType = 'from' | 'to' | 'space' | 'empty';
 
-type TDate = {
+export type TDate = {
   date: number | string;
   dayOrder: number;
   nameOfDay: string;
@@ -82,7 +82,7 @@ export const returnDate = (day: dayjs.Dayjs | null): TDate | null => {
 export function returnCalendarInterval(
   dayFrom: dayjs.Dayjs,
   dayTo: dayjs.Dayjs,
-) {
+): TDate[] {
   let currentDayUnix = dayFrom.unix();
   let result = [];
   let addDays = 0;
@@ -140,7 +140,7 @@ export function returnCalendarInterval(
     }
   }
 
-  return result;
+  return result as TDate[];
 }
 
 // 86400 - unix one day

@@ -1,0 +1,8 @@
+@import '~styles/vars';
+
+.DaysNames {
+  text-align: center;
+  &.weekend {
+    color: $error;
+  }
+}

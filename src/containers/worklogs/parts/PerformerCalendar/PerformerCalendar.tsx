@@ -1,31 +1,31 @@
-import { useMemo } from 'react';
 import dayjs from 'dayjs';
-import { returnCalendarInterval, ruNamesOfDays } from 'utils/date';
-import { TWorklogTaskData } from 'interfaces/IWorklogs';
-import { useSelector } from 'react-redux';
+import { useMemo } from 'react';
 import { TStore } from 'store/store';
+import { useSelector } from 'react-redux';
+import { returnCalendarInterval, TDate } from 'utils/date';
+
+// components
+import { DayInfo, DaysNames } from './parts';
 
 // styles
-import cn from 'classnames';
 import styles from './PerformerCalendar.module.scss';
 
 type TProps = {
-  performer: string;
-  performerData: Record<string, TWorklogTaskData[]>;
+  performerName: string;
 };
 
-const PerformerCalendar: React.FC<TProps> = ({
-  performer,
-  performerData,
-}: TProps) => {
+const PerformerCalendar: React.FC<TProps> = ({ performerName }: TProps) => {
   // selectors
-  const { dateFrom, dateTo, tasksData } = useSelector((store: TStore) => ({
-    dateFrom: store.worklogs.filters.dateFrom,
-    dateTo: store.worklogs.filters.dateTo,
-    tasksData: store.worklogs.tasksData,
-  }));
+  const { dateFrom, dateTo, tasksData, worklogs } = useSelector(
+    (store: TStore) => ({
+      dateFrom: store.worklogs.filters.dateFrom,
+      dateTo: store.worklogs.filters.dateTo,
+      tasksData: store.worklogs.tasksData,
+      worklogs: store.worklogs.worklogs,
+    }),
+  );
 
-  const performerInterval = useMemo(() => {
+  const performerInterval: TDate[] = useMemo(() => {
     return returnCalendarInterval(
       dateFrom as dayjs.Dayjs,
       dateTo as dayjs.Dayjs,
@@ -35,91 +35,17 @@ const PerformerCalendar: React.FC<TProps> = ({
   return (
     <div className={styles.PerformerCalendar}>
       {/* performer */}
-      <h2>{performer}</h2>
+      <h2>{performerName}</h2>
 
       {/* calendar */}
       <div className={styles.PerformerCalendar__calendar}>
         {/* Дни недели */}
-        {!!performerInterval.length &&
-          ruNamesOfDays.map((day, index) => (
-            <div
-              key={index}
-              className={cn(styles.PerformerCalendar__calendarTop, {
-                [styles.holiday]: day === 'Сб' || day === 'Вс',
-              })}
-            >
-              {day}
-            </div>
-          ))}
+        {!!performerInterval.length && <DaysNames />}
 
         {/* Дни интервала */}
         {!!performerInterval.length &&
-          performerInterval.map((day, index) => (
-            <div
-              key={index}
-              className={cn(styles.PerformerCalendar__day, {
-                [styles.weekend]:
-                  day.nameOfDay === 'Сб' || day.nameOfDay === 'Вс',
-              })}
-            >
-              <header>
-                <i>{`${day.date}.${day.month}.${day.year}`}</i>
-              </header>
-
-              {/* day worklog content */}
-              <div>
-                {!!performerData[day.value as string]?.length &&
-                  performerData[day.value as string].map((task, index) => {
-                    const taskType = tasksData
-                      ? tasksData[task.code]?.type
-                      : '-';
-
-                    const dayTasks = performerData[day.value as string].length
-                      ? performerData[day.value as string]
-                      : [];
-
-                    return (
-                      <div
-                        key={task.code + index}
-                        className={styles.PerformerCalendar__task}
-                      >
-                        {/* task.code */}
-                        <span>
-                          <a
-                            href={`https://tracker.yandex.ru/${task.code}`}
-                            target='_blank'
-                            rel='noreferrer'
-                            title={
-                              `Комментарий: ${task.comment}` ||
-                              'Без комментариев'
-                            }
-                          >
-                            {task.code}
-                          </a>
-                        </span>
-
-                        {/* taskType */}
-                        <span
-                          title={`Название: ${task.name}`}
-                        >{`(${taskType})`}</span>
-
-                        {/* duration */}
-                        <span>{task.duration.toFixed(2)}</span>
-
-                        {/* total duration */}
-                        <i>
-                          {dayTasks
-                            .reduce(
-                              (total, item) => (total += item.duration),
-                              0,
-                            )
-                            .toFixed(2)}
-                        </i>
-                      </div>
-                    );
-                  })}
-              </div>
-            </div>
+          performerInterval.map(day => (
+            <DayInfo day={day} performerData={worklogs![performerName]} />
           ))}
       </div>
     </div>

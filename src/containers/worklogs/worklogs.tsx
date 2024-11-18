@@ -32,10 +32,3 @@ const Worklogs: React.FC = () => {
 };
 
 export default Worklogs;
-
-// TODO:
-// 1. Добавить типизацию +++
-// 2. Проверить worklogsEffects.ts в плане тестирования запросов +++
-// 3. Сделать динамически меняющийся homepage в package.json в зависимости от запущенного скрипта +++
-// 4. Add calendar-grid +++
-// 5. Разбить на под-компоненты файл PerformerCalendar.tsx ---
