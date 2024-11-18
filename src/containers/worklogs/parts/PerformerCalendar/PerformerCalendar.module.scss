@@ -1,0 +1,108 @@
+@import '~styles/vars';
+
+.PerformerCalendar {
+  & > h2 {
+    color: $primary;
+    padding-bottom: 10px;
+  }
+
+  &__calendar {
+    display: flex;
+    flex-wrap: wrap;
+
+    // day
+    & > div {
+      flex-basis: 14.285%;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      flex-grow: 1;
+      border: 1px solid $gray-middle;
+      overflow: overlay;
+
+      // Суббота и Воскресенье
+      &:nth-child(7n),
+      &:nth-child(7n - 1) {
+        flex-basis: 10%;
+        flex-shrink: 1;
+        flex-grow: 0;
+        min-width: 115px;
+      }
+    }
+  }
+
+  &__day {
+    position: relative;
+    margin-bottom: 25px;
+    background-color: white;
+    position: relative;
+
+    &.weekend {
+      background-color: $gray-light;
+      header {
+        color: $error;
+        opacity: 0.33;
+      }
+
+      & > div {
+        opacity: 0.33;
+      }
+    }
+
+    // date
+    header {
+      text-align: center;
+      border-bottom: 1px solid $text;
+      background-color: $gray-light;
+      font-weight: 600;
+    }
+
+    // day worklog content
+    & > div {
+      min-height: 100px;
+      padding-bottom: 30px;
+    }
+  }
+
+  &__task {
+    display: flex;
+    width: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 12px;
+    @media (max-width: 1410px) {
+      font-size: 10px;
+    }
+
+    & > span {
+      &:first-child {
+        flex-shrink: 0;
+        margin-right: 3px;
+      }
+
+      &:nth-child(2) {
+        margin-right: auto;
+      }
+
+      &:last-child {
+        flex-shrink: 0;
+        font-weight: 900;
+      }
+    }
+
+    & > i {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border-top: 1px solid #ddd;
+      text-align: right;
+      margin: 0;
+      border-radius: 0 0 10px 10px;
+      padding-right: 10px;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 600;
+    }
+  }
+}
