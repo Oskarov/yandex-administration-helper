@@ -3,12 +3,10 @@ import { TStore } from 'store/store';
 
 const Debug = () => {
   // selectors
-  const { worklogs, tasksData } = useSelector((store: TStore) => {
-    return {
-      worklogs: store.worklogs.worklogs,
-      tasksData: store.worklogs.tasksData,
-    };
-  });
+  const { worklogs, tasksData } = useSelector((store: TStore) => ({
+    worklogs: store.worklogs.worklogs,
+    tasksData: store.worklogs.tasksData,
+  }));
 
   return (
     <>

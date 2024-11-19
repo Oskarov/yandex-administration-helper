@@ -1,29 +1,25 @@
 import React from 'react';
 
-// constent
-import ListOfPerformers from './listOfPerformers/listOfPerformers';
-import { CreateTasks } from '../createTasks';
-import Statistics from '../statistics/statistics';
-import Worklogs from 'containers/worklogs/worklogs';
-// import {CreateTasks} from "../createTasks";
+// components
 import { Stats } from './stats/stats';
+import { CreateTasks } from '../createTasks';
+import ListOfPerformers from './listOfPerformers/listOfPerformers';
+import Worklogs from 'containers/worklogs/worklogs';
+import { TaskDirect } from '../TaskDirect/taskDirect';
 
 // styles
-import CN from 'classnames';
+import cn from 'classnames';
 import styles from './main.module.scss';
-import {TaskDirect} from "../TaskDirect/taskDirect";
-
-interface MainProps {}
 
 export const tabs: string[] = [
   'Статистика по спринту',
   'Создание задач на спринт',
   'Заведение исполнителей',
   'Ворклоги',
-  'Отслеживание задач'
+  'Отслеживание задач',
 ];
 
-const Main: React.FC<MainProps> = () => {
+const Main: React.FC = () => {
   const [tab, setTab] = React.useState<number>(1);
 
   return (
@@ -33,7 +29,7 @@ const Main: React.FC<MainProps> = () => {
           <div
             key={`${index + 1} - ${item}`}
             onClick={() => setTab(index + 1)}
-            className={CN({ [styles.active]: tab === index + 1 })}
+            className={cn({ [styles.active]: tab === index + 1 })}
           >
             <span>{item}</span>
           </div>
