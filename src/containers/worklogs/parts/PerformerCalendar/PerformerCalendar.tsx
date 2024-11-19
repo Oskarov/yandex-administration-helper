@@ -25,6 +25,7 @@ const PerformerCalendar: React.FC<TProps> = ({ performerName }: TProps) => {
     }),
   );
 
+  // создаем массив дней для мапинга календаря
   const performerInterval: TDate[] = useMemo(() => {
     return returnCalendarInterval(
       dateFrom as dayjs.Dayjs,
@@ -42,7 +43,7 @@ const PerformerCalendar: React.FC<TProps> = ({ performerName }: TProps) => {
         {/* Дни недели */}
         {!!performerInterval.length && <DaysNames />}
 
-        {/* Дни интервала */}
+        {/* мапим Дни интервала, передавая даные по ворклогам */}
         {!!performerInterval.length &&
           performerInterval.map(day => (
             <DayInfo day={day} performerData={worklogs![performerName]} />

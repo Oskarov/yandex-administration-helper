@@ -20,10 +20,7 @@ const Worklogs: React.FC = () => {
 
         <main className={styles.Worklogs__content}>
           <Errors errors={errors} />
-
           <WorklogsData />
-
-          {/* JSON debug output */}
           {/* <Debug /> */}
         </main>
       </div>

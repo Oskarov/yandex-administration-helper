@@ -40,7 +40,7 @@ const DayInfo: React.FC<TProps> = ({ day, performerData }) => {
 
             return (
               <div key={task.code + index} className={styles.DayInfo__task}>
-                {/* task.code */}
+                {/* link */}
                 <span>
                   <a
                     target='_blank'
@@ -52,7 +52,7 @@ const DayInfo: React.FC<TProps> = ({ day, performerData }) => {
                   </a>
                 </span>
 
-                {/* taskType */}
+                {/* name */}
                 <span title={`Название: ${task.name}`}>{`(${taskType})`}</span>
 
                 {/* duration */}

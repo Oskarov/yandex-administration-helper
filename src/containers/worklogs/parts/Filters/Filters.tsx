@@ -73,7 +73,6 @@ const Filters = () => {
             value={dateFrom}
             label='Дата с'
             onChange={newValue =>
-              // save data to Redux store
               dispatch(setDates({ name: 'dateFrom', value: newValue }))
             }
           />
@@ -85,7 +84,6 @@ const Filters = () => {
             label='Дата по'
             minDate={dayjs(dateFrom)}
             onChange={newValue =>
-              // save data to Redux store
               dispatch(setDates({ name: 'dateTo', value: newValue }))
             }
           />

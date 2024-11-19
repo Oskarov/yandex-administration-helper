@@ -12,8 +12,8 @@ const WorklogsData = () => {
   if (worklogs && !!performerList?.length) {
     return (
       <>
-        {Object.keys(worklogs).map((performerName, index) => (
-          <section key={index} className={styles.WorklogsData}>
+        {Object.keys(worklogs).map(performerName => (
+          <section key={performerName} className={styles.WorklogsData}>
             <PerformerCalendar performerName={performerName} />
           </section>
         ))}
