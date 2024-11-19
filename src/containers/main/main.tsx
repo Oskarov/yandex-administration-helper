@@ -5,7 +5,7 @@ import { Stats } from './stats/stats';
 import { CreateTasks } from '../createTasks';
 import ListOfPerformers from './listOfPerformers/listOfPerformers';
 import Worklogs from 'containers/worklogs/worklogs';
-import TaskDirect from 'containers/taskDirect/taskDirect';
+import TasksTracker from 'containers/tasksTracker/tasksTracker';
 
 // styles
 import cn from 'classnames';
@@ -50,7 +50,7 @@ const Main: React.FC = () => {
         {tab === 4 && <Worklogs />}
 
         {/* Отслеживание задач */}
-        {tab === 5 && <TaskDirect />}
+        {tab === 5 && <TasksTracker />}
       </div>
     </div>
   );

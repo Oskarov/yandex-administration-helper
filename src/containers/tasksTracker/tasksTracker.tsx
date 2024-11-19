@@ -1,17 +1,17 @@
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { TStore } from 'store/store';
 import { TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 // import ReplayIcon from '@mui/icons-material/Replay';
-import styles from './taskDirect.module.scss';
-import { useSelector } from 'react-redux';
-import { TStore } from 'store/store';
+import styles from './tasksTracker.module.scss';
 
-const TaskDirect = () => {
+const TasksTracker = () => {
   const [task, setTask] = useState<string>('');
   // const [project, setProject] = useState<string>('');
 
-  const { tracker } = useSelector((store: TStore) => ({
-    tracker: store.tracker,
+  const { tasksTracker } = useSelector((store: TStore) => ({
+    tasksTracker: store.tasksTracker,
   }));
 
   const addTask = () => {};
@@ -19,7 +19,7 @@ const TaskDirect = () => {
   // const addProject = () => {};
 
   return (
-    <div className={styles.TaskDirect}>
+    <div className={styles.TasksTracker}>
       {/* <div className={styles.reloadItem}>
           <ReplayIcon />
         </div> */}
@@ -76,4 +76,4 @@ const TaskDirect = () => {
   );
 };
 
-export default TaskDirect;
+export default TasksTracker;
