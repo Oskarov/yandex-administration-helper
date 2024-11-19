@@ -5,7 +5,7 @@ import { Stats } from './stats/stats';
 import { CreateTasks } from '../createTasks';
 import ListOfPerformers from './listOfPerformers/listOfPerformers';
 import Worklogs from 'containers/worklogs/worklogs';
-import { TaskDirect } from '../TaskDirect/taskDirect';
+import TaskDirect from 'containers/taskDirect/taskDirect';
 
 // styles
 import cn from 'classnames';

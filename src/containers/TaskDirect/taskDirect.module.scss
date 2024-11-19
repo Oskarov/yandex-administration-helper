@@ -1,0 +1,74 @@
+@import '~styles/vars';
+
+.TaskDirect {
+  display: flex;
+  flex-direction: column;
+}
+
+.Filters {
+  display: flex;
+  margin-bottom: 20px;
+
+  &__item {
+    padding: 10px;
+    flex-shrink: 0;
+    flex-grow: 0;
+    border: 1px solid $gray-middle;
+    border-radius: 10px;
+    margin-right: 10px;
+
+    & > h2 {
+      margin-top: 0;
+    }
+  }
+
+  &__actions[class] {
+    display: flex;
+    padding: 0;
+    border: none;
+
+    button {
+      border-radius: 10px;
+
+      &:first-child {
+        margin-right: 10px;
+      }
+    }
+  }
+}
+
+// .TaskDirect {
+//   display: flex;
+//   align-items: center;
+
+//   & > * {
+//     margin-right: 5px;
+//   }
+
+//   &__inputItem {
+//     padding-right: 8px;
+//     display: flex;
+//     align-items: center;
+//     justify-content: space-between;
+//   }
+// }
+
+// .queueInput {
+//   width: 260px;
+//   margin-right: 8px !important;
+// }
+
+// .reloadItem {
+//   width: 50px;
+//   height: 50px;
+//   background-color: $primary;
+//   border-radius: 10px;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+
+//   & > * {
+//     color: white;
+//     font-size: 36px;
+//   }
+// }

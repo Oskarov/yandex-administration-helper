@@ -1,48 +1,79 @@
-import React, {FC, useState} from 'react';
-import {TextField} from "@mui/material";
-import styles2 from "../main/header/toTracker/toTracker.module.scss";
-import styles from "./index.module.scss"
-import Button from "@mui/material/Button";
-import ReplayIcon from '@mui/icons-material/Replay';
+import { useState } from 'react';
+import { TextField } from '@mui/material';
+import Button from '@mui/material/Button';
+// import ReplayIcon from '@mui/icons-material/Replay';
+import styles from './taskDirect.module.scss';
+import { useSelector } from 'react-redux';
+import { TStore } from 'store/store';
 
-export const TaskDirect: FC = ({  }) => {
+const TaskDirect = () => {
+  const [task, setTask] = useState<string>('');
+  // const [project, setProject] = useState<string>('');
 
-    const [task, setTask] = useState<string>('');
-    const [project, setProject] = useState<string>('');
+  const { tracker } = useSelector((store: TStore) => ({
+    tracker: store.tracker,
+  }));
 
-    const addTask = () => {
+  const addTask = () => {};
 
-    }
+  // const addProject = () => {};
 
-    const addProject = () => {
+  return (
+    <div className={styles.TaskDirect}>
+      {/* <div className={styles.reloadItem}>
+          <ReplayIcon />
+        </div> */}
 
-    }
+      <div className={styles.Filters}>
+        <div className={styles.Filters__item}>
+          <h2>Введите ключ задачи</h2>
 
-    return  <div>
-      <div className={styles.inputBlock}>
-        <div className={styles.reloadItem}>
-          <ReplayIcon/>
+          {/* Ключ задачи */}
+          <TextField
+            id='outlined-basic'
+            label='TMS-124'
+            variant='outlined'
+            value={task}
+            sx={{ width: 430 }}
+            className={styles.queueInput}
+            onChange={e => setTask(e.target.value)}
+          />
         </div>
-        <div className={styles.inputItem}>
-          <TextField id="outlined-basic" label="Ключ задачи (TMS-124)" variant="outlined" value={task}
-                     className={styles.queueInput}
-                     onChange={(e) => {
-                       setTask(e.target.value);
-                     }}/>
-          <Button onClick={addTask} color={'primary'} variant={'contained'}
-                  disabled={!task.length}>добавить задачу </Button>
-        </div>
-        <div className={styles.inputItem}>
-          <TextField id="outlined-basic" label="Номер проекта (1985)" variant="outlined" value={project}
-                     className={styles.queueInput}
-                     onChange={(e) => {
-                       setProject(e.target.value);
-                     }}/>
-          <Button onClick={addProject} color={'primary'} variant={'contained'}
-                  disabled={!task.length}>добавить Проект </Button>
+
+        {/* Добавить задачу */}
+        <div className={styles.Filters__actions}>
+          <Button
+            onClick={addTask}
+            color='primary'
+            variant='contained'
+            disabled={!task.length}
+          >
+            Добавить
+          </Button>
         </div>
       </div>
 
+      {/* <div className={styles.TaskDirect__inputItem}>
+          <TextField
+            id='outlined-basic'
+            label='Номер проекта (1985)'
+            variant='outlined'
+            value={project}
+            className={styles.queueInput}
+            onChange={e => setProject(e.target.value)}
+          />
 
+          <Button
+            onClick={addProject}
+            color='primary'
+            variant='contained'
+            disabled={!task.length}
+          >
+            Добавить проект
+          </Button>
+        </div> */}
     </div>
-}
+  );
+};
+
+export default TaskDirect;
