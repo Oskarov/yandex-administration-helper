@@ -1,17 +1,24 @@
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
+// redux
 import { TStore } from 'store/store';
-import { TextField } from '@mui/material';
+import { setQuery } from 'slices/tasksTracker';
+import { useDispatch, useSelector } from 'react-redux';
+
+// components
+import Loader from 'components/loader';
 import Button from '@mui/material/Button';
-// import ReplayIcon from '@mui/icons-material/Replay';
+import { TextField } from '@mui/material';
+
+// styles
 import styles from './tasksTracker.module.scss';
 
 const TasksTracker = () => {
-  const [task, setTask] = useState<string>('');
-  // const [project, setProject] = useState<string>('');
+  const dispatch = useDispatch();
 
-  const { tasksTracker } = useSelector((store: TStore) => ({
-    tasksTracker: store.tasksTracker,
+  const { loading, error, query, tasks } = useSelector((store: TStore) => ({
+    loading: store.tasksTracker.loading,
+    error: store.tasksTracker.error,
+    query: store.tasksTracker.query,
+    tasks: store.tasksTracker.tasks,
   }));
 
   const addTask = () => {};
@@ -20,9 +27,7 @@ const TasksTracker = () => {
 
   return (
     <div className={styles.TasksTracker}>
-      {/* <div className={styles.reloadItem}>
-          <ReplayIcon />
-        </div> */}
+      <Loader loading={loading} />
 
       <div className={styles.Filters}>
         <div className={styles.Filters__item}>
@@ -33,10 +38,10 @@ const TasksTracker = () => {
             id='outlined-basic'
             label='TMS-124'
             variant='outlined'
-            value={task}
+            value={query}
             sx={{ width: 430 }}
             className={styles.queueInput}
-            onChange={e => setTask(e.target.value)}
+            onChange={e => dispatch(setQuery(e.target.value))}
           />
         </div>
 
@@ -46,14 +51,31 @@ const TasksTracker = () => {
             onClick={addTask}
             color='primary'
             variant='contained'
-            disabled={!task.length}
+            disabled={Number(query.length) < 3}
           >
             Добавить
           </Button>
         </div>
       </div>
 
-      {/* <div className={styles.TaskDirect__inputItem}>
+      <div className={styles.Tasks}>{/* tasks maping */}</div>
+    </div>
+  );
+};
+
+export default TasksTracker;
+
+// const [project, setProject] = useState<string>('');
+// import ReplayIcon from '@mui/icons-material/Replay';
+
+{
+  /* <div className={styles.reloadItem}>
+          <ReplayIcon />
+        </div> */
+}
+
+{
+  /* <div className={styles.TaskDirect__inputItem}>
           <TextField
             id='outlined-basic'
             label='Номер проекта (1985)'
@@ -71,9 +93,5 @@ const TasksTracker = () => {
           >
             Добавить проект
           </Button>
-        </div> */}
-    </div>
-  );
-};
-
-export default TasksTracker;
+        </div> */
+}
