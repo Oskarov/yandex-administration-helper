@@ -13,6 +13,7 @@ import Button from '@mui/material/Button';
 import calculateHoursFromTrackerTack from 'utils/calculateHoursFromTrackerTack';
 
 // styles
+import cn from 'classnames';
 import styles from './stats.module.scss';
 
 interface ITimeObj {
@@ -74,7 +75,8 @@ export const Stats: React.FC = () => {
 
   if (tasks.length) {
     tasks.forEach(task => {
-      if (task.assignee?.display && task?.spent) {
+      //  (task.assignee?.display && task?.spent) - раньше были только затреканные задачи
+      if (task.assignee?.display) {
         let str = task.assignee.display as string;
         if (!timeObj.hasOwnProperty(str)) {
           timeObj[str] = [task];
@@ -90,6 +92,7 @@ export const Stats: React.FC = () => {
       tasks.forEach(task => {
         if (task?.spent) {
           let time = calculateHoursFromTrackerTack(task.spent);
+
           if (!endTimeObj.hasOwnProperty(key)) {
             endTimeObj[key] = time;
           } else {
@@ -216,7 +219,9 @@ export const Stats: React.FC = () => {
               <div className={styles.timeLineTable}>
                 <div
                   className={styles.orgTimesegment}
-                  style={{ width: `${(Math.trunc(item.orgTime) * 100) / 80}%` }}
+                  style={{
+                    width: `${(Math.trunc(item.orgTime) * 100) / 80}%`,
+                  }}
                 />
                 <div
                   className={styles.specTimesegment}
@@ -234,25 +239,39 @@ export const Stats: React.FC = () => {
 
             <div className={styles.timeTasks}>
               <div className={styles.taskTitle}>Задачи:</div>
-              {item.tasks.map(task => (
-                <div className={styles.taskRaw}>
-                  <a
-                    target='_blank'
-                    rel='noreferrer'
-                    href={`https://tracker.yandex.ru/${task.key}`}
-                  >
-                    {task.key}
-                  </a>
-                  <span>{task.summary}</span>
-                  <span>
-                    (
-                    {task?.spent
-                      ? calculateHoursFromTrackerTack(task.spent)
-                      : 0}{' '}
-                    ч.)
-                  </span>
-                </div>
-              ))}
+              {item.tasks
+                .sort(
+                  (next, cur) =>
+                    calculateHoursFromTrackerTack(`${cur.spent}`) -
+                    calculateHoursFromTrackerTack(`${next.spent}`),
+                )
+                .map(task => {
+                  return (
+                    <div
+                      className={cn(styles.taskRaw, {
+                        [styles.notTracked]: !calculateHoursFromTrackerTack(
+                          `${task.spent}`,
+                        ),
+                      })}
+                    >
+                      <a
+                        target='_blank'
+                        rel='noreferrer'
+                        href={`https://tracker.yandex.ru/${task.key}`}
+                      >
+                        {task.key}
+                      </a>
+                      <span>{task.summary}</span>
+                      <span>
+                        (
+                        {task?.spent
+                          ? calculateHoursFromTrackerTack(task.spent)
+                          : 0}{' '}
+                        ч.)
+                      </span>
+                    </div>
+                  );
+                })}
             </div>
           </div>
         ))}
