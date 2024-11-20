@@ -37,6 +37,14 @@
   }
 }
 
+.Error {
+  color: $error;
+  border: 1px solid $error;
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 25px;
+}
+
 .Tasks {
   color: inherit;
 }

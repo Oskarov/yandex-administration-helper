@@ -33,6 +33,7 @@ const TasksTracker = () => {
     <div className={styles.TasksTracker}>
       <Loader loading={loading} />
 
+      {/* filters */}
       <div className={styles.Filters}>
         <div className={styles.Filters__item}>
           <h2>Введите ключ задачи</h2>
@@ -62,6 +63,9 @@ const TasksTracker = () => {
         </div>
       </div>
 
+      {/* error */}
+      {error && <div className={styles.Error}>{error}</div>}
+
       {/* tasks */}
       <div className={styles.Tasks}>
         {!!tasksKeys.length
@@ -90,4 +94,4 @@ export default TasksTracker;
 // 3. Удаление задачи
 // 4. Обновить всё
 // 5. Дата обновления
-// 6. Вывод ошибок
+// 6. Вывод ошибок +++

@@ -29,12 +29,12 @@ export const findAndAddTask = (tasksKey: string) => {
 
       // если ни одной задачи не нашлось
       if (!data.length) {
-        dispatch(setError(`Задача ${tasksKey} не найдена`));
-
-        alert(
-          taskKeysArray.length === 1
-            ? `Задача ${taskKeysArray[0]} не найдена`
-            : `Задач ${taskKeysArray.join(', ')} не найдено`,
+        dispatch(
+          setError(
+            taskKeysArray.length === 1
+              ? `Задача ${taskKeysArray[0]} не найдена`
+              : `Задач ${taskKeysArray.join(', ')} не найдено`,
+          ),
         );
         return;
       }
@@ -42,7 +42,7 @@ export const findAndAddTask = (tasksKey: string) => {
       // add tasks to store
       dispatch(addTask(data));
 
-      // если нашлась только часть задач
+      // если нашлись не все задачи
       if (data.length !== taskKeysArray.length) {
         const foundTasksKeys = data.map(task => task.key);
 
@@ -50,10 +50,12 @@ export const findAndAddTask = (tasksKey: string) => {
           taskKey => !foundTasksKeys.includes(taskKey),
         );
 
-        alert(
-          notFoundTasks.length === 1
-            ? `Задача ${notFoundTasks[0]} не найдена`
-            : `Задач ${notFoundTasks.join(', ')} не найдено`,
+        dispatch(
+          setError(
+            notFoundTasks.length === 1
+              ? `Задача ${notFoundTasks[0]} не найдена`
+              : `Задач ${notFoundTasks.join(', ')} не найдено`,
+          ),
         );
       }
     } else {
