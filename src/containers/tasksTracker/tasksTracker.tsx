@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Loader from 'components/loader';
 import Button from '@mui/material/Button';
 import { TextField } from '@mui/material';
+import { findAndAddTask } from 'effects/tasksTrackerEffect';
 
 // styles
 import styles from './tasksTracker.module.scss';
@@ -21,9 +22,12 @@ const TasksTracker = () => {
     tasks: store.tasksTracker.tasks,
   }));
 
-  const addTask = () => {};
+  // запрос на поиск задачи и добавление в список отслеживания
+  const onAddTaskClick = () => {
+    dispatch(findAndAddTask(query));
+  };
 
-  // const addProject = () => {};
+  const tasksKeys = Object.keys(tasks);
 
   return (
     <div className={styles.TasksTracker}>
@@ -48,7 +52,7 @@ const TasksTracker = () => {
         {/* Добавить задачу */}
         <div className={styles.Filters__actions}>
           <Button
-            onClick={addTask}
+            onClick={onAddTaskClick}
             color='primary'
             variant='contained'
             disabled={Number(query.length) < 3}
@@ -58,40 +62,24 @@ const TasksTracker = () => {
         </div>
       </div>
 
-      <div className={styles.Tasks}>{/* tasks maping */}</div>
+      {/* tasks */}
+      <div className={styles.Tasks}>
+        {!!tasksKeys.length
+          ? tasksKeys.map((key: string) => {
+              return (
+                <div>
+                  <b>{key}</b>
+                  &nbsp;&ndash;&nbsp;
+                  <span>{tasks[key]?.summary}</span>
+                  &nbsp;&ndash;&nbsp;
+                  <span>{tasks[key]?.status?.display}</span>
+                </div>
+              );
+            })
+          : 'Нет задач'}
+      </div>
     </div>
   );
 };
 
 export default TasksTracker;
-
-// const [project, setProject] = useState<string>('');
-// import ReplayIcon from '@mui/icons-material/Replay';
-
-{
-  /* <div className={styles.reloadItem}>
-          <ReplayIcon />
-        </div> */
-}
-
-{
-  /* <div className={styles.TaskDirect__inputItem}>
-          <TextField
-            id='outlined-basic'
-            label='Номер проекта (1985)'
-            variant='outlined'
-            value={project}
-            className={styles.queueInput}
-            onChange={e => setProject(e.target.value)}
-          />
-
-          <Button
-            onClick={addProject}
-            color='primary'
-            variant='contained'
-            disabled={!task.length}
-          >
-            Добавить проект
-          </Button>
-        </div> */
-}

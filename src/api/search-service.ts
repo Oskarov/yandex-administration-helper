@@ -43,10 +43,10 @@ const SearchService = {
   },
 
   // searchingTasks
-  searchTasks: async (ids: string[]): Promise<TSearchTasksResponse> => {
+  searchTasks: async (tasksKeys: string[]): Promise<TSearchTasksResponse> => {
     try {
       const { data } = await httpClient.post(`/issues/_search`, {
-        keys: ids,
+        keys: tasksKeys,
       });
 
       return {

@@ -6,7 +6,7 @@ const initialState: ITasksTrackerState = {
   loading: false,
   error: '',
   query: '',
-  tasks: [],
+  tasks: {},
 };
 
 const tasksTrackerSlice = createSlice({
@@ -29,7 +29,9 @@ const tasksTrackerSlice = createSlice({
     },
 
     // addTask
-    addTask(state, { payload }: PayloadAction<any>) {},
+    addTask(state, { payload }: PayloadAction<any>) {
+      state.tasks[payload.key] = payload;
+    },
 
     // removeTask
     removeTask(state, { payload }: PayloadAction<any>) {},

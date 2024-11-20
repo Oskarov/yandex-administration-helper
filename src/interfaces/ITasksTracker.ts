@@ -2,5 +2,5 @@ export interface ITasksTrackerState {
   loading: boolean;
   error: string;
   query: string;
-  tasks: any[];
+  tasks: Record<string, any>;
 }
