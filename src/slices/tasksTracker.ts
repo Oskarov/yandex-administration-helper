@@ -38,9 +38,6 @@ const tasksTrackerSlice = createSlice({
     // removeTask
     removeTask(state, { payload }: PayloadAction<any>) {},
 
-    // updateTaskData
-    updateTaskData(state, { payload }: PayloadAction<any>) {},
-
     // updateAllTaskData
     updateAllTaskData(state, { payload }: PayloadAction<any>) {},
   },
@@ -54,6 +51,5 @@ export const {
   setQuery,
   addTask,
   removeTask,
-  updateTaskData,
   updateAllTaskData,
 } = tasksTrackerSlice.actions;
