@@ -29,8 +29,10 @@ const tasksTrackerSlice = createSlice({
     },
 
     // addTask
-    addTask(state, { payload }: PayloadAction<any>) {
-      state.tasks[payload.key] = payload;
+    addTask(state, { payload }: PayloadAction<any[]>) {
+      payload.forEach(task => {
+        state.tasks[task.key] = task;
+      });
     },
 
     // removeTask
