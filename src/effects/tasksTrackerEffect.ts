@@ -32,8 +32,8 @@ export const findAndAddTask = (tasksKey: string) => {
         dispatch(
           setError(
             taskKeysArray.length === 1
-              ? `Задача ${taskKeysArray[0]} не найдена`
-              : `Задач ${taskKeysArray.join(', ')} не найдено`,
+              ? `Задача <b>${taskKeysArray[0]}</b> не найдена`
+              : `Задачи <b>${taskKeysArray.join(', ')}</b> не найдены`,
           ),
         );
         return;
@@ -53,8 +53,8 @@ export const findAndAddTask = (tasksKey: string) => {
         dispatch(
           setError(
             notFoundTasks.length === 1
-              ? `Задача ${notFoundTasks[0]} не найдена`
-              : `Задач ${notFoundTasks.join(', ')} не найдено`,
+              ? `Задача <b>${notFoundTasks[0]}</b> не найдена`
+              : `Задачи <b>${notFoundTasks.join(', ')}</b> не найдены`,
           ),
         );
       }

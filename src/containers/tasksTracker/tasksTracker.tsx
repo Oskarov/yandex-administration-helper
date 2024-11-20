@@ -64,7 +64,12 @@ const TasksTracker = () => {
       </div>
 
       {/* error */}
-      {error && <div className={styles.Error}>{error}</div>}
+      {error && (
+        <div
+          className={styles.Error}
+          dangerouslySetInnerHTML={{ __html: error }}
+        />
+      )}
 
       {/* tasks */}
       <div className={styles.Tasks}>
@@ -89,9 +94,9 @@ const TasksTracker = () => {
 export default TasksTracker;
 
 // TODO
-// 1. Типизация задач при запросах
-// 2. Таблица
-// 3. Удаление задачи
-// 4. Обновить всё
-// 5. Дата обновления
-// 6. Вывод ошибок +++
+// 2. Таблица ---
+// 2. Удаление задачи ---
+// 3. Обновить всё ---
+// 4. Вывод ошибок +++
+// 5. Типизация задач при запросах
+// 6. Дата обновления
