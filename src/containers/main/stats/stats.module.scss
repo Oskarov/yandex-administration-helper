@@ -1,7 +1,9 @@
+@import '~styles/vars';
+
 .control {
   width: 600px;
 
-  > * {
+  & > * {
     margin-bottom: 16px;
   }
 }
@@ -25,18 +27,17 @@
   margin-bottom: 8px;
 }
 
-.taskTitle{
+.taskTitle {
   font-weight: bolder;
 }
 
-.timeLine{
+.timeLine {
   margin-bottom: 8px;
   position: relative;
-  width:600px;
+  width: 600px;
 
-  .timeDevider{
-
-    .center{
+  .timeDevider {
+    .center {
       position: absolute;
       bottom: 0;
       height: 40px;
@@ -44,13 +45,13 @@
       border-right: 2px solid red;
     }
 
-    .left{
+    .left {
       font-size: 12px;
       right: 51%;
       bottom: 27px;
       position: absolute;
     }
-    .right{
+    .right {
       font-size: 12px;
       left: 51%;
       bottom: 27px;
@@ -58,56 +59,67 @@
     }
   }
 
-  .timeLineTitle{
+  .timeLineTitle {
     font-weight: bolder;
     margin-bottom: 4px;
-
-
   }
 
-  .timeLineTable{
+  .timeLineTable {
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    width:600px;
+    width: 600px;
     position: relative;
     border: 1px solid #30a309;
     border-radius: 8px;
 
-    >*{
+    & > * {
       height: 24px;
     }
 
-    .orgTimesegment{
+    .orgTimesegment {
       background: #fadb56;
     }
 
-    .specTimesegment{
+    .specTimesegment {
       background: #30a309;
     }
   }
 }
 
-.taskRaw{
+.timeTasks {
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.taskRaw {
+  display: inline-flex;
   align-items: center;
   justify-content: flex-start;
 
-  >*{
+  &.notTracked {
+    outline: 2px solid red;
+    padding: 3px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+
+  & > * {
     margin-right: 8px;
   }
 }
 
-.fastLinks{
+.fastLinks {
   display: flex;
 
-  >*{
+  & > * {
     cursor: pointer;
     margin-right: 24px;
-    color: #26c314;
-    &:first-child{
-      color: #103eea;
+    color: $success;
+    &:first-child {
+      color: $primary;
     }
   }
 }

@@ -14,21 +14,19 @@ const Filters = () => {
 
   // selectors
   const { performersOptions, selectedPerformers, dateFrom, dateTo } =
-    useSelector((store: TStore) => {
-      return {
-        // performersOptions
-        performersOptions: store.performers.items.map(item => ({
-          label: `${item.lastName} ${item.firstName}`,
-          key: item.trackerId,
-        })),
+    useSelector((store: TStore) => ({
+      // performersOptions
+      performersOptions: store.performers.items.map(item => ({
+        label: `${item.lastName} ${item.firstName}`,
+        key: item.trackerId,
+      })),
 
-        selectedPerformers: store.worklogs.filters.performers,
-        dateFrom: store.worklogs.filters.dateFrom,
-        dateTo: store.worklogs.filters.dateTo,
-        worklogs: store.worklogs.worklogs,
-        tasksData: store.worklogs.tasksData,
-      };
-    });
+      selectedPerformers: store.worklogs.filters.performers,
+      dateFrom: store.worklogs.filters.dateFrom,
+      dateTo: store.worklogs.filters.dateTo,
+      worklogs: store.worklogs.worklogs,
+      tasksData: store.worklogs.tasksData,
+    }));
 
   const getWorklogsClick = () => {
     dispatch(getWorklogsMultiply(selectedPerformers, dateFrom, dateTo));
@@ -75,7 +73,6 @@ const Filters = () => {
             value={dateFrom}
             label='Дата с'
             onChange={newValue =>
-              // save data to Redux store
               dispatch(setDates({ name: 'dateFrom', value: newValue }))
             }
           />
@@ -87,7 +84,6 @@ const Filters = () => {
             label='Дата по'
             minDate={dayjs(dateFrom)}
             onChange={newValue =>
-              // save data to Redux store
               dispatch(setDates({ name: 'dateTo', value: newValue }))
             }
           />
