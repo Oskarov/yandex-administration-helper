@@ -1,7 +1,9 @@
 // redux
+import { useEffect } from 'react';
 import { TStore } from 'store/store';
 import { setQuery } from 'slices/tasksTracker';
 import { useDispatch, useSelector } from 'react-redux';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 
 // components
 import Loader from 'components/loader';
@@ -19,7 +21,27 @@ import {
 import { findAndAddTask } from 'effects/tasksTrackerEffect';
 
 // styles
+import cn from 'classnames';
 import styles from './tasksTracker.module.scss';
+
+const returnStatusClass = (status: string) => {
+  switch (status) {
+    // Беклог
+    case 'Беклог':
+      return 'backlog';
+
+    // В работе
+    case 'В работе':
+      return 'in-work';
+
+    // Готово
+    case 'Готово':
+      return 'done';
+
+    default:
+      return 'dafault';
+  }
+};
 
 const TasksTracker = () => {
   const dispatch = useDispatch();
@@ -30,6 +52,15 @@ const TasksTracker = () => {
     query: store.tasksTracker.query,
     tasks: store.tasksTracker.tasks,
   }));
+
+  // запрос на обновление задач при загрузке страницы
+  useEffect(() => {
+    const keys = !!Object.keys(tasks).length && Object.keys(tasks).join(',');
+
+    if (keys) {
+      dispatch(findAndAddTask(keys));
+    }
+  }, []);
 
   // запрос на поиск задачи и добавление в список отслеживания
   const onAddTaskClick = () => {
@@ -81,70 +112,110 @@ const TasksTracker = () => {
       )}
 
       {/* tasks */}
-      <div className={styles.Tasks}>
-        {!!tasksKeys.length
-          ? tasksKeys.map((key: string) => {
-              return (
-                <div>
-                  <b>{key}</b>
-                  &nbsp;&ndash;&nbsp;
-                  <span>{tasks[key]?.summary}</span>
-                  &nbsp;&ndash;&nbsp;
-                  <span>{tasks[key]?.status?.display}</span>
-                </div>
-              );
-            })
-          : 'Нет задач'}
-      </div>
-
       {!!tasksKeys.length ? (
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label='simple table'>
-            {/* table head */}
-            <TableHead>
-              <TableRow
-                sx={{
-                  '& th': {
-                    fontWeight: 900,
-                    background: 'rgba(1, 1, 1, 0.015)',
-                  },
-                }}
-              >
-                <TableCell>№</TableCell>
-                <TableCell>Код</TableCell>
-                <TableCell>Название</TableCell>
-                <TableCell>Исполнитель</TableCell>
-                <TableCell>Спринт</TableCell>
-                <TableCell>Статус</TableCell>
-              </TableRow>
-            </TableHead>
+        <div className={styles.Tasks}>
+          <h2>Отслеживаемые задачи</h2>
 
-            {/* table body */}
-            <TableBody>
-              {tasksKeys.map((key, index) => {
-                const sprintsList: string = !!tasks[key]?.sprint?.length
-                  ? tasks[key]?.sprint
+          <TableContainer component={Paper}>
+            <Table
+              sx={{ minWidth: 650 }}
+              aria-label='simple table'
+              className={styles.Table}
+            >
+              {/* table head */}
+              <TableHead>
+                <TableRow
+                  sx={{
+                    '& th': {
+                      fontWeight: 900,
+                      background: 'rgba(1, 1, 1, 0.015)',
+                    },
+                  }}
+                >
+                  <TableCell>№</TableCell>
+                  <TableCell>Код</TableCell>
+                  <TableCell>Название</TableCell>
+                  <TableCell>Спринт</TableCell>
+                  <TableCell>Создал</TableCell>
+                  <TableCell>Дата создания</TableCell>
+                  <TableCell>Исполнитель</TableCell>
+                  <TableCell align='center'>Статус</TableCell>
+                  <TableCell />
+                </TableRow>
+              </TableHead>
+
+              {/* table body */}
+              <TableBody>
+                {tasksKeys.map((key, index) => {
+                  const sprintsList: string =
+                    !!tasks[key]?.sprint?.length &&
+                    tasks[key]?.sprint
                       ?.map((sprint: any) => sprint.display)
-                      .join(', ')
-                  : '-';
+                      .join(', ');
+                  return (
+                    <TableRow
+                      key={key}
+                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                      className={styles.Table__row}
+                    >
+                      {/* № */}
+                      <TableCell>{index + 1}</TableCell>
 
-                return (
-                  <TableRow
-                    key={key}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  >
-                    <TableCell>{index + 1}</TableCell>
-                    <TableCell>{key}</TableCell>
-                    <TableCell>{tasks[key]?.summary}</TableCell>
-                    <TableCell>{tasks[key]?.assignee?.display}</TableCell>
-                    <TableCell>{sprintsList}</TableCell>
-                    <TableCell>{tasks[key]?.status?.display}</TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </TableContainer>
+                      {/* Код */}
+                      <TableCell sx={{ fontSize: '16px' }}>
+                        <a
+                          target='_blank'
+                          rel='noreferrer'
+                          href={`https://tracker.yandex.ru/${key}`}
+                        >
+                          {key}
+                        </a>
+                      </TableCell>
+
+                      {/* Название */}
+                      <TableCell>{tasks[key]?.summary}</TableCell>
+
+                      {/* Спринт */}
+                      <TableCell>{sprintsList}</TableCell>
+
+                      {/* Создал */}
+                      <TableCell>{tasks[key]?.createdBy?.display}</TableCell>
+
+                      {/* Дата создания */}
+                      <TableCell>
+                        {tasks[key]?.createdAt.slice(0, 10)}
+                      </TableCell>
+
+                      {/* Исполнитель */}
+                      <TableCell>{tasks[key]?.assignee?.display}</TableCell>
+
+                      {/* Статус */}
+                      <TableCell
+                        align='center'
+                        className={cn(styles.Table__status, {
+                          [styles[
+                            returnStatusClass(tasks[key]?.status?.display)
+                          ]]: true,
+                        })}
+                      >
+                        <span>{tasks[key]?.status?.display}</span>
+                      </TableCell>
+
+                      {/* Удаление задачи */}
+                      <TableCell
+                        align='center'
+                        width={30}
+                        className={styles.Table__delete}
+                      >
+                        <DeleteOutlineOutlinedIcon />
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
       ) : (
         'Нет задач'
       )}
@@ -155,9 +226,10 @@ const TasksTracker = () => {
 export default TasksTracker;
 
 // TODO
-// 2. Таблица ---
+// 2. Таблица +++
 // 2. Удаление задачи ---
-// 3. Обновить всё ---
+// 3. Обновить всё +++
 // 4. Вывод ошибок +++
-// 5. Типизация задач при запросах
-// 6. Дата обновления
+// 5. Типизация задач при запросах ---
+// 6. Декомпозиция ---
+// 7. Дата обновления ???

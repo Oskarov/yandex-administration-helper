@@ -49,38 +49,59 @@
   color: inherit;
 }
 
-// .TaskDirect {
-//   display: flex;
-//   align-items: center;
+.Table {
+  &__row {
+    &:hover {
+      td:last-child {
+        svg {
+          fill: $gray-middle;
+        }
+      }
+    }
+  }
 
-//   & > * {
-//     margin-right: 5px;
-//   }
+  &__status {
+    & > span {
+      font-family: inherit;
+      justify-content: center;
+      display: inline-flex;
+      padding: 2px 8px;
+      border-radius: 10px;
+      min-width: 80px;
+    }
 
-//   &__inputItem {
-//     padding-right: 8px;
-//     display: flex;
-//     align-items: center;
-//     justify-content: space-between;
-//   }
-// }
+    &.backlog {
+      & > span {
+        background-color: $gray-middle;
+      }
+    }
 
-// .queueInput {
-//   width: 260px;
-//   margin-right: 8px !important;
-// }
+    &.in-work,
+    &.default {
+      & > span {
+        background-color: $warning;
+      }
+    }
 
-// .reloadItem {
-//   width: 50px;
-//   height: 50px;
-//   background-color: $primary;
-//   border-radius: 10px;
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
+    &.done {
+      & > span {
+        background-color: $success;
+      }
+    }
+  }
 
-//   & > * {
-//     color: white;
-//     font-size: 36px;
-//   }
-// }
+  &__delete {
+    padding: 0;
+
+    svg {
+      fill: transparent;
+      width: 0.8em;
+      height: 0.8em;
+      cursor: pointer;
+
+      &:hover {
+        fill: $error !important;
+      }
+    }
+  }
+}
