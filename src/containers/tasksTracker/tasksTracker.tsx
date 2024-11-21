@@ -6,7 +6,16 @@ import { useDispatch, useSelector } from 'react-redux';
 // components
 import Loader from 'components/loader';
 import Button from '@mui/material/Button';
-import { TextField } from '@mui/material';
+import {
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TextField,
+} from '@mui/material';
 import { findAndAddTask } from 'effects/tasksTrackerEffect';
 
 // styles
@@ -87,6 +96,58 @@ const TasksTracker = () => {
             })
           : 'Нет задач'}
       </div>
+
+      {!!tasksKeys.length ? (
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }} aria-label='simple table'>
+            {/* table head */}
+            <TableHead>
+              <TableRow
+                sx={{
+                  '& th': {
+                    fontWeight: 900,
+                    background: 'rgba(1, 1, 1, 0.015)',
+                  },
+                }}
+              >
+                <TableCell>№</TableCell>
+                <TableCell>Код</TableCell>
+                <TableCell>Название</TableCell>
+                <TableCell>Исполнитель</TableCell>
+                <TableCell>Спринт</TableCell>
+                <TableCell>Статус</TableCell>
+              </TableRow>
+            </TableHead>
+
+            {/* table body */}
+            <TableBody>
+              {tasksKeys.map((key, index) => {
+                const sprintsList: string = !!tasks[key]?.sprint?.length
+                  ? tasks[key]?.sprint
+                      ?.map((sprint: any) => sprint.display)
+                      .join(', ')
+                  : '-';
+
+                return (
+                  <TableRow
+                    key={key}
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  >
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>{key}</TableCell>
+                    <TableCell>{tasks[key]?.summary}</TableCell>
+                    <TableCell>{tasks[key]?.assignee?.display}</TableCell>
+                    <TableCell>{sprintsList}</TableCell>
+                    <TableCell>{tasks[key]?.status?.display}</TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      ) : (
+        'Нет задач'
+      )}
     </div>
   );
 };
