@@ -1,5 +1,5 @@
 // redux
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { TStore } from 'store/store';
 import { setQuery } from 'slices/tasksTracker';
 import { useDispatch, useSelector } from 'react-redux';
@@ -46,6 +46,10 @@ const returnStatusClass = (status: string) => {
 const TasksTracker = () => {
   const dispatch = useDispatch();
 
+  // local state
+  const [updateDate, setUpdateDate] = useState<string>('');
+
+  // selectors
   const { loading, error, query, tasks } = useSelector((store: TStore) => ({
     loading: store.tasksTracker.loading,
     error: store.tasksTracker.error,
@@ -53,13 +57,34 @@ const TasksTracker = () => {
     tasks: store.tasksTracker.tasks,
   }));
 
+  // экшен на обновление данных у существующих задач
+  const updateTasksList = (): void => {
+    const day = new Date().toLocaleDateString('ru-RU', {
+      year: 'numeric',
+      month: 'numeric',
+      day: 'numeric',
+    });
+
+    const time = new Date().toLocaleTimeString('ru-RU', {
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric',
+    });
+
+    const date = `${day}, ${time}`;
+
+    const tasksKeys =
+      !!Object.keys(tasks).length && Object.keys(tasks).join(',');
+
+    if (tasksKeys) {
+      dispatch(findAndAddTask(tasksKeys));
+      setUpdateDate(date);
+    }
+  };
+
   // запрос на обновление задач при загрузке страницы
   useEffect(() => {
-    const keys = !!Object.keys(tasks).length && Object.keys(tasks).join(',');
-
-    if (keys) {
-      dispatch(findAndAddTask(keys));
-    }
+    updateTasksList();
   }, []);
 
   // запрос на поиск задачи и добавление в список отслеживания
@@ -114,7 +139,19 @@ const TasksTracker = () => {
       {/* tasks */}
       {!!tasksKeys.length ? (
         <div className={styles.Tasks}>
-          <h2>Отслеживаемые задачи</h2>
+          <header>
+            <b>Отслеживаемые задачи</b>
+
+            <span>
+              <span>Последнее обновление:</span>
+              &nbsp;
+              <code>{updateDate}</code>
+            </span>
+
+            <Button onClick={updateTasksList} color='primary' variant='text'>
+              Обновить
+            </Button>
+          </header>
 
           <TableContainer component={Paper}>
             <Table
@@ -233,3 +270,4 @@ export default TasksTracker;
 // 5. Типизация задач ---
 // 6. Декомпозиция ---
 // 7. Цвет статуса +++
+// 8. Толтип с подсказкой ---
