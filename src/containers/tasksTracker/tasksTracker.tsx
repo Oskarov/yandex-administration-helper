@@ -24,6 +24,8 @@ import {
 import { setConfirmationOpen } from 'slices/modal';
 import { findAndAddTask } from 'effects/tasksTrackerEffect';
 
+import { Error } from './parts';
+
 // styles
 import cn from 'classnames';
 import styles from './tasksTracker.module.scss';
@@ -121,12 +123,7 @@ const TasksTracker = () => {
       </div>
 
       {/* error */}
-      {error && (
-        <div
-          className={styles.Error}
-          dangerouslySetInnerHTML={{ __html: error }}
-        />
-      )}
+      {error && <Error error={error} />}
 
       {/* tasks */}
       {!!tasksKeys.length ? (
