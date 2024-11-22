@@ -1,0 +1,51 @@
+@import '~styles/vars';
+
+.TasksTracker {
+  display: flex;
+  flex-direction: column;
+
+  &__tasks {
+    header {
+      display: flex;
+      align-items: center;
+      // justify-content: space-between;
+      margin-bottom: 10px;
+
+      b {
+        font-size: 1.5em;
+        font-weight: bold;
+        margin-right: auto;
+      }
+
+      span {
+        margin-top: 5px;
+
+        code {
+          font-family: monospace;
+          font-size: 14px;
+        }
+      }
+
+      button {
+        margin-left: 5px;
+        margin-top: 7px;
+      }
+
+      // h2 {
+      //   display: inline-flex;
+      //   margin-top: 14px;
+      //   align-items: center;
+
+      //   & > div {
+      //     font-weight: normal;
+      //     margin-left: 10px;
+      //     font-size: 14px;
+      //   }
+      // }
+    }
+  }
+
+  &__table {
+    color: inherit;
+  }
+}

@@ -46,7 +46,9 @@ export const searchTasksTypes = () => {
       }
 
       // conver data to hash-object
-      const _data: Record<string, TTaskData> = data.reduce((total, task) => {
+      const _data: Record<string, TTaskData> = data.reduce<
+        Record<string, TTaskData>
+      >((total, task) => {
         total[task.key] = {
           key: task.key,
           type: task.type.display,
