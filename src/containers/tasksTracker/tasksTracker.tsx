@@ -5,6 +5,7 @@ import { removeTask, setQuery } from 'slices/tasksTracker';
 import { useDispatch, useSelector } from 'react-redux';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import { returnDateString, returnStatusClass } from './utils';
 
 // components
 import Loader from 'components/loader';
@@ -27,25 +28,6 @@ import { findAndAddTask } from 'effects/tasksTrackerEffect';
 import cn from 'classnames';
 import styles from './tasksTracker.module.scss';
 
-const returnStatusClass = (status: string) => {
-  switch (status) {
-    // Беклог
-    case 'Беклог':
-      return 'backlog';
-
-    // В работе
-    case 'В работе':
-      return 'in-work';
-
-    // Готово
-    case 'Готово':
-      return 'done';
-
-    default:
-      return 'dafault';
-  }
-};
-
 const TasksTracker = () => {
   const dispatch = useDispatch();
 
@@ -62,26 +44,12 @@ const TasksTracker = () => {
 
   // экшен на обновление данных у существующих задач
   const updateTasksList = (): void => {
-    const day = new Date().toLocaleDateString('ru-RU', {
-      year: 'numeric',
-      month: 'numeric',
-      day: 'numeric',
-    });
-
-    const time = new Date().toLocaleTimeString('ru-RU', {
-      hour: 'numeric',
-      minute: 'numeric',
-      second: 'numeric',
-    });
-
-    const date = `${day}, ${time}`;
-
     const tasksKeys =
       !!Object.keys(tasks).length && Object.keys(tasks).join(',');
 
     if (tasksKeys) {
       dispatch(findAndAddTask(tasksKeys));
-      setUpdateDate(date);
+      setUpdateDate(returnDateString());
     }
   };
 
