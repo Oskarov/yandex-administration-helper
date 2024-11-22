@@ -26,7 +26,7 @@ import { setConfirmationOpen } from 'slices/modal';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 
 // parts
-import { Error, Filters } from './parts';
+import { Error, Filters, Head } from './parts';
 
 // styles
 import cn from 'classnames';
@@ -111,26 +111,7 @@ const TasksTracker = () => {
               className={styles.Table}
             >
               {/* table head */}
-              <TableHead>
-                <TableRow
-                  sx={{
-                    '& th': {
-                      fontWeight: 900,
-                      background: 'rgba(1, 1, 1, 0.015)',
-                    },
-                  }}
-                >
-                  <TableCell>№</TableCell>
-                  <TableCell>Код</TableCell>
-                  <TableCell>Название</TableCell>
-                  <TableCell>Спринт</TableCell>
-                  <TableCell>Создал</TableCell>
-                  <TableCell>Дата создания</TableCell>
-                  <TableCell>Исполнитель</TableCell>
-                  <TableCell align='center'>Статус</TableCell>
-                  <TableCell />
-                </TableRow>
-              </TableHead>
+              <Head />
 
               {/* table body */}
               <TableBody>
