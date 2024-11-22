@@ -8,28 +8,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { findAndAddTask } from 'effects/tasksTrackerEffect';
 
 // utils
-import { returnDateString, returnStatusClass } from './utils';
+import { returnDateString } from './utils';
 
 // components
 import Loader from 'components/loader';
-import {
-  Button,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from '@mui/material';
+import { Paper, Table, TableBody, TableContainer } from '@mui/material';
 import { setConfirmationOpen } from 'slices/modal';
-import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 
 // parts
-import { Error, Filters, Head } from './parts';
+import { Error, Filters, TableCols, TableHeader, TaskRow } from './parts';
 
 // styles
-import cn from 'classnames';
 import styles from './tasksTracker.module.scss';
 
 const TasksTracker = () => {
@@ -53,7 +42,7 @@ const TasksTracker = () => {
 
     if (tasksKeys) {
       dispatch(findAndAddTask(tasksKeys));
-      setUpdateDate(returnDateString());
+      !error && setUpdateDate(returnDateString());
     }
   };
 
@@ -85,104 +74,29 @@ const TasksTracker = () => {
       {/* error */}
       {error && <Error error={error} />}
 
-      {/* tasks */}
+      {/* tasks table */}
       {!!tasksKeys.length ? (
-        <div className={styles.Tasks}>
-          <header>
-            <b>Отслеживаемые задачи</b>
-
-            {updateDate && (
-              <span>
-                <span>Последнее обновление:</span>
-                &nbsp;
-                <code>{updateDate}</code>
-              </span>
-            )}
-
-            <Button onClick={updateTasksList} color='primary' variant='text'>
-              Обновить
-            </Button>
-          </header>
+        <div className={styles.TasksTracker__tasks}>
+          {/* table header */}
+          <TableHeader
+            updateDate={updateDate}
+            updateTasksList={updateTasksList}
+          />
 
           <TableContainer component={Paper}>
             <Table
               sx={{ minWidth: 650 }}
               aria-label='simple table'
-              className={styles.Table}
+              className={styles.TasksTracker__table}
             >
-              {/* table head */}
-              <Head />
+              {/* table columns */}
+              <TableCols />
 
               {/* table body */}
               <TableBody>
-                {tasksKeys.map((key, index) => {
-                  const sprintsList: string =
-                    !!tasks[key]?.sprint?.length &&
-                    tasks[key]?.sprint
-                      ?.map((sprint: any) => sprint.display)
-                      .join(', ');
-                  return (
-                    <TableRow
-                      key={key}
-                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                      className={styles.Table__row}
-                    >
-                      {/* № */}
-                      <TableCell>{index + 1}</TableCell>
-
-                      {/* Код */}
-                      <TableCell sx={{ fontSize: '16px' }}>
-                        <a
-                          target='_blank'
-                          rel='noreferrer'
-                          href={`https://tracker.yandex.ru/${key}`}
-                        >
-                          {key}
-                        </a>
-                      </TableCell>
-
-                      {/* Название */}
-                      <TableCell>{tasks[key]?.summary}</TableCell>
-
-                      {/* Спринт */}
-                      <TableCell>{sprintsList}</TableCell>
-
-                      {/* Создал */}
-                      <TableCell>{tasks[key]?.createdBy?.display}</TableCell>
-
-                      {/* Дата создания */}
-                      <TableCell>
-                        {tasks[key]?.createdAt.slice(0, 10)}
-                      </TableCell>
-
-                      {/* Исполнитель */}
-                      <TableCell>{tasks[key]?.assignee?.display}</TableCell>
-
-                      {/* Статус */}
-                      <TableCell
-                        align='center'
-                        className={cn(styles.Table__status, {
-                          [styles[
-                            returnStatusClass(tasks[key]?.status?.display)
-                          ]]: true,
-                        })}
-                      >
-                        <span>{tasks[key]?.status?.display}</span>
-                      </TableCell>
-
-                      {/* Удаление задачи */}
-                      <TableCell
-                        width={30}
-                        align='center'
-                        className={styles.Table__delete}
-                      >
-                        <DeleteOutlineOutlinedIcon
-                          onClick={() => handleDelete(key)}
-                        />
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
+                {tasksKeys.map((key, index) => (
+                  <TaskRow index={index} task={tasks[key]} />
+                ))}
               </TableBody>
             </Table>
           </TableContainer>

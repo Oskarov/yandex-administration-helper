@@ -1,6 +1,6 @@
 import { TableCell, TableHead, TableRow } from '@mui/material';
 
-const Head = () => (
+const TableCols = () => (
   <TableHead>
     <TableRow
       sx={{
@@ -11,7 +11,7 @@ const Head = () => (
       }}
     >
       <TableCell>№</TableCell>
-      <TableCell>Код</TableCell>
+      <TableCell width={100}>Код</TableCell>
       <TableCell>Название</TableCell>
       <TableCell>Спринт</TableCell>
       <TableCell>Создал</TableCell>
@@ -23,4 +23,4 @@ const Head = () => (
   </TableHead>
 );
 
-export default Head;
+export default TableCols;

@@ -1,0 +1,56 @@
+@import '~styles/vars';
+
+.TaskRow {
+  &:hover {
+    td:last-child {
+      svg {
+        fill: $gray-middle;
+      }
+    }
+  }
+
+  &__status {
+    & > span {
+      font-family: inherit;
+      justify-content: center;
+      display: inline-flex;
+      padding: 2px 8px;
+      border-radius: 10px;
+      min-width: 80px;
+    }
+
+    &.backlog {
+      & > span {
+        background-color: $gray-middle;
+      }
+    }
+
+    &.in-work,
+    &.default {
+      & > span {
+        background-color: $warning;
+      }
+    }
+
+    &.done {
+      & > span {
+        background-color: $success;
+      }
+    }
+  }
+
+  &__delete {
+    padding: 0;
+
+    svg {
+      fill: transparent;
+      width: 0.8em;
+      height: 0.8em;
+      cursor: pointer;
+
+      &:hover {
+        fill: $error !important;
+      }
+    }
+  }
+}
