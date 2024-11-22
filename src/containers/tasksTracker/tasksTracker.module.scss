@@ -19,6 +19,20 @@
 
     & > h2 {
       margin-top: 0;
+
+      span {
+        svg {
+          width: 20px;
+          opacity: 0.5;
+          transition-property: opacity;
+          transition-duration: $duration;
+
+          &:hover {
+            cursor: pointer;
+            opacity: 1;
+          }
+        }
+      }
     }
   }
 

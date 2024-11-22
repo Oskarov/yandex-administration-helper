@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { TStore } from 'store/store';
 import { removeTask, setQuery } from 'slices/tasksTracker';
 import { useDispatch, useSelector } from 'react-redux';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 
 // components
@@ -17,6 +18,7 @@ import {
   TableHead,
   TableRow,
   TextField,
+  Tooltip,
 } from '@mui/material';
 import { setConfirmationOpen } from 'slices/modal';
 import { findAndAddTask } from 'effects/tasksTrackerEffect';
@@ -113,7 +115,17 @@ const TasksTracker = () => {
       {/* filters */}
       <div className={styles.Filters}>
         <div className={styles.Filters__item}>
-          <h2>Введите ключ задачи</h2>
+          <h2>
+            <b>Введите ключ задачи</b>
+            <span>
+              <Tooltip
+                placement='top-start'
+                title='Можно добавлять несколько задач через запятую'
+              >
+                <HelpOutlineIcon />
+              </Tooltip>
+            </span>
+          </h2>
 
           {/* Ключ задачи */}
           <TextField
@@ -154,11 +166,13 @@ const TasksTracker = () => {
           <header>
             <b>Отслеживаемые задачи</b>
 
-            <span>
-              <span>Последнее обновление:</span>
-              &nbsp;
-              <code>{updateDate}</code>
-            </span>
+            {updateDate && (
+              <span>
+                <span>Последнее обновление:</span>
+                &nbsp;
+                <code>{updateDate}</code>
+              </span>
+            )}
 
             <Button onClick={updateTasksList} color='primary' variant='text'>
               Обновить
@@ -278,6 +292,6 @@ export default TasksTracker;
 
 // TODO
 // 1. Модалка подтверждения +++
-// 2. Толтип с подсказкой ---
-// 3. Типизация ---
+// 2. Толтип с подсказкой +++
+// 3. Типизация +++
 // 4. Декомпозиция ---

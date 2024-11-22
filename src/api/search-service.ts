@@ -1,3 +1,4 @@
+import { TFullTask } from 'interfaces/ITask';
 import httpClient from './httpClient';
 
 // TODO: data typisation
@@ -9,7 +10,7 @@ type TSearchWorklogsResponse = {
 
 type TSearchTasksResponse = {
   success: boolean;
-  data: any[] | null;
+  data: TFullTask[] | null;
   error: any;
 };
 

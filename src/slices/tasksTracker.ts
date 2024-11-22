@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { ITasksTrackerState } from '../interfaces/ITasksTracker';
+import { TFullTask } from 'interfaces/ITask';
 
 const initialState: ITasksTrackerState = {
   loading: false,
@@ -29,7 +30,7 @@ const tasksTrackerSlice = createSlice({
     },
 
     // addTask
-    addTask(state, { payload }: PayloadAction<any[]>) {
+    addTask(state, { payload }: PayloadAction<TFullTask[]>) {
       payload.forEach(task => {
         state.tasks[task.key] = task;
       });
