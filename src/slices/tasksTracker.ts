@@ -36,20 +36,13 @@ const tasksTrackerSlice = createSlice({
     },
 
     // removeTask
-    removeTask(state, { payload }: PayloadAction<any>) {},
-
-    // updateAllTaskData
-    updateAllTaskData(state, { payload }: PayloadAction<any>) {},
+    removeTask(state, { payload }: PayloadAction<string>) {
+      delete state.tasks[payload];
+    },
   },
 });
 
 export const tasksTrackerReducer = tasksTrackerSlice.reducer;
 
-export const {
-  setLoading,
-  setError,
-  setQuery,
-  addTask,
-  removeTask,
-  updateAllTaskData,
-} = tasksTrackerSlice.actions;
+export const { setLoading, setError, setQuery, addTask, removeTask } =
+  tasksTrackerSlice.actions;

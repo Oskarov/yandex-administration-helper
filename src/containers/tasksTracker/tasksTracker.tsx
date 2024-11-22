@@ -1,7 +1,7 @@
 // redux
 import { useEffect, useState } from 'react';
 import { TStore } from 'store/store';
-import { setQuery } from 'slices/tasksTracker';
+import { removeTask, setQuery } from 'slices/tasksTracker';
 import { useDispatch, useSelector } from 'react-redux';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 
@@ -244,7 +244,9 @@ const TasksTracker = () => {
                         align='center'
                         className={styles.Table__delete}
                       >
-                        <DeleteOutlineOutlinedIcon />
+                        <DeleteOutlineOutlinedIcon
+                          onClick={() => dispatch(removeTask(key))}
+                        />
                       </TableCell>
                     </TableRow>
                   );
