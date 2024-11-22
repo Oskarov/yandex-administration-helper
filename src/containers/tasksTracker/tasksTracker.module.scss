@@ -5,52 +5,6 @@
   flex-direction: column;
 }
 
-.Filters {
-  display: flex;
-  margin-bottom: 20px;
-
-  &__item {
-    padding: 10px;
-    flex-shrink: 0;
-    flex-grow: 0;
-    border: 1px solid $gray-middle;
-    border-radius: 10px;
-    margin-right: 10px;
-
-    & > h2 {
-      margin-top: 0;
-
-      span {
-        svg {
-          width: 20px;
-          opacity: 0.5;
-          transition-property: opacity;
-          transition-duration: $duration;
-
-          &:hover {
-            cursor: pointer;
-            opacity: 1;
-          }
-        }
-      }
-    }
-  }
-
-  &__actions[class] {
-    display: flex;
-    padding: 0;
-    border: none;
-
-    button {
-      border-radius: 10px;
-
-      &:first-child {
-        margin-right: 10px;
-      }
-    }
-  }
-}
-
 .Tasks {
   header {
     display: flex;

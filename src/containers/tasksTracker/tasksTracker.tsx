@@ -1,16 +1,19 @@
 // redux
 import { useEffect, useState } from 'react';
+
+// redux
 import { TStore } from 'store/store';
-import { removeTask, setQuery } from 'slices/tasksTracker';
+import { removeTask } from 'slices/tasksTracker';
 import { useDispatch, useSelector } from 'react-redux';
-import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
-import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import { findAndAddTask } from 'effects/tasksTrackerEffect';
+
+// utils
 import { returnDateString, returnStatusClass } from './utils';
 
 // components
 import Loader from 'components/loader';
-import Button from '@mui/material/Button';
 import {
+  Button,
   Paper,
   Table,
   TableBody,
@@ -18,13 +21,12 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  TextField,
-  Tooltip,
 } from '@mui/material';
 import { setConfirmationOpen } from 'slices/modal';
-import { findAndAddTask } from 'effects/tasksTrackerEffect';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 
-import { Error } from './parts';
+// parts
+import { Error, Filters } from './parts';
 
 // styles
 import cn from 'classnames';
@@ -60,11 +62,6 @@ const TasksTracker = () => {
     updateTasksList();
   }, []);
 
-  // запрос на поиск задачи и добавление в список отслеживания
-  const onAddTaskClick = () => {
-    dispatch(findAndAddTask(query));
-  };
-
   const tasksKeys = Object.keys(tasks);
 
   // удаление задачи из списка
@@ -83,44 +80,7 @@ const TasksTracker = () => {
       <Loader loading={loading} />
 
       {/* filters */}
-      <div className={styles.Filters}>
-        <div className={styles.Filters__item}>
-          <h2>
-            <b>Введите ключ задачи</b>
-            <span>
-              <Tooltip
-                placement='top-start'
-                title='Можно добавлять несколько задач через запятую'
-              >
-                <HelpOutlineIcon />
-              </Tooltip>
-            </span>
-          </h2>
-
-          {/* Ключ задачи */}
-          <TextField
-            id='outlined-basic'
-            label='TMS-124'
-            variant='outlined'
-            value={query}
-            sx={{ width: 430 }}
-            className={styles.queueInput}
-            onChange={e => dispatch(setQuery(e.target.value))}
-          />
-        </div>
-
-        {/* Добавить задачу */}
-        <div className={styles.Filters__actions}>
-          <Button
-            onClick={onAddTaskClick}
-            color='primary'
-            variant='contained'
-            disabled={Number(query.length) < 3}
-          >
-            Добавить
-          </Button>
-        </div>
-      </div>
+      <Filters query={query} />
 
       {/* error */}
       {error && <Error error={error} />}
