@@ -18,6 +18,7 @@ import {
   TableRow,
   TextField,
 } from '@mui/material';
+import { setConfirmationOpen } from 'slices/modal';
 import { findAndAddTask } from 'effects/tasksTrackerEffect';
 
 // styles
@@ -93,6 +94,17 @@ const TasksTracker = () => {
   };
 
   const tasksKeys = Object.keys(tasks);
+
+  // удаление задачи из списка
+  const handleDelete = (key: string) => {
+    dispatch(
+      setConfirmationOpen({
+        dialogType: 'positive',
+        dialogText: `Вы точно хотите удалить задачу ${key}?`,
+        confirmationFunction: () => dispatch(removeTask(key)),
+      }),
+    );
+  };
 
   return (
     <div className={styles.TasksTracker}>
@@ -245,7 +257,7 @@ const TasksTracker = () => {
                         className={styles.Table__delete}
                       >
                         <DeleteOutlineOutlinedIcon
-                          onClick={() => dispatch(removeTask(key))}
+                          onClick={() => handleDelete(key)}
                         />
                       </TableCell>
                     </TableRow>
@@ -265,7 +277,7 @@ const TasksTracker = () => {
 export default TasksTracker;
 
 // TODO
-// 1. Модалка подтверждения ---
+// 1. Модалка подтверждения +++
 // 2. Толтип с подсказкой ---
 // 3. Типизация ---
 // 4. Декомпозиция ---
