@@ -7,7 +7,7 @@ const initialState: ITasksTrackerState = {
   loading: false,
   error: '',
   query: '',
-  tasks: {},
+  tasks: [],
 };
 
 const tasksTrackerSlice = createSlice({
@@ -31,14 +31,24 @@ const tasksTrackerSlice = createSlice({
 
     // addTask
     addTask(state, { payload }: PayloadAction<TFullTask[]>) {
-      payload.forEach(task => {
-        state.tasks[task.key] = task;
-      });
+      if (state.tasks.length > 0) {
+        const newTasksKeys = payload.map(task => task.key);
+
+        state.tasks = [
+          // old tasks without updated
+          ...state.tasks.filter(task => !newTasksKeys.includes(task.key)),
+
+          // updated
+          ...payload,
+        ];
+      } else {
+        state.tasks = payload;
+      }
     },
 
     // removeTask
     removeTask(state, { payload }: PayloadAction<string>) {
-      delete state.tasks[payload];
+      state.tasks = state.tasks.filter(task => task.key !== payload);
     },
   },
 });

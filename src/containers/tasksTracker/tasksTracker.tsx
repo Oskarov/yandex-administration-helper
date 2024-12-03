@@ -37,8 +37,7 @@ const TasksTracker = () => {
 
   // экшен на обновление данных у существующих задач
   const updateTasksList = (): void => {
-    const tasksKeys =
-      !!Object.keys(tasks).length && Object.keys(tasks).join(',');
+    const tasksKeys = !!tasks.length && tasks.map(task => task.key).join(',');
 
     if (tasksKeys) {
       dispatch(findAndAddTask(tasksKeys));
@@ -50,8 +49,6 @@ const TasksTracker = () => {
   useEffect(() => {
     updateTasksList();
   }, []);
-
-  const tasksKeys = Object.keys(tasks);
 
   // удаление задачи из списка
   const handleDelete = (key: string) => {
@@ -75,7 +72,7 @@ const TasksTracker = () => {
       {error && <Error error={error} />}
 
       {/* tasks table */}
-      {!!tasksKeys.length ? (
+      {!!tasks.length ? (
         <div className={styles.TasksTracker__tasks}>
           {/* table header */}
           <TableHeader
@@ -94,8 +91,8 @@ const TasksTracker = () => {
 
               {/* table body */}
               <TableBody>
-                {tasksKeys.map((key, index) => (
-                  <TaskRow index={index} task={tasks[key]} />
+                {tasks.map((task, index) => (
+                  <TaskRow index={index} task={task} />
                 ))}
               </TableBody>
             </Table>
