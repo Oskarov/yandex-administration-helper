@@ -38,6 +38,11 @@ const TaskRow: React.FC<TProps> = ({ index, task }) => {
     !!task?.sprint?.length &&
     task?.sprint?.map(sprint => sprint.display).join(', ');
 
+  const projectName =
+    task?.project?.id && task?.project?.display
+      ? `${task?.project?.id} - ${task?.project?.display}`
+      : '-';
+
   return (
     <TableRow
       key={task.key}
@@ -60,6 +65,9 @@ const TaskRow: React.FC<TProps> = ({ index, task }) => {
 
       {/* Название */}
       <TableCell>{task.summary}</TableCell>
+
+      {/* Проект */}
+      <TableCell align='center'>{projectName}</TableCell>
 
       {/* Спринт */}
       <TableCell>{sprintsList}</TableCell>

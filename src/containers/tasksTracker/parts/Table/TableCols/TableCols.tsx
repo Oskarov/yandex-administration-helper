@@ -11,8 +11,11 @@ const TableCols = () => (
       }}
     >
       <TableCell>№</TableCell>
-      <TableCell width={100}>Код</TableCell>
+      <TableCell width={120}>Код</TableCell>
       <TableCell>Название</TableCell>
+      <TableCell width={150} align='center'>
+        Проект
+      </TableCell>
       <TableCell>Спринт</TableCell>
       <TableCell>Создал</TableCell>
       <TableCell>Дата создания</TableCell>
