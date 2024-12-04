@@ -1,6 +1,6 @@
 // redux
 import { useDispatch } from 'react-redux';
-import { TFullTask } from 'interfaces/ITask';
+import { TShortTask } from 'interfaces/ITask';
 import { removeTask } from 'slices/tasksTracker';
 import { setConfirmationOpen } from 'slices/modal';
 
@@ -17,7 +17,7 @@ import styles from './TaskRow.module.scss';
 
 type TProps = {
   index: number;
-  task: TFullTask;
+  task: TShortTask;
 };
 
 const TaskRow: React.FC<TProps> = ({ index, task }) => {
@@ -32,16 +32,6 @@ const TaskRow: React.FC<TProps> = ({ index, task }) => {
       }),
     );
   };
-
-  // список спринтов преобразуем в строку
-  const sprintsList =
-    !!task?.sprint?.length &&
-    task?.sprint?.map(sprint => sprint.display).join(', ');
-
-  const projectName =
-    task?.project?.id && task?.project?.display
-      ? `${task?.project?.id} - ${task?.project?.display}`
-      : '-';
 
   return (
     <TableRow
@@ -67,28 +57,28 @@ const TaskRow: React.FC<TProps> = ({ index, task }) => {
       <TableCell>{task.summary}</TableCell>
 
       {/* Проект */}
-      <TableCell align='center'>{projectName}</TableCell>
+      <TableCell align='center'>{task.projectName}</TableCell>
 
       {/* Спринт */}
-      <TableCell>{sprintsList}</TableCell>
+      <TableCell>{task?.sprintsList}</TableCell>
 
       {/* Создал */}
-      <TableCell>{task?.createdBy?.display}</TableCell>
+      <TableCell>{task.createdBy}</TableCell>
 
       {/* Дата создания */}
-      <TableCell>{task?.createdAt.slice(0, 10)}</TableCell>
+      <TableCell>{task.createdAt}</TableCell>
 
       {/* Исполнитель */}
-      <TableCell>{task?.assignee?.display}</TableCell>
+      <TableCell>{task.assignee}</TableCell>
 
       {/* Статус */}
       <TableCell
         align='center'
         className={cn(styles.TaskRow__status, {
-          [styles[returnStatusClass(task?.status?.display)]]: true,
+          [styles[returnStatusClass(task.status)]]: true,
         })}
       >
-        <span>{task?.status?.display}</span>
+        <span>{task?.status}</span>
       </TableCell>
 
       {/* Удаление задачи */}

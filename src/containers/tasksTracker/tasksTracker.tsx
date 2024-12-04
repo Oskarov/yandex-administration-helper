@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 
 // redux
 import { TStore } from 'store/store';
-import { removeTask } from 'slices/tasksTracker';
 import { useDispatch, useSelector } from 'react-redux';
 import { findAndAddTask } from 'effects/tasksTrackerEffect';
 
@@ -13,13 +12,13 @@ import { returnDateString } from './utils';
 // components
 import Loader from 'components/loader';
 import { Paper, Table, TableBody, TableContainer } from '@mui/material';
-import { setConfirmationOpen } from 'slices/modal';
 
 // parts
 import { Error, Filters, TableCols, TableHeader, TaskRow } from './parts';
 
 // styles
 import styles from './tasksTracker.module.scss';
+import { setSortDirection } from 'slices/tasksTracker';
 
 const TasksTracker = () => {
   const dispatch = useDispatch();
@@ -28,12 +27,20 @@ const TasksTracker = () => {
   const [updateDate, setUpdateDate] = useState<string>('');
 
   // selectors
-  const { loading, error, query, tasks } = useSelector((store: TStore) => ({
-    loading: store.tasksTracker.loading,
-    error: store.tasksTracker.error,
-    query: store.tasksTracker.query,
-    tasks: store.tasksTracker.tasks,
-  }));
+  const { loading, error, query, tasks, sortField, sortDirecion } = useSelector(
+    (store: TStore) => ({
+      loading: store.tasksTracker.loading,
+      error: store.tasksTracker.error,
+      query: store.tasksTracker.query,
+
+      // items
+      tasks: store.tasksTracker.tasks,
+
+      // sort
+      sortField: store.tasksTracker.sortField,
+      sortDirecion: store.tasksTracker.sortDirecion,
+    }),
+  );
 
   // экшен на обновление данных у существующих задач
   const updateTasksList = (): void => {
@@ -49,17 +56,6 @@ const TasksTracker = () => {
   useEffect(() => {
     updateTasksList();
   }, []);
-
-  // удаление задачи из списка
-  const handleDelete = (key: string) => {
-    dispatch(
-      setConfirmationOpen({
-        dialogType: 'positive',
-        dialogText: `Вы точно хотите удалить задачу ${key}?`,
-        confirmationFunction: () => dispatch(removeTask(key)),
-      }),
-    );
-  };
 
   return (
     <div className={styles.TasksTracker}>
@@ -101,6 +97,10 @@ const TasksTracker = () => {
       ) : (
         'Нет задач'
       )}
+
+      <button onClick={() => dispatch(setSortDirection())}>
+        Change sort direction
+      </button>
     </div>
   );
 };

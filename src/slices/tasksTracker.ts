@@ -1,13 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { ITasksTrackerState } from '../interfaces/ITasksTracker';
-import { TFullTask } from 'interfaces/ITask';
+import { TShortTask } from 'interfaces/ITask';
 
 const initialState: ITasksTrackerState = {
   loading: false,
   error: '',
   query: '',
   tasks: [],
+  sortField: 'key',
+  sortDirecion: 'ASC', // 'ASC' | 'DESC'
 };
 
 const tasksTrackerSlice = createSlice({
@@ -29,20 +31,61 @@ const tasksTrackerSlice = createSlice({
       state.query = payload;
     },
 
-    // addTask
-    addTask(state, { payload }: PayloadAction<TFullTask[]>) {
+    // addTask(state, { payload }: PayloadAction<TShortTask[]>) {
+    //   if (state.tasks.length > 0) {
+    //     const newTasksKeys = payload.map(task => task.key);
+
+    //     state.tasks = [
+    //       // old tasks without updated
+    //       ...state.tasks.filter(task => !newTasksKeys.includes(task.key)),
+
+    //       // updated
+    //       ...payload,
+    //     ].sort((a, b) =>
+    //       state.sortDirecion === 'ASC'
+    //         ? a[state.sortField].localeCompare(b[state.sortField])
+    //         : b[state.sortField].localeCompare(a[state.sortField]),
+    //     );
+    //   } else {
+    //     state.tasks = payload.sort((a, b) =>
+    //       state.sortDirecion === 'ASC'
+    //         ? a[state.sortField].localeCompare(b[state.sortField])
+    //         : b[state.sortField].localeCompare(a[state.sortField]),
+    //     );
+    //   }
+    // },
+
+    // addTask + sorting
+    addTask: (state, { payload }: PayloadAction<TShortTask[]>) => {
+      const isAsc = state.sortDirecion === 'ASC';
+      const newTasksKeys = payload.map(task => task.key);
+
       if (state.tasks.length > 0) {
-        const newTasksKeys = payload.map(task => task.key);
+        return {
+          ...state,
+          tasks: [
+            // old tasks without updated
+            ...state.tasks.filter(task => !newTasksKeys.includes(task.key)),
 
-        state.tasks = [
-          // old tasks without updated
-          ...state.tasks.filter(task => !newTasksKeys.includes(task.key)),
+            // updated
+            ...payload,
 
-          // updated
-          ...payload,
-        ];
+            // sorting
+          ].sort((a, b) =>
+            isAsc
+              ? a[state.sortField].localeCompare(b[state.sortField])
+              : b[state.sortField].localeCompare(a[state.sortField]),
+          ),
+        };
       } else {
-        state.tasks = payload;
+        return {
+          ...state,
+          tasks: payload.sort((a, b) =>
+            isAsc
+              ? a[state.sortField].localeCompare(b[state.sortField])
+              : b[state.sortField].localeCompare(a[state.sortField]),
+          ),
+        };
       }
     },
 
@@ -50,10 +93,21 @@ const tasksTrackerSlice = createSlice({
     removeTask(state, { payload }: PayloadAction<string>) {
       state.tasks = state.tasks.filter(task => task.key !== payload);
     },
+
+    // setSortDirection
+    setSortDirection(state) {
+      state.sortDirecion = state.sortDirecion === 'ASC' ? 'DESC' : 'ASC';
+    },
   },
 });
 
 export const tasksTrackerReducer = tasksTrackerSlice.reducer;
 
-export const { setLoading, setError, setQuery, addTask, removeTask } =
-  tasksTrackerSlice.actions;
+export const {
+  setLoading,
+  setError,
+  setQuery,
+  addTask,
+  removeTask,
+  setSortDirection,
+} = tasksTrackerSlice.actions;

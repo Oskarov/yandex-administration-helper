@@ -206,3 +206,14 @@ export type TFullTask = {
   };
   favorite: boolean;
 };
+
+export type TShortTask = {
+  key: string;
+  summary: string;
+  projectName: string;
+  sprintsList: string;
+  createdBy: string;
+  createdAt: string;
+  assignee: string;
+  status: string;
+};

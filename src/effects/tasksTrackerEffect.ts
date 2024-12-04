@@ -1,4 +1,5 @@
 import SearchService from 'api/search-service';
+import { TShortTask } from 'interfaces/ITask';
 import { Dispatch } from 'react';
 import { addTask, setError, setLoading } from 'slices/tasksTracker';
 
@@ -39,8 +40,32 @@ export const findAndAddTask = (tasksKey: string) => {
         return;
       }
 
+      const _data: TShortTask[] = data.map(task => {
+        // sprintsList
+        const sprintsList =
+          !!task?.sprint?.length &&
+          task?.sprint?.map(sprint => sprint.display).join(', ');
+
+        // projectName
+        const projectName =
+          task?.project?.id && task?.project?.display
+            ? `${task?.project?.id} - ${task?.project?.display}`
+            : '-';
+
+        return {
+          key: task.key,
+          summary: task.summary,
+          projectName,
+          sprintsList,
+          createdBy: task?.createdBy?.display,
+          createdAt: task?.createdAt.slice(0, 10),
+          assignee: task?.assignee?.display,
+          status: task?.status?.display,
+        };
+      });
+
       // add tasks to store
-      dispatch(addTask(data));
+      dispatch(addTask(_data));
 
       // если нашлись не все задачи
       if (data.length !== taskKeysArray.length) {
