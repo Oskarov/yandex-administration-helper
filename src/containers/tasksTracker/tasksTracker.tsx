@@ -1,8 +1,9 @@
 // redux
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 // redux
 import { TStore } from 'store/store';
+import { setSortDirection } from 'slices/tasksTracker';
 import { useDispatch, useSelector } from 'react-redux';
 import { findAndAddTask } from 'effects/tasksTrackerEffect';
 
@@ -18,7 +19,6 @@ import { Error, Filters, TableCols, TableHeader, TaskRow } from './parts';
 
 // styles
 import styles from './tasksTracker.module.scss';
-import { setSortDirection } from 'slices/tasksTracker';
 
 const TasksTracker = () => {
   const dispatch = useDispatch();
@@ -27,25 +27,20 @@ const TasksTracker = () => {
   const [updateDate, setUpdateDate] = useState<string>('');
 
   // selectors
-  const {
-    loading,
-    error,
-    query,
-    tasks,
-    // sortField,
-    // sortDirecion,
-  } = useSelector((store: TStore) => ({
-    loading: store.tasksTracker.loading,
-    error: store.tasksTracker.error,
-    query: store.tasksTracker.query,
+  const { loading, error, query, tasks, sortField, sortDirecion } = useSelector(
+    (store: TStore) => ({
+      loading: store.tasksTracker.loading,
+      error: store.tasksTracker.error,
+      query: store.tasksTracker.query,
 
-    // items
-    tasks: store.tasksTracker.tasks,
+      // items
+      tasks: store.tasksTracker.tasks,
 
-    // sort
-    // sortField: store.tasksTracker.sortField,
-    // sortDirecion: store.tasksTracker.sortDirecion,
-  }));
+      // sort
+      sortField: store.tasksTracker.sortField,
+      sortDirecion: store.tasksTracker.sortDirecion,
+    }),
+  );
 
   // экшен на обновление данных у существующих задач
   const updateTasksList = (): void => {
@@ -62,6 +57,13 @@ const TasksTracker = () => {
     updateTasksList();
   }, []);
 
+  // sorting tasks
+  const sortedTasks = useMemo(() => {
+    return sortDirecion === 'ASC'
+      ? [...tasks].sort((a, b) => a[sortField].localeCompare(b[sortField]))
+      : [...tasks].sort((a, b) => b[sortField].localeCompare(a[sortField]));
+  }, [tasks, sortField, sortDirecion]);
+
   return (
     <div className={styles.TasksTracker}>
       <Loader loading={loading} />
@@ -73,7 +75,7 @@ const TasksTracker = () => {
       {error && <Error error={error} />}
 
       {/* tasks table */}
-      {!!tasks.length ? (
+      {!!sortedTasks.length ? (
         <div className={styles.TasksTracker__tasks}>
           {/* table header */}
           <TableHeader
@@ -88,11 +90,11 @@ const TasksTracker = () => {
               className={styles.TasksTracker__table}
             >
               {/* table columns */}
-              <TableCols />
+              <TableCols sortField={sortField} sortDirecion={sortDirecion} />
 
               {/* table body */}
               <TableBody>
-                {tasks.map((task, index) => (
+                {sortedTasks.map((task, index) => (
                   <TaskRow index={index} task={task} />
                 ))}
               </TableBody>

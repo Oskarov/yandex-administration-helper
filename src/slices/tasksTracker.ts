@@ -1,6 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { ITasksTrackerState } from '../interfaces/ITasksTracker';
+import {
+  ITasksTrackerState,
+  TShortTaskFields,
+} from '../interfaces/ITasksTracker';
 import { TShortTask } from 'interfaces/ITask';
 
 const initialState: ITasksTrackerState = {
@@ -52,6 +55,10 @@ const tasksTrackerSlice = createSlice({
       state.tasks = state.tasks.filter(task => task.key !== payload);
     },
 
+    setSortField(state, { payload }: PayloadAction<TShortTaskFields>): void {
+      state.sortField = payload;
+    },
+
     // setSortDirection
     setSortDirection(state) {
       state.sortDirecion = state.sortDirecion === 'ASC' ? 'DESC' : 'ASC';
@@ -67,5 +74,6 @@ export const {
   setQuery,
   addTask,
   removeTask,
+  setSortField,
   setSortDirection,
 } = tasksTrackerSlice.actions;
