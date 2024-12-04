@@ -27,20 +27,25 @@ const TasksTracker = () => {
   const [updateDate, setUpdateDate] = useState<string>('');
 
   // selectors
-  const { loading, error, query, tasks, sortField, sortDirecion } = useSelector(
-    (store: TStore) => ({
-      loading: store.tasksTracker.loading,
-      error: store.tasksTracker.error,
-      query: store.tasksTracker.query,
+  const {
+    loading,
+    error,
+    query,
+    tasks,
+    // sortField,
+    // sortDirecion,
+  } = useSelector((store: TStore) => ({
+    loading: store.tasksTracker.loading,
+    error: store.tasksTracker.error,
+    query: store.tasksTracker.query,
 
-      // items
-      tasks: store.tasksTracker.tasks,
+    // items
+    tasks: store.tasksTracker.tasks,
 
-      // sort
-      sortField: store.tasksTracker.sortField,
-      sortDirecion: store.tasksTracker.sortDirecion,
-    }),
-  );
+    // sort
+    // sortField: store.tasksTracker.sortField,
+    // sortDirecion: store.tasksTracker.sortDirecion,
+  }));
 
   // экшен на обновление данных у существующих задач
   const updateTasksList = (): void => {

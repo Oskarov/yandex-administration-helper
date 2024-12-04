@@ -31,62 +31,20 @@ const tasksTrackerSlice = createSlice({
       state.query = payload;
     },
 
-    // addTask(state, { payload }: PayloadAction<TShortTask[]>) {
-    //   if (state.tasks.length > 0) {
-    //     const newTasksKeys = payload.map(task => task.key);
-
-    //     state.tasks = [
-    //       // old tasks without updated
-    //       ...state.tasks.filter(task => !newTasksKeys.includes(task.key)),
-
-    //       // updated
-    //       ...payload,
-    //     ].sort((a, b) =>
-    //       state.sortDirecion === 'ASC'
-    //         ? a[state.sortField].localeCompare(b[state.sortField])
-    //         : b[state.sortField].localeCompare(a[state.sortField]),
-    //     );
-    //   } else {
-    //     state.tasks = payload.sort((a, b) =>
-    //       state.sortDirecion === 'ASC'
-    //         ? a[state.sortField].localeCompare(b[state.sortField])
-    //         : b[state.sortField].localeCompare(a[state.sortField]),
-    //     );
-    //   }
-    // },
-
-    // addTask + sorting
-    addTask: (state, { payload }: PayloadAction<TShortTask[]>) => {
-      const isAsc = state.sortDirecion === 'ASC';
+    // addTask
+    addTask(state, { payload }: PayloadAction<TShortTask[]>) {
+      // updated tasks from payload
       const newTasksKeys = payload.map(task => task.key);
 
-      if (state.tasks.length > 0) {
-        return {
-          ...state,
-          tasks: [
+      state.tasks = !!state.tasks.length
+        ? [
             // old tasks without updated
             ...state.tasks.filter(task => !newTasksKeys.includes(task.key)),
 
-            // updated
+            // updated tasks
             ...payload,
-
-            // sorting
-          ].sort((a, b) =>
-            isAsc
-              ? a[state.sortField].localeCompare(b[state.sortField])
-              : b[state.sortField].localeCompare(a[state.sortField]),
-          ),
-        };
-      } else {
-        return {
-          ...state,
-          tasks: payload.sort((a, b) =>
-            isAsc
-              ? a[state.sortField].localeCompare(b[state.sortField])
-              : b[state.sortField].localeCompare(a[state.sortField]),
-          ),
-        };
-      }
+          ]
+        : payload;
     },
 
     // removeTask

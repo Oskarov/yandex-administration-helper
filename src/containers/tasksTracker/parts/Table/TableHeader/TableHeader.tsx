@@ -5,24 +5,22 @@ type TProps = {
   updateTasksList: () => void;
 };
 
-const TableHeader: React.FC<TProps> = ({ updateDate, updateTasksList }) => {
-  return (
-    <header>
-      <b>Отслеживаемые задачи</b>
+const TableHeader: React.FC<TProps> = ({ updateDate, updateTasksList }) => (
+  <header>
+    <b>Отслеживаемые задачи</b>
 
-      {updateDate && (
-        <span>
-          <span>Последнее обновление:</span>
-          &nbsp;
-          <code>{updateDate}</code>
-        </span>
-      )}
+    {updateDate && (
+      <span>
+        <span>Последнее обновление:</span>
+        &nbsp;
+        <code>{updateDate}</code>
+      </span>
+    )}
 
-      <Button onClick={updateTasksList} color='primary' variant='text'>
-        Обновить
-      </Button>
-    </header>
-  );
-};
+    <Button onClick={updateTasksList} color='primary' variant='text'>
+      Обновить
+    </Button>
+  </header>
+);
 
 export default TableHeader;
