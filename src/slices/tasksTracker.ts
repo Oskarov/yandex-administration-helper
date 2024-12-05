@@ -63,6 +63,17 @@ const tasksTrackerSlice = createSlice({
     setSortDirection(state) {
       state.sortDirecion = state.sortDirecion === 'ASC' ? 'DESC' : 'ASC';
     },
+
+    // setSortDirection
+    setCheckTask(state, { payload }: PayloadAction<string>) {
+      state.tasks = state.tasks.map(task => {
+        if (task.key === payload) {
+          return { ...task, newStatusChecked: true };
+        }
+
+        return task;
+      });
+    },
   },
 });
 
@@ -76,4 +87,5 @@ export const {
   removeTask,
   setSortField,
   setSortDirection,
+  setCheckTask,
 } = tasksTrackerSlice.actions;

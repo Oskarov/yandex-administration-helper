@@ -1,12 +1,31 @@
 @import '~styles/vars';
 
 .TaskRow {
+  position: relative;
+
   &:hover {
     td:last-child {
-      svg {
+      svg.delete {
         fill: $gray-middle;
       }
     }
+  }
+
+  &__hightlight {
+    border: 2px solid $primary;
+  }
+
+  &__newStatus {
+    position: absolute;
+    right: -2px;
+    bottom: -2px;
+    display: inline-flex;
+    background-color: $primary;
+    color: white;
+    font-size: 12px;
+    line-height: 12px;
+    padding: 1px 3px;
+    cursor: pointer;
   }
 
   &__status {
@@ -39,10 +58,11 @@
     }
   }
 
-  &__delete {
+  &__actions {
     padding: 0;
 
-    svg {
+    // delete icon
+    svg.delete {
       fill: transparent;
       width: 0.8em;
       height: 0.8em;
@@ -51,6 +71,24 @@
       &:hover {
         fill: $error !important;
       }
+    }
+
+    // check icon
+    svg.check {
+      fill: $primary;
+      width: 1em;
+      height: 1em;
+      cursor: pointer;
+    }
+  }
+
+  &__tooltip {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    code {
+      font-weight: bold;
     }
   }
 }

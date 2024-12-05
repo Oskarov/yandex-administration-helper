@@ -63,6 +63,8 @@ const TasksTracker = () => {
       : [...tasks].sort((a, b) => b[sortField].localeCompare(a[sortField]));
   }, [tasks, sortField, sortDirecion]);
 
+  // const sortedTasks = tasks;
+
   return (
     <div className={styles.TasksTracker}>
       <Loader loading={loading} />

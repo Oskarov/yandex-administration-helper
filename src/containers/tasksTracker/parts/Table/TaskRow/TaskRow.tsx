@@ -1,15 +1,16 @@
 // redux
 import { useDispatch } from 'react-redux';
 import { TShortTask } from 'interfaces/ITask';
-import { removeTask } from 'slices/tasksTracker';
+import { removeTask, setCheckTask } from 'slices/tasksTracker';
 import { setConfirmationOpen } from 'slices/modal';
 
 // utils
 import { returnStatusClass } from 'containers/tasksTracker/utils';
 
 // components
-import { TableRow, TableCell } from '@mui/material';
+import { TableRow, TableCell, Tooltip } from '@mui/material';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 // styles
 import cn from 'classnames';
@@ -23,6 +24,7 @@ type TProps = {
 const TaskRow: React.FC<TProps> = ({ index, task }) => {
   const dispatch = useDispatch();
 
+  // удаление задачи из отслеживание
   const handleDelete = (key: string) => {
     dispatch(
       setConfirmationOpen({
@@ -33,10 +35,30 @@ const TaskRow: React.FC<TProps> = ({ index, task }) => {
     );
   };
 
+  const isStatusUpdated =
+    task.hasOwnProperty('newStatusChecked') && !task.newStatusChecked;
+
+  const tooltipLayout = (): JSX.Element => (
+    <ul className={styles.TaskRow__tooltip}>
+      <li>
+        <span>Получен:</span>
+        &nbsp;
+        <code>{task.getNewStatusAt}</code>
+      </li>
+      <li>
+        <span>Предыдущий статус:</span>
+        &nbsp;
+        <code>{task.previousStatus}</code>
+      </li>
+    </ul>
+  );
+
   return (
     <TableRow
       key={task.key}
-      className={styles.TaskRow}
+      className={cn(styles.TaskRow, {
+        [styles.TaskRow__hightlight]: isStatusUpdated,
+      })}
       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
     >
       {/* № */}
@@ -60,7 +82,7 @@ const TaskRow: React.FC<TProps> = ({ index, task }) => {
       <TableCell align='center'>{task.projectName}</TableCell>
 
       {/* Спринт */}
-      <TableCell>{task?.sprintsList}</TableCell>
+      <TableCell>{task.sprintsList}</TableCell>
 
       {/* Создал */}
       <TableCell>{task.createdBy}</TableCell>
@@ -82,9 +104,30 @@ const TaskRow: React.FC<TProps> = ({ index, task }) => {
       </TableCell>
 
       {/* Удаление задачи */}
-      <TableCell width={30} align='center' className={styles.TaskRow__delete}>
-        <DeleteOutlineOutlinedIcon onClick={() => handleDelete(task.key)} />
+      <TableCell width={30} align='center' className={styles.TaskRow__actions}>
+        {isStatusUpdated ? (
+          // check icon
+          <Tooltip title='Отметить как просмотренный'>
+            <CheckCircleIcon
+              className={styles.check}
+              onClick={() => dispatch(setCheckTask(task.key))}
+            />
+          </Tooltip>
+        ) : (
+          // delete icon
+          <DeleteOutlineOutlinedIcon
+            className={styles.delete}
+            onClick={() => handleDelete(task.key)}
+          />
+        )}
       </TableCell>
+
+      {/* Статус обновлён */}
+      {isStatusUpdated && (
+        <Tooltip title={tooltipLayout()}>
+          <div className={styles.TaskRow__newStatus}>Статус обновлён</div>
+        </Tooltip>
+      )}
     </TableRow>
   );
 };
