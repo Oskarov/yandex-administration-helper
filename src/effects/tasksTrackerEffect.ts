@@ -3,7 +3,6 @@ import { store } from 'store/store';
 import { TShortTask } from 'interfaces/ITask';
 import SearchService from 'api/search-service';
 import { addTask, setError, setLoading } from 'slices/tasksTracker';
-import dayjs from 'dayjs';
 import { returnDateString } from 'containers/tasksTracker/utils';
 
 // обработка ключей задач
