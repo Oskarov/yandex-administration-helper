@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux';
 import { TableCell, TableHead, TableRow } from '@mui/material';
-import { TShortTaskFields } from 'interfaces/ITasksTracker';
+import { TSortedTaskFields } from 'interfaces/ITasksTracker';
 import { setSortDirection, setSortField } from 'slices/tasksTracker';
 import cn from 'classnames';
 import styles from './TableCols.module.scss';
@@ -14,13 +14,13 @@ const TableCols: React.FC<TProps> = ({ sortField, sortDirecion }) => {
   const dispatch = useDispatch();
 
   // return sorted classes
-  const returnSortClasses = (field: TShortTaskFields) => ({
+  const returnSortClasses = (field: TSortedTaskFields) => ({
     [styles.sort]: sortField === field,
     [styles.sortAsc]: sortField === field && sortDirecion === 'ASC',
     [styles.sortDesc]: sortField === field && sortDirecion === 'DESC',
   });
 
-  const onCellClick = (field: TShortTaskFields) => {
+  const onCellClick = (field: TSortedTaskFields) => {
     dispatch(sortField === field ? setSortDirection() : setSortField(field));
   };
 

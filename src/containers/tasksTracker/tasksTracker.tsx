@@ -3,7 +3,6 @@ import { useEffect, useMemo, useState } from 'react';
 
 // redux
 import { TStore } from 'store/store';
-import { setSortDirection } from 'slices/tasksTracker';
 import { useDispatch, useSelector } from 'react-redux';
 import { findAndAddTask } from 'effects/tasksTrackerEffect';
 
@@ -104,10 +103,6 @@ const TasksTracker = () => {
       ) : (
         'Нет задач'
       )}
-
-      <button onClick={() => dispatch(setSortDirection())}>
-        Change sort direction
-      </button>
     </div>
   );
 };

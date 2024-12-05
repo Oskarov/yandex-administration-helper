@@ -1,6 +1,14 @@
 import { TShortTask } from './ITask';
 
-export type TShortTaskFields = keyof TShortTask;
+export type TSortedTaskFields =
+  | 'key'
+  | 'summary'
+  | 'projectName'
+  | 'sprintsList'
+  | 'createdBy'
+  | 'createdAt'
+  | 'assignee'
+  | 'status';
 
 export interface ITasksTrackerState {
   loading: boolean;
@@ -9,6 +17,6 @@ export interface ITasksTrackerState {
   tasks: TShortTask[];
 
   // key, name, project, sprint, create, createDate, performer, status
-  sortField: TShortTaskFields;
+  sortField: TSortedTaskFields;
   sortDirecion: 'ASC' | 'DESC';
 }

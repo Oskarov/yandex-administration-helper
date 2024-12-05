@@ -215,5 +215,10 @@ export type TShortTask = {
   createdBy: string;
   createdAt: string;
   assignee: string;
+
+  // status
   status: string;
+  lastStatus?: string;
+  statusUpdate?: string;
+  statusChecked?: boolean;
 };
