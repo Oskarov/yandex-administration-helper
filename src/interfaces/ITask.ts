@@ -1,3 +1,5 @@
+import { TaskStatuses } from './ITasksTracker';
+
 export interface ITask {
   uuid: string;
   trackerId?: string;
@@ -215,7 +217,7 @@ export type TShortTask = {
   createdBy: string;
   createdAt: string;
   assignee: string;
-  status: string;
+  status: TaskStatuses;
 
   // дополнительные поля
   previousStatus?: string;

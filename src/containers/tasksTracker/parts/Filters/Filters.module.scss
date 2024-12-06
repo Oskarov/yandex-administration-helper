@@ -2,9 +2,10 @@
 
 .Filters {
   display: flex;
+  // justify-content: space-between;
   margin-bottom: 20px;
 
-  &__item {
+  &__filterItem {
     padding: 10px;
     flex-shrink: 0;
     flex-grow: 0;
@@ -31,17 +32,16 @@
     }
   }
 
-  &__actions[class] {
+  &__actionsItem {
     display: flex;
-    padding: 0;
-    border: none;
 
     button {
       border-radius: 10px;
-
-      &:first-child {
-        margin-right: 10px;
-      }
     }
+  }
+
+  &__statuses {
+    display: flex;
+    align-items: center;
   }
 }

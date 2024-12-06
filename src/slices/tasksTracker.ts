@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import {
   ITasksTrackerState,
+  TaskStatuses,
   TSortedTaskFields,
 } from '../interfaces/ITasksTracker';
 import { TShortTask } from 'interfaces/ITask';
@@ -11,8 +12,14 @@ const initialState: ITasksTrackerState = {
   error: '',
   query: '',
   tasks: [],
+
+  // sort
   sortField: 'key',
   sortDirecion: 'ASC', // 'ASC' | 'DESC'
+
+  // filter
+  filterStatus: TaskStatuses.ALL,
+  showOnlyUpdatedTasks: false,
 };
 
 const tasksTrackerSlice = createSlice({
@@ -74,6 +81,22 @@ const tasksTrackerSlice = createSlice({
         return task;
       });
     },
+
+    // setFilterStatus
+    setFilterStatus(state, { payload }: PayloadAction<TaskStatuses>): void {
+      state.filterStatus = payload;
+    },
+
+    // setFilterStatus
+    setUpdatedTasks(state): void {
+      state.showOnlyUpdatedTasks = !state.showOnlyUpdatedTasks;
+    },
+
+    // setResetFilters
+    setResetFilters(state): void {
+      state.filterStatus = TaskStatuses.ALL;
+      state.showOnlyUpdatedTasks = false;
+    },
   },
 });
 
@@ -88,4 +111,7 @@ export const {
   setSortField,
   setSortDirection,
   setCheckTask,
+  setFilterStatus,
+  setUpdatedTasks,
+  setResetFilters,
 } = tasksTrackerSlice.actions;
