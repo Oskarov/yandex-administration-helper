@@ -15,6 +15,8 @@ import {
 const persistConfig = {
   key: 'root',
   storage: storage,
+
+  // список названий слайсов, которые не нужно персистить
   blacklist: ['modalSlice', 'trackerNoMemo', 'worklogs'],
 };
 

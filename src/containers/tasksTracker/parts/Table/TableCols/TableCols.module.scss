@@ -1,0 +1,44 @@
+@import '~styles/vars';
+
+.sort {
+  span {
+    position: relative;
+    color: $primary;
+    text-transform: uppercase;
+    cursor: pointer;
+
+    &::selection {
+      background-color: transparent;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 14px;
+      height: 14px;
+      margin-top: -7px;
+      top: 50%;
+      right: -16px;
+      font-size: 16px;
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-position: center;
+      background-image: url(~assets/arrow.svg);
+    }
+  }
+}
+
+.sortAsc {
+  span::after {
+    rotate: 180deg;
+  }
+}
+
+.sortDesc {
+  span::after {
+    rotate: 0;
+  }
+}

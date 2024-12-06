@@ -1,9 +1,8 @@
 // redux
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 // redux
 import { TStore } from 'store/store';
-import { removeTask } from 'slices/tasksTracker';
 import { useDispatch, useSelector } from 'react-redux';
 import { findAndAddTask } from 'effects/tasksTrackerEffect';
 
@@ -13,13 +12,13 @@ import { returnDateString } from './utils';
 // components
 import Loader from 'components/loader';
 import { Paper, Table, TableBody, TableContainer } from '@mui/material';
-import { setConfirmationOpen } from 'slices/modal';
 
 // parts
 import { Error, Filters, TableCols, TableHeader, TaskRow } from './parts';
 
 // styles
 import styles from './tasksTracker.module.scss';
+import { TaskStatuses } from 'interfaces/ITasksTracker';
 
 const TasksTracker = () => {
   const dispatch = useDispatch();
@@ -28,17 +27,35 @@ const TasksTracker = () => {
   const [updateDate, setUpdateDate] = useState<string>('');
 
   // selectors
-  const { loading, error, query, tasks } = useSelector((store: TStore) => ({
+  const {
+    loading,
+    error,
+    query,
+    tasks,
+    sortField,
+    sortDirecion,
+    filterStatus,
+    showOnlyUpdatedTasks,
+  } = useSelector((store: TStore) => ({
     loading: store.tasksTracker.loading,
     error: store.tasksTracker.error,
     query: store.tasksTracker.query,
+
+    // items
     tasks: store.tasksTracker.tasks,
+
+    // sort
+    sortField: store.tasksTracker.sortField,
+    sortDirecion: store.tasksTracker.sortDirecion,
+
+    // filter
+    filterStatus: store.tasksTracker.filterStatus,
+    showOnlyUpdatedTasks: store.tasksTracker.showOnlyUpdatedTasks,
   }));
 
   // экшен на обновление данных у существующих задач
   const updateTasksList = (): void => {
-    const tasksKeys =
-      !!Object.keys(tasks).length && Object.keys(tasks).join(',');
+    const tasksKeys = !!tasks.length && tasks.map(task => task.key).join(',');
 
     if (tasksKeys) {
       dispatch(findAndAddTask(tasksKeys));
@@ -51,31 +68,51 @@ const TasksTracker = () => {
     updateTasksList();
   }, []);
 
-  const tasksKeys = Object.keys(tasks);
+  // filtering tasks [...tasks]
+  const filteredTasks = useMemo(() => {
+    return (
+      tasks
+        // фильтрация по полю status
+        .filter(task => {
+          if (filterStatus !== TaskStatuses.ALL) {
+            return task.status === filterStatus;
+          } else return true;
+        })
 
-  // удаление задачи из списка
-  const handleDelete = (key: string) => {
-    dispatch(
-      setConfirmationOpen({
-        dialogType: 'positive',
-        dialogText: `Вы точно хотите удалить задачу ${key}?`,
-        confirmationFunction: () => dispatch(removeTask(key)),
-      }),
+        // фильтрация по полю newStatusChecked
+        .filter(task => {
+          if (showOnlyUpdatedTasks) {
+            return (
+              task.hasOwnProperty('newStatusChecked') && !task.newStatusChecked
+            );
+          } else return true;
+        })
     );
-  };
+  }, [tasks, filterStatus, showOnlyUpdatedTasks]);
+
+  // sorting tasks
+  const sortedTasks = useMemo(() => {
+    return sortDirecion === 'ASC'
+      ? filteredTasks.sort((a, b) => a[sortField].localeCompare(b[sortField]))
+      : filteredTasks.sort((a, b) => b[sortField].localeCompare(a[sortField]));
+  }, [sortField, sortDirecion, filteredTasks]);
 
   return (
     <div className={styles.TasksTracker}>
       <Loader loading={loading} />
 
       {/* filters */}
-      <Filters query={query} />
+      <Filters
+        query={query}
+        filterStatus={filterStatus}
+        showOnlyUpdatedTasks={showOnlyUpdatedTasks}
+      />
 
       {/* error */}
       {error && <Error error={error} />}
 
       {/* tasks table */}
-      {!!tasksKeys.length ? (
+      {!!sortedTasks.length ? (
         <div className={styles.TasksTracker__tasks}>
           {/* table header */}
           <TableHeader
@@ -90,12 +127,12 @@ const TasksTracker = () => {
               className={styles.TasksTracker__table}
             >
               {/* table columns */}
-              <TableCols />
+              <TableCols sortField={sortField} sortDirecion={sortDirecion} />
 
               {/* table body */}
               <TableBody>
-                {tasksKeys.map((key, index) => (
-                  <TaskRow index={index} task={tasks[key]} />
+                {sortedTasks.map((task, index) => (
+                  <TaskRow index={index} task={task} />
                 ))}
               </TableBody>
             </Table>

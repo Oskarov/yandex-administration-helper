@@ -1,3 +1,5 @@
+import { TaskStatuses } from './ITasksTracker';
+
 export interface ITask {
   uuid: string;
   trackerId?: string;
@@ -205,4 +207,20 @@ export type TFullTask = {
     display: string;
   };
   favorite: boolean;
+};
+
+export type TShortTask = {
+  key: string;
+  summary: string;
+  projectName: string;
+  sprintsList: string;
+  createdBy: string;
+  createdAt: string;
+  assignee: string;
+  status: TaskStatuses;
+
+  // дополнительные поля
+  previousStatus?: string;
+  getNewStatusAt?: string;
+  newStatusChecked?: boolean;
 };
