@@ -3,12 +3,41 @@
 .TaskRow {
   position: relative;
 
+  &__checkbox {
+    position: relative;
+
+    span {
+      padding: 0;
+    }
+
+    & > div {
+      position: absolute;
+      left: -30px;
+      top: 55%;
+      background-color: transparent !important;
+      display: block;
+      width: 26px;
+      height: 26px;
+      margin-top: -13px;
+      font-weight: 400;
+      font-size: 0.875rem;
+      line-height: 1.43;
+      letter-spacing: 0.01071em;
+      text-align: right;
+    }
+  }
+
   &:hover {
     td:last-child {
       svg.delete {
         fill: $gray-middle;
       }
     }
+  }
+
+  &__position {
+    position: absolute;
+    outline: 1px solid red;
   }
 
   &__hightlight {
@@ -90,11 +119,5 @@
     code {
       font-weight: bold;
     }
-  }
-}
-
-.checkbox {
-  span {
-    padding: 0;
   }
 }
