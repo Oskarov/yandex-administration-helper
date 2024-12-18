@@ -8,6 +8,7 @@ import { findAndAddTask } from 'effects/tasksTrackerEffect';
 
 // utils
 import { returnDateString } from './utils';
+import { TaskStatuses } from 'interfaces/ITasksTracker';
 
 // components
 import Loader from 'components/loader';
@@ -18,7 +19,6 @@ import { Error, Filters, TableCols, TableHeader, TaskRow } from './parts';
 
 // styles
 import styles from './tasksTracker.module.scss';
-import { TaskStatuses } from 'interfaces/ITasksTracker';
 
 const TasksTracker = () => {
   const dispatch = useDispatch();
@@ -119,19 +119,16 @@ const TasksTracker = () => {
 
       {/* tasks table */}
       {!!sortedTasks.length ? (
-        <div className={styles.TasksTracker__tasks}>
+        <div>
           {/* table header */}
           <TableHeader
             updateDate={updateDate}
+            selectedTasks={selectedTasks}
             updateTasksList={updateTasksList}
           />
 
           <TableContainer component={Paper} sx={{ overflow: 'inherit' }}>
-            <Table
-              sx={{ minWidth: 650 }}
-              aria-label='simple table'
-              className={styles.TasksTracker__table}
-            >
+            <Table sx={{ minWidth: 650 }} aria-label='simple table'>
               {/* table columns */}
               <TableCols
                 sortField={sortField}
