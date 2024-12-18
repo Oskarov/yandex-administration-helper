@@ -50,6 +50,7 @@ const TasksTracker = () => {
     // sort
     sortField: store.tasksTracker.sortField,
     sortDirecion: store.tasksTracker.sortDirecion,
+    sortedTasks: store.tasksTracker.sortedTasks,
 
     // filter
     filterStatus: store.tasksTracker.filterStatus,
@@ -139,7 +140,9 @@ const TasksTracker = () => {
               <TableCols
                 sortField={sortField}
                 sortDirecion={sortDirecion}
-                selectAllTasks={selectAllTasks}
+                selectAllTasks={
+                  selectAllTasks || sortedTasks.length === selectedTasks.length
+                }
               />
 
               {/* table body */}

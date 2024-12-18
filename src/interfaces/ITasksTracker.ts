@@ -28,13 +28,13 @@ export interface ITasksTrackerState {
   // key, name, project, sprint, create, createDate, performer, status
   sortField: TSortedTaskFields;
   sortDirecion: 'ASC' | 'DESC';
+  sortedTasks: string[];
 
   // filter
   filterStatus: TaskStatuses;
   showOnlyUpdatedTasks: boolean;
 
   // select
-  sortedTasks: string[];
   selectedTasks: string[];
   selectAllTasks: boolean;
 }

@@ -16,13 +16,13 @@ const initialState: ITasksTrackerState = {
   // sort
   sortField: 'key',
   sortDirecion: 'ASC', // 'ASC' | 'DESC'
+  sortedTasks: [],
 
   // filter
   filterStatus: TaskStatuses.ALL,
   showOnlyUpdatedTasks: false,
 
   // selected tasks
-  sortedTasks: [],
   selectedTasks: [],
   selectAllTasks: false,
 };
