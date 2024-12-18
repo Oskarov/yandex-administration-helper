@@ -65,6 +65,16 @@ const tasksTrackerSlice = createSlice({
     // removeTask
     removeTask(state, { payload }: PayloadAction<string>) {
       state.tasks = state.tasks.filter(task => task.key !== payload);
+
+      // если задача выла выделена чекбоксом
+      const isSelected = state.selectedTasks.includes(payload);
+
+      // удаляем из выделенных
+      if (isSelected) {
+        state.selectedTasks = state.selectedTasks.filter(
+          task => task !== payload,
+        );
+      }
     },
 
     // setSortField
