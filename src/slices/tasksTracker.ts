@@ -127,8 +127,8 @@ const tasksTrackerSlice = createSlice({
     },
 
     // setSelectAllTasks
-    setSelectAllTasks(state): void {
-      state.selectAllTasks = !state.selectAllTasks;
+    setSelectAllTasks(state, { payload }: PayloadAction<boolean>): void {
+      state.selectAllTasks = !payload;
 
       if (state.selectAllTasks) {
         state.selectedTasks = state.sortedTasks;

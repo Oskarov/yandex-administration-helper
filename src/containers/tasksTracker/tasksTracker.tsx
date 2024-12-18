@@ -140,7 +140,7 @@ const TasksTracker = () => {
               <TableCols
                 sortField={sortField}
                 sortDirecion={sortDirecion}
-                selectAllTasks={
+                isSelectedAllTasks={
                   selectAllTasks || sortedTasks.length === selectedTasks.length
                 }
               />

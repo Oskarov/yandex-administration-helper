@@ -12,13 +12,13 @@ import styles from './TableCols.module.scss';
 type TProps = {
   sortField: string;
   sortDirecion: string;
-  selectAllTasks: boolean;
+  isSelectedAllTasks: boolean;
 };
 
 const TableCols: React.FC<TProps> = ({
   sortField,
   sortDirecion,
-  selectAllTasks,
+  isSelectedAllTasks,
 }) => {
   const dispatch = useDispatch();
 
@@ -46,8 +46,8 @@ const TableCols: React.FC<TProps> = ({
         {/* Checkbox */}
         <TableCell>
           <Checkbox
-            checked={selectAllTasks}
-            onChange={() => dispatch(setSelectAllTasks())}
+            checked={isSelectedAllTasks}
+            onChange={() => dispatch(setSelectAllTasks(isSelectedAllTasks))}
           />
         </TableCell>
 
