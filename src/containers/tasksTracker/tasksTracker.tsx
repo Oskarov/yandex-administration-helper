@@ -36,6 +36,8 @@ const TasksTracker = () => {
     sortDirecion,
     filterStatus,
     showOnlyUpdatedTasks,
+    selectedTasks,
+    selectAllTasks,
   } = useSelector((store: TStore) => ({
     loading: store.tasksTracker.loading,
     error: store.tasksTracker.error,
@@ -51,6 +53,10 @@ const TasksTracker = () => {
     // filter
     filterStatus: store.tasksTracker.filterStatus,
     showOnlyUpdatedTasks: store.tasksTracker.showOnlyUpdatedTasks,
+
+    // select
+    selectedTasks: store.tasksTracker.selectedTasks,
+    selectAllTasks: store.tasksTracker.selectAllTasks,
   }));
 
   // экшен на обновление данных у существующих задач
@@ -127,12 +133,20 @@ const TasksTracker = () => {
               className={styles.TasksTracker__table}
             >
               {/* table columns */}
-              <TableCols sortField={sortField} sortDirecion={sortDirecion} />
+              <TableCols
+                sortField={sortField}
+                sortDirecion={sortDirecion}
+                selectAllTasks={selectAllTasks}
+              />
 
               {/* table body */}
               <TableBody>
                 {sortedTasks.map((task, index) => (
-                  <TaskRow index={index} task={task} />
+                  <TaskRow
+                    index={index}
+                    task={task}
+                    selectedTasks={selectedTasks}
+                  />
                 ))}
               </TableBody>
             </Table>

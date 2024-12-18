@@ -1,16 +1,25 @@
 import { useDispatch } from 'react-redux';
-import { TableCell, TableHead, TableRow } from '@mui/material';
+import { Checkbox, TableCell, TableHead, TableRow } from '@mui/material';
 import { TSortedTaskFields } from 'interfaces/ITasksTracker';
-import { setSortDirection, setSortField } from 'slices/tasksTracker';
+import {
+  setSelectAllTasks,
+  setSortDirection,
+  setSortField,
+} from 'slices/tasksTracker';
 import cn from 'classnames';
 import styles from './TableCols.module.scss';
 
 type TProps = {
   sortField: string;
   sortDirecion: string;
+  selectAllTasks: boolean;
 };
 
-const TableCols: React.FC<TProps> = ({ sortField, sortDirecion }) => {
+const TableCols: React.FC<TProps> = ({
+  sortField,
+  sortDirecion,
+  selectAllTasks,
+}) => {
   const dispatch = useDispatch();
 
   // return sorted classes
@@ -34,10 +43,18 @@ const TableCols: React.FC<TProps> = ({ sortField, sortDirecion }) => {
           },
         }}
       >
-        {/* № */}
-        <TableCell>
-          <span>№</span>
+        {/* Checkbox */}
+        <TableCell className={styles.checkbox} width={50}>
+          <Checkbox
+            checked={selectAllTasks}
+            onChange={() => dispatch(setSelectAllTasks())}
+          />
         </TableCell>
+
+        {/* № */}
+        {/* <TableCell>
+          <span>№</span>
+        </TableCell> */}
 
         {/* Код */}
         <TableCell

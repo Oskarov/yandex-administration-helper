@@ -20,6 +20,10 @@ const initialState: ITasksTrackerState = {
   // filter
   filterStatus: TaskStatuses.ALL,
   showOnlyUpdatedTasks: false,
+
+  // selected tasks
+  selectedTasks: [],
+  selectAllTasks: false,
 };
 
 const tasksTrackerSlice = createSlice({
@@ -62,6 +66,7 @@ const tasksTrackerSlice = createSlice({
       state.tasks = state.tasks.filter(task => task.key !== payload);
     },
 
+    // setSortField
     setSortField(state, { payload }: PayloadAction<TSortedTaskFields>): void {
       state.sortField = payload;
     },
@@ -71,7 +76,7 @@ const tasksTrackerSlice = createSlice({
       state.sortDirecion = state.sortDirecion === 'ASC' ? 'DESC' : 'ASC';
     },
 
-    // setSortDirection
+    // setCheckTask
     setCheckTask(state, { payload }: PayloadAction<string>) {
       state.tasks = state.tasks.map(task => {
         if (task.key === payload) {
@@ -97,6 +102,26 @@ const tasksTrackerSlice = createSlice({
       state.filterStatus = TaskStatuses.ALL;
       state.showOnlyUpdatedTasks = false;
     },
+
+    // setSelectTask
+    setSelectTask(state, { payload }: PayloadAction<string>): void {
+      const isTaskInclude = state.selectedTasks.includes(payload);
+
+      state.selectedTasks = isTaskInclude
+        ? state.selectedTasks.filter(task => task !== payload)
+        : [...state.selectedTasks, payload];
+    },
+
+    // setSelectAllTasks
+    setSelectAllTasks(state): void {
+      state.selectAllTasks = !state.selectAllTasks;
+
+      if (state.selectAllTasks) {
+        state.selectedTasks = state.tasks.map(task => task.key);
+      } else {
+        state.selectedTasks = [];
+      }
+    },
   },
 });
 
@@ -114,4 +139,6 @@ export const {
   setFilterStatus,
   setUpdatedTasks,
   setResetFilters,
+  setSelectTask,
+  setSelectAllTasks,
 } = tasksTrackerSlice.actions;

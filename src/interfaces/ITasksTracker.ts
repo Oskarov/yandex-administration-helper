@@ -31,6 +31,9 @@ export interface ITasksTrackerState {
 
   // filter
   filterStatus: TaskStatuses;
-  // filterStatus: TaskStatuses[];
   showOnlyUpdatedTasks: boolean;
+
+  // select
+  selectedTasks: string[];
+  selectAllTasks: boolean;
 }

@@ -1,14 +1,14 @@
 // redux
 import { useDispatch } from 'react-redux';
 import { TShortTask } from 'interfaces/ITask';
-import { removeTask, setCheckTask } from 'slices/tasksTracker';
+import { removeTask, setCheckTask, setSelectTask } from 'slices/tasksTracker';
 import { setConfirmationOpen } from 'slices/modal';
 
 // utils
 import { returnStatusClass } from 'containers/tasksTracker/utils';
 
 // components
-import { TableRow, TableCell, Tooltip } from '@mui/material';
+import { TableRow, TableCell, Tooltip, Checkbox } from '@mui/material';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
@@ -19,9 +19,10 @@ import styles from './TaskRow.module.scss';
 type TProps = {
   index: number;
   task: TShortTask;
+  selectedTasks: string[];
 };
 
-const TaskRow: React.FC<TProps> = ({ index, task }) => {
+const TaskRow: React.FC<TProps> = ({ index, task, selectedTasks }) => {
   const dispatch = useDispatch();
 
   // удаление задачи из отслеживание
@@ -62,7 +63,12 @@ const TaskRow: React.FC<TProps> = ({ index, task }) => {
       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
     >
       {/* № */}
-      <TableCell>{index + 1}</TableCell>
+      <TableCell className={styles.checkbox} width={50}>
+        <Checkbox
+          checked={selectedTasks.includes(task.key)}
+          onChange={() => dispatch(setSelectTask(task.key))}
+        />
+      </TableCell>
 
       {/* Код */}
       <TableCell sx={{ fontSize: '16px' }}>
