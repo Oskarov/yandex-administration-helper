@@ -12,7 +12,7 @@ export type TSortedTaskFields =
 
 export enum TaskStatuses {
   ALL = 'Все',
-  BACKLOG = 'Бэклог',
+  BACKLOG = 'Беклог',
   IN_WORK = 'В работе',
   DONE = 'Готово',
   CANCELED = 'Отменено',

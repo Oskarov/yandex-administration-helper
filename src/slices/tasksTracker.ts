@@ -92,19 +92,21 @@ const tasksTrackerSlice = createSlice({
       state.filterStatus = payload;
     },
 
-    // setFilterStatus
+    // setUpdatedTasks
     setUpdatedTasks(state): void {
       state.showOnlyUpdatedTasks = !state.showOnlyUpdatedTasks;
     },
 
-    // setResetFilters
-    setResetFilters(state): void {
-      state.filterStatus = TaskStatuses.ALL;
-      state.showOnlyUpdatedTasks = false;
+    // resetFilters
+    resetFilters(state): void {
+      state.filterStatus = initialState.filterStatus;
+      state.showOnlyUpdatedTasks = initialState.showOnlyUpdatedTasks;
     },
 
     // setSelectTask
     setSelectTask(state, { payload }: PayloadAction<string>): void {
+      state.selectAllTasks = false;
+
       const isTaskInclude = state.selectedTasks.includes(payload);
 
       state.selectedTasks = isTaskInclude
@@ -122,6 +124,12 @@ const tasksTrackerSlice = createSlice({
         state.selectedTasks = [];
       }
     },
+
+    // resetSelectedTasks
+    resetSelectedTasks(state): void {
+      state.selectAllTasks = initialState.selectAllTasks;
+      state.selectedTasks = initialState.selectedTasks;
+    },
   },
 });
 
@@ -138,7 +146,8 @@ export const {
   setCheckTask,
   setFilterStatus,
   setUpdatedTasks,
-  setResetFilters,
+  resetFilters,
   setSelectTask,
   setSelectAllTasks,
+  resetSelectedTasks,
 } = tasksTrackerSlice.actions;

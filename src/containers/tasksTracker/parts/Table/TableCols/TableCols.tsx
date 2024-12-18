@@ -51,11 +51,6 @@ const TableCols: React.FC<TProps> = ({
           />
         </TableCell>
 
-        {/* № */}
-        {/* <TableCell>
-          <span>№</span>
-        </TableCell> */}
-
         {/* Код */}
         <TableCell
           width={120}
