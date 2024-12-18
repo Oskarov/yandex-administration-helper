@@ -34,6 +34,7 @@ export interface ITasksTrackerState {
   showOnlyUpdatedTasks: boolean;
 
   // select
+  sortedTasks: string[];
   selectedTasks: string[];
   selectAllTasks: boolean;
 }

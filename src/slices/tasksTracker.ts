@@ -22,6 +22,7 @@ const initialState: ITasksTrackerState = {
   showOnlyUpdatedTasks: false,
 
   // selected tasks
+  sortedTasks: [],
   selectedTasks: [],
   selectAllTasks: false,
 };
@@ -119,7 +120,7 @@ const tasksTrackerSlice = createSlice({
       state.selectAllTasks = !state.selectAllTasks;
 
       if (state.selectAllTasks) {
-        state.selectedTasks = state.tasks.map(task => task.key);
+        state.selectedTasks = state.sortedTasks;
       } else {
         state.selectedTasks = [];
       }
@@ -129,6 +130,11 @@ const tasksTrackerSlice = createSlice({
     resetSelectedTasks(state): void {
       state.selectAllTasks = initialState.selectAllTasks;
       state.selectedTasks = initialState.selectedTasks;
+    },
+
+    // setSortedTasks
+    setSortedTasks(state, { payload }: PayloadAction<string[]>): void {
+      state.sortedTasks = payload;
     },
   },
 });
@@ -150,4 +156,5 @@ export const {
   setSelectTask,
   setSelectAllTasks,
   resetSelectedTasks,
+  setSortedTasks,
 } = tasksTrackerSlice.actions;

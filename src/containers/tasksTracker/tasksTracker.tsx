@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 // redux
 import { TStore } from 'store/store';
+import { setSortedTasks } from 'slices/tasksTracker';
 import { useDispatch, useSelector } from 'react-redux';
 import { findAndAddTask } from 'effects/tasksTrackerEffect';
 
@@ -102,6 +103,11 @@ const TasksTracker = () => {
       ? filteredTasks.sort((a, b) => a[sortField].localeCompare(b[sortField]))
       : filteredTasks.sort((a, b) => b[sortField].localeCompare(a[sortField]));
   }, [sortField, sortDirecion, filteredTasks]);
+
+  // сохранение соритированных задач в сторе
+  useEffect(() => {
+    dispatch(setSortedTasks(sortedTasks.map(task => task.key)));
+  }, [sortedTasks]);
 
   return (
     <div className={styles.TasksTracker}>
