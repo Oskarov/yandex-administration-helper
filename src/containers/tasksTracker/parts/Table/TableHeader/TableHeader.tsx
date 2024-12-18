@@ -19,19 +19,19 @@ const TableHeader: React.FC<TProps> = ({
     {/* Массовые действия */}
     {!!selectedTasks.length && (
       <div className={styles.TableHeader__massActions}>
-        {/* Массовая отметка задач */}
-        <Button onClick={() => null} color='primary' variant='outlined'>
-          <span>Отметить</span>
-          &nbsp;
-          <span>{`(${selectedTasks.length} шт.)`}</span>
-        </Button>
-
         {/* Массовое удаление задач */}
         <Button onClick={() => null} color='error' variant='outlined'>
           <span>Удалить</span>
           &nbsp;
           <span>{`(${selectedTasks.length} шт.)`}</span>
         </Button>
+
+        {/* Массовая отметка задач */}
+        {/* <Button onClick={() => null} color='primary' variant='outlined'>
+          <span>Отметить</span>
+          &nbsp;
+          <span>{`(${selectedTasks.length} шт.)`}</span>
+        </Button> */}
       </div>
     )}
 

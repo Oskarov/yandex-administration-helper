@@ -51,13 +51,13 @@ const TableCols: React.FC<TProps> = ({
           />
         </TableCell>
 
-        {/* Код */}
+        {/* Ключ */}
         <TableCell
           width={120}
           onClick={() => onCellClick('key')}
           className={cn(returnSortClasses('key'))}
         >
-          <span>Код</span>
+          <span>Ключ</span>
         </TableCell>
 
         {/* Название */}
