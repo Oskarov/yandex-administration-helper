@@ -111,8 +111,8 @@ const TaskRow: React.FC<TProps> = ({ index, task, selectedTasks }) => {
         <span>{task?.status}</span>
       </TableCell>
 
-      {/* Удаление задачи */}
-      <TableCell width={30} align='center' className={styles.TaskRow__actions}>
+      {/* Удаление или пометка задачи */}
+      <TableCell align='center' className={styles.TaskRow__actions}>
         {isStatusUpdated ? (
           // check icon
           <Tooltip title='Отметить как просмотренный'>
