@@ -63,7 +63,7 @@ const TaskRow: React.FC<TProps> = ({ index, task, selectedTasks }) => {
       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
     >
       {/* Checkbox */}
-      <TableCell className={styles.TaskRow__checkbox} width={50}>
+      <TableCell className={styles.TaskRow__checkbox}>
         <Checkbox
           checked={selectedTasks.includes(task.key)}
           onChange={() => dispatch(setSelectTask(task.key))}

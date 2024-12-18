@@ -44,7 +44,7 @@ const TableCols: React.FC<TProps> = ({
         }}
       >
         {/* Checkbox */}
-        <TableCell className={styles.checkbox} width={50}>
+        <TableCell>
           <Checkbox
             checked={selectAllTasks}
             onChange={() => dispatch(setSelectAllTasks())}

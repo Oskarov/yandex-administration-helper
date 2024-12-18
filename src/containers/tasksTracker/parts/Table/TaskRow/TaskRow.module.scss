@@ -4,15 +4,10 @@
   position: relative;
 
   &__checkbox {
-    position: relative;
-
-    span {
-      padding: 0;
-    }
-
+    // порядковый номер рядом с чекбоксом
     & > div {
       position: absolute;
-      left: -30px;
+      left: -33px;
       top: 55%;
       background-color: transparent !important;
       display: block;
@@ -33,11 +28,6 @@
         fill: $gray-middle;
       }
     }
-  }
-
-  &__position {
-    position: absolute;
-    outline: 1px solid red;
   }
 
   &__hightlight {
@@ -88,7 +78,7 @@
   }
 
   &__actions {
-    padding: 0;
+    // padding: 0;
 
     // delete icon
     svg.delete {
