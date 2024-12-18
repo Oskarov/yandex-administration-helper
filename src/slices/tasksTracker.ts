@@ -64,6 +64,7 @@ const tasksTrackerSlice = createSlice({
 
     // removeTask
     removeTask(state, { payload }: PayloadAction<string>) {
+      // удаляем задачу из списка задач
       state.tasks = state.tasks.filter(task => task.key !== payload);
 
       // если задача выла выделена чекбоксом
