@@ -12,7 +12,7 @@ export type TSortedTaskFields =
 
 export enum TaskStatuses {
   ALL = 'Все',
-  BACKLOG = 'Бэклог',
+  BACKLOG = 'Беклог',
   IN_WORK = 'В работе',
   DONE = 'Готово',
   CANCELED = 'Отменено',
@@ -28,9 +28,13 @@ export interface ITasksTrackerState {
   // key, name, project, sprint, create, createDate, performer, status
   sortField: TSortedTaskFields;
   sortDirecion: 'ASC' | 'DESC';
+  sortedTasks: string[];
 
   // filter
   filterStatus: TaskStatuses;
-  // filterStatus: TaskStatuses[];
   showOnlyUpdatedTasks: boolean;
+
+  // select
+  selectedTasks: string[];
+  selectAllTasks: boolean;
 }

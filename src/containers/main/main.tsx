@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC, useState, useEffect } from 'react';
 
 // components
 import { Stats } from './stats/stats';
@@ -19,8 +19,33 @@ export const tabs: string[] = [
   'Отслеживание задач',
 ];
 
-const Main: React.FC = () => {
-  const [tab, setTab] = React.useState<number>(1);
+const Main: FC = () => {
+  const [tab, setTab] = useState<number>(1);
+
+  // title
+  useEffect(() => {
+    switch (tab) {
+      case 1:
+        document.title = 'Я.Трекер - Статистика по спринту';
+        return;
+      case 2:
+        document.title = 'Я.Трекер - Создание задач на спринт';
+        return;
+      case 3:
+        document.title = 'Я.Трекер - Заведение исполнителей';
+        return;
+      case 4:
+        document.title = 'Я.Трекер - Ворклоги';
+        return;
+      case 5:
+        document.title = 'Я.Трекер - Отслеживание задач';
+        return;
+
+      default:
+        document.title = 'Я.Трекер';
+        return;
+    }
+  }, [tab]);
 
   return (
     <div className={styles.main}>

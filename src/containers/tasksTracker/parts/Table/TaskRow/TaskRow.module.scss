@@ -3,6 +3,29 @@
 .TaskRow {
   position: relative;
 
+  & > td {
+    padding: 8px 16px;
+  }
+
+  &__checkbox {
+    // порядковый номер рядом с чекбоксом
+    & > div {
+      position: absolute;
+      left: -33px;
+      top: 55%;
+      background-color: transparent !important;
+      display: block;
+      width: 26px;
+      height: 26px;
+      margin-top: -13px;
+      font-weight: 400;
+      font-size: 0.875rem;
+      line-height: 1.43;
+      letter-spacing: 0.01071em;
+      text-align: right;
+    }
+  }
+
   &:hover {
     td:last-child {
       svg.delete {
@@ -59,7 +82,7 @@
   }
 
   &__actions {
-    padding: 0;
+    // padding: 0;
 
     // delete icon
     svg.delete {

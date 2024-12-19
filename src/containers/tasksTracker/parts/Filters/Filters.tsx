@@ -5,7 +5,6 @@ import {
   Checkbox,
   FormControl,
   FormControlLabel,
-  FormGroup,
   InputLabel,
   MenuItem,
   OutlinedInput,
@@ -16,10 +15,11 @@ import {
 } from '@mui/material';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import {
-  setFilterStatus,
   setQuery,
-  setResetFilters,
+  resetFilters,
+  setFilterStatus,
   setUpdatedTasks,
+  resetSelectedTasks,
 } from 'slices/tasksTracker';
 import { findAndAddTask } from 'effects/tasksTrackerEffect';
 import { TaskStatuses } from 'interfaces/ITasksTracker';
@@ -44,6 +44,7 @@ const Filters: React.FC<TProps> = ({
   };
 
   const handleFilterStatusChange = (event: SelectChangeEvent<TaskStatuses>) => {
+    dispatch(resetSelectedTasks());
     dispatch(setFilterStatus(event.target.value as TaskStatuses));
   };
 
@@ -124,7 +125,13 @@ const Filters: React.FC<TProps> = ({
               control={
                 <Checkbox
                   checked={showOnlyUpdatedTasks}
-                  onChange={() => dispatch(setUpdatedTasks())}
+                  onChange={() => {
+                    // сбрасываем выделенные задачи
+                    dispatch(resetSelectedTasks());
+
+                    // фильтруем по обновленным задачам
+                    dispatch(setUpdatedTasks());
+                  }}
                 />
               }
               label='Обновлённые статусы'
@@ -137,7 +144,13 @@ const Filters: React.FC<TProps> = ({
           <Button
             variant='outlined'
             color='secondary'
-            onClick={() => dispatch(setResetFilters())}
+            onClick={() => {
+              // сбрасываем фильтры
+              dispatch(resetFilters());
+
+              // сбрысываем выделенные задачи
+              dispatch(resetSelectedTasks());
+            }}
             className='medium primary outlined'
           >
             Сбросить

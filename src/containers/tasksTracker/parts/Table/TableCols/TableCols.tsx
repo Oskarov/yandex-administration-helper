@@ -1,16 +1,25 @@
 import { useDispatch } from 'react-redux';
-import { TableCell, TableHead, TableRow } from '@mui/material';
+import { Checkbox, TableCell, TableHead, TableRow } from '@mui/material';
 import { TSortedTaskFields } from 'interfaces/ITasksTracker';
-import { setSortDirection, setSortField } from 'slices/tasksTracker';
+import {
+  setSelectAllTasks,
+  setSortDirection,
+  setSortField,
+} from 'slices/tasksTracker';
 import cn from 'classnames';
 import styles from './TableCols.module.scss';
 
 type TProps = {
   sortField: string;
   sortDirecion: string;
+  isSelectedAllTasks: boolean;
 };
 
-const TableCols: React.FC<TProps> = ({ sortField, sortDirecion }) => {
+const TableCols: React.FC<TProps> = ({
+  sortField,
+  sortDirecion,
+  isSelectedAllTasks,
+}) => {
   const dispatch = useDispatch();
 
   // return sorted classes
@@ -30,22 +39,26 @@ const TableCols: React.FC<TProps> = ({ sortField, sortDirecion }) => {
         sx={{
           '& th': {
             fontWeight: 900,
+            padding: '0 16px',
             background: 'rgba(1, 1, 1, 0.015)',
           },
         }}
       >
-        {/* № */}
+        {/* Checkbox */}
         <TableCell>
-          <span>№</span>
+          <Checkbox
+            checked={isSelectedAllTasks}
+            onChange={() => dispatch(setSelectAllTasks(isSelectedAllTasks))}
+          />
         </TableCell>
 
-        {/* Код */}
+        {/* Ключ */}
         <TableCell
           width={120}
           onClick={() => onCellClick('key')}
           className={cn(returnSortClasses('key'))}
         >
-          <span>Код</span>
+          <span>Ключ</span>
         </TableCell>
 
         {/* Название */}

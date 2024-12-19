@@ -16,10 +16,15 @@ const initialState: ITasksTrackerState = {
   // sort
   sortField: 'key',
   sortDirecion: 'ASC', // 'ASC' | 'DESC'
+  sortedTasks: [],
 
   // filter
   filterStatus: TaskStatuses.ALL,
   showOnlyUpdatedTasks: false,
+
+  // selected tasks
+  selectedTasks: [],
+  selectAllTasks: false,
 };
 
 const tasksTrackerSlice = createSlice({
@@ -59,9 +64,21 @@ const tasksTrackerSlice = createSlice({
 
     // removeTask
     removeTask(state, { payload }: PayloadAction<string>) {
+      // удаляем задачу из списка задач
       state.tasks = state.tasks.filter(task => task.key !== payload);
+
+      // если задача выла выделена чекбоксом
+      const isSelected = state.selectedTasks.includes(payload);
+
+      // удаляем из выделенных
+      if (isSelected) {
+        state.selectedTasks = state.selectedTasks.filter(
+          task => task !== payload,
+        );
+      }
     },
 
+    // setSortField
     setSortField(state, { payload }: PayloadAction<TSortedTaskFields>): void {
       state.sortField = payload;
     },
@@ -71,7 +88,7 @@ const tasksTrackerSlice = createSlice({
       state.sortDirecion = state.sortDirecion === 'ASC' ? 'DESC' : 'ASC';
     },
 
-    // setSortDirection
+    // setCheckTask
     setCheckTask(state, { payload }: PayloadAction<string>) {
       state.tasks = state.tasks.map(task => {
         if (task.key === payload) {
@@ -87,15 +104,48 @@ const tasksTrackerSlice = createSlice({
       state.filterStatus = payload;
     },
 
-    // setFilterStatus
+    // setUpdatedTasks
     setUpdatedTasks(state): void {
       state.showOnlyUpdatedTasks = !state.showOnlyUpdatedTasks;
     },
 
-    // setResetFilters
-    setResetFilters(state): void {
-      state.filterStatus = TaskStatuses.ALL;
-      state.showOnlyUpdatedTasks = false;
+    // resetFilters
+    resetFilters(state): void {
+      state.filterStatus = initialState.filterStatus;
+      state.showOnlyUpdatedTasks = initialState.showOnlyUpdatedTasks;
+    },
+
+    // setSelectTask
+    setSelectTask(state, { payload }: PayloadAction<string>): void {
+      state.selectAllTasks = false;
+
+      const isTaskInclude = state.selectedTasks.includes(payload);
+
+      state.selectedTasks = isTaskInclude
+        ? state.selectedTasks.filter(task => task !== payload)
+        : [...state.selectedTasks, payload];
+    },
+
+    // setSelectAllTasks
+    setSelectAllTasks(state, { payload }: PayloadAction<boolean>): void {
+      state.selectAllTasks = !payload;
+
+      if (state.selectAllTasks) {
+        state.selectedTasks = state.sortedTasks;
+      } else {
+        state.selectedTasks = [];
+      }
+    },
+
+    // resetSelectedTasks
+    resetSelectedTasks(state): void {
+      state.selectAllTasks = initialState.selectAllTasks;
+      state.selectedTasks = initialState.selectedTasks;
+    },
+
+    // setSortedTasks
+    setSortedTasks(state, { payload }: PayloadAction<string[]>): void {
+      state.sortedTasks = payload;
     },
   },
 });
@@ -113,5 +163,9 @@ export const {
   setCheckTask,
   setFilterStatus,
   setUpdatedTasks,
-  setResetFilters,
+  resetFilters,
+  setSelectTask,
+  setSelectAllTasks,
+  resetSelectedTasks,
+  setSortedTasks,
 } = tasksTrackerSlice.actions;

@@ -3,11 +3,13 @@ import { useEffect, useMemo, useState } from 'react';
 
 // redux
 import { TStore } from 'store/store';
+import { setSortedTasks } from 'slices/tasksTracker';
 import { useDispatch, useSelector } from 'react-redux';
 import { findAndAddTask } from 'effects/tasksTrackerEffect';
 
 // utils
 import { returnDateString } from './utils';
+import { TaskStatuses } from 'interfaces/ITasksTracker';
 
 // components
 import Loader from 'components/loader';
@@ -18,7 +20,6 @@ import { Error, Filters, TableCols, TableHeader, TaskRow } from './parts';
 
 // styles
 import styles from './tasksTracker.module.scss';
-import { TaskStatuses } from 'interfaces/ITasksTracker';
 
 const TasksTracker = () => {
   const dispatch = useDispatch();
@@ -36,6 +37,8 @@ const TasksTracker = () => {
     sortDirecion,
     filterStatus,
     showOnlyUpdatedTasks,
+    selectedTasks,
+    selectAllTasks,
   } = useSelector((store: TStore) => ({
     loading: store.tasksTracker.loading,
     error: store.tasksTracker.error,
@@ -47,10 +50,15 @@ const TasksTracker = () => {
     // sort
     sortField: store.tasksTracker.sortField,
     sortDirecion: store.tasksTracker.sortDirecion,
+    sortedTasks: store.tasksTracker.sortedTasks,
 
     // filter
     filterStatus: store.tasksTracker.filterStatus,
     showOnlyUpdatedTasks: store.tasksTracker.showOnlyUpdatedTasks,
+
+    // select
+    selectedTasks: store.tasksTracker.selectedTasks,
+    selectAllTasks: store.tasksTracker.selectAllTasks,
   }));
 
   // экшен на обновление данных у существующих задач
@@ -97,6 +105,19 @@ const TasksTracker = () => {
       : filteredTasks.sort((a, b) => b[sortField].localeCompare(a[sortField]));
   }, [sortField, sortDirecion, filteredTasks]);
 
+  // сохранение соритированных задач в сторе
+  useEffect(() => {
+    dispatch(setSortedTasks(sortedTasks.map(task => task.key)));
+  }, [sortedTasks]);
+
+  // определяем выбранные задачи, у которых не отмечен как просмотрееный новый статус
+  const notCheckedTasks = sortedTasks
+    .filter(
+      task =>
+        selectedTasks.includes(task.key) && task.newStatusChecked === false,
+    )
+    .map(task => task.key);
+
   return (
     <div className={styles.TasksTracker}>
       <Loader loading={loading} />
@@ -113,26 +134,34 @@ const TasksTracker = () => {
 
       {/* tasks table */}
       {!!sortedTasks.length ? (
-        <div className={styles.TasksTracker__tasks}>
+        <div>
           {/* table header */}
           <TableHeader
             updateDate={updateDate}
+            selectedTasks={selectedTasks}
+            notCheckedTasks={notCheckedTasks}
             updateTasksList={updateTasksList}
           />
 
-          <TableContainer component={Paper}>
-            <Table
-              sx={{ minWidth: 650 }}
-              aria-label='simple table'
-              className={styles.TasksTracker__table}
-            >
+          <TableContainer component={Paper} sx={{ overflow: 'inherit' }}>
+            <Table sx={{ minWidth: 650 }} aria-label='simple table'>
               {/* table columns */}
-              <TableCols sortField={sortField} sortDirecion={sortDirecion} />
+              <TableCols
+                sortField={sortField}
+                sortDirecion={sortDirecion}
+                isSelectedAllTasks={
+                  selectAllTasks || sortedTasks.length === selectedTasks.length
+                }
+              />
 
               {/* table body */}
               <TableBody>
                 {sortedTasks.map((task, index) => (
-                  <TaskRow index={index} task={task} />
+                  <TaskRow
+                    index={index}
+                    task={task}
+                    selectedTasks={selectedTasks}
+                  />
                 ))}
               </TableBody>
             </Table>

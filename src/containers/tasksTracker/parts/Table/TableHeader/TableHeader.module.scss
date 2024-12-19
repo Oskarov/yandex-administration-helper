@@ -1,0 +1,38 @@
+.TableHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+
+  // Отслеживаемые задачи
+  & > b {
+    font-size: 1.5em;
+    font-weight: bold;
+  }
+
+  // Массовые действия
+  &__massActions {
+    margin-right: auto;
+    margin-left: 15px;
+
+    & > button:first-child {
+      margin-right: 10px;
+    }
+  }
+
+  // Последнее обновление
+  &__updateDate {
+    margin-top: 5px;
+    margin-left: auto;
+
+    code {
+      font-family: monospace;
+      font-size: 14px;
+    }
+  }
+
+  // Кнопка "Обновить"
+  & > button {
+    margin-left: 5px;
+    margin-top: 7px;
+  }
+}
