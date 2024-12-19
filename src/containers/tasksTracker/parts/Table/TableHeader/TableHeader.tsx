@@ -1,7 +1,7 @@
 import { Button } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { setConfirmationOpen } from 'slices/modal';
-import { removeTask } from 'slices/tasksTracker';
+import { removeTask, setCheckTask } from 'slices/tasksTracker';
 import styles from './TableHeader.module.scss';
 
 type TProps = {
@@ -38,7 +38,19 @@ const TableHeader: React.FC<TProps> = ({
 
   // массовая отметка задач
   const handleMassCheck = () => {
-    return null;
+    dispatch(
+      setConfirmationOpen({
+        dialogType: 'positive',
+        dialogText:
+          notCheckedTasks.length === 1
+            ? `Вы точно хотите отметить задачу ${notCheckedTasks[0]} как просмотренную?`
+            : `Вы точно хотите отметить задачи ${notCheckedTasks.join(',')} как просмотренные?`,
+
+        // отмечаем задачи как прочитанные
+        confirmationFunction: () =>
+          notCheckedTasks.forEach(task => dispatch(setCheckTask(task))),
+      }),
+    );
   };
 
   return (
