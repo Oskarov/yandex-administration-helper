@@ -39,6 +39,7 @@ const TableCols: React.FC<TProps> = ({
         sx={{
           '& th': {
             fontWeight: 900,
+            padding: '0 16px',
             background: 'rgba(1, 1, 1, 0.015)',
           },
         }}

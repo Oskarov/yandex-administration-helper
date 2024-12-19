@@ -3,6 +3,10 @@
 .TaskRow {
   position: relative;
 
+  & > td {
+    padding: 8px 16px;
+  }
+
   &__checkbox {
     // порядковый номер рядом с чекбоксом
     & > div {
