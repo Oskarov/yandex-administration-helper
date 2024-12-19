@@ -110,6 +110,14 @@ const TasksTracker = () => {
     dispatch(setSortedTasks(sortedTasks.map(task => task.key)));
   }, [sortedTasks]);
 
+  // определяем выбранные задачи, у которых не отмечен как просмотрееный новый статус
+  const notCheckedTasks = sortedTasks
+    .filter(
+      task =>
+        selectedTasks.includes(task.key) && task.newStatusChecked === false,
+    )
+    .map(task => task.key);
+
   return (
     <div className={styles.TasksTracker}>
       <Loader loading={loading} />
@@ -131,6 +139,7 @@ const TasksTracker = () => {
           <TableHeader
             updateDate={updateDate}
             selectedTasks={selectedTasks}
+            notCheckedTasks={notCheckedTasks}
             updateTasksList={updateTasksList}
           />
 

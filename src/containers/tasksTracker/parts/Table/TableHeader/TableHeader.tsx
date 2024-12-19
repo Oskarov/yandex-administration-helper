@@ -1,24 +1,26 @@
 import { Button } from '@mui/material';
-import styles from './TableHeader.module.scss';
 import { useDispatch } from 'react-redux';
 import { setConfirmationOpen } from 'slices/modal';
 import { removeTask } from 'slices/tasksTracker';
+import styles from './TableHeader.module.scss';
 
 type TProps = {
   updateDate: string;
   selectedTasks: string[];
+  notCheckedTasks: string[];
   updateTasksList: () => void;
 };
 
 const TableHeader: React.FC<TProps> = ({
   updateDate,
   selectedTasks,
+  notCheckedTasks,
   updateTasksList,
 }) => {
   const dispatch = useDispatch();
 
-  // удаление задачи из отслеживание
-  const handleDelete = () => {
+  // массовае удаление задач
+  const handleMassDelete = () => {
     dispatch(
       setConfirmationOpen({
         dialogType: 'positive',
@@ -34,6 +36,11 @@ const TableHeader: React.FC<TProps> = ({
     );
   };
 
+  // массовая отметка задач
+  const handleMassCheck = () => {
+    return null;
+  };
+
   return (
     <header className={styles.TableHeader}>
       {/* Отслеживаемые задачи */}
@@ -43,18 +50,24 @@ const TableHeader: React.FC<TProps> = ({
       {!!selectedTasks.length && (
         <div className={styles.TableHeader__massActions}>
           {/* Массовое удаление задач */}
-          <Button onClick={handleDelete} color='error' variant='outlined'>
+          <Button onClick={handleMassDelete} color='error' variant='outlined'>
             <span>Удалить</span>
             &nbsp;
             <span>{`(${selectedTasks.length} шт.)`}</span>
           </Button>
 
           {/* Массовая отметка задач */}
-          {/* <Button onClick={() => null} color='primary' variant='outlined'>
-          <span>Отметить</span>
-          &nbsp;
-          <span>{`(${selectedTasks.length} шт.)`}</span>
-        </Button> */}
+          {!!notCheckedTasks.length && (
+            <Button
+              onClick={handleMassCheck}
+              color='primary'
+              variant='outlined'
+            >
+              <span>Отметить</span>
+              &nbsp;
+              <span>{`(${notCheckedTasks.length} шт.)`}</span>
+            </Button>
+          )}
         </div>
       )}
 
