@@ -1,10 +1,10 @@
 import { FC, useState, useEffect } from 'react';
 
-// components
+// parts
 import { Stats } from './stats/stats';
-import { CreateTasks } from '../createTasks';
-import ListOfPerformers from './listOfPerformers/listOfPerformers';
+import CreateTasks from 'containers/createTasks/createTasks';
 import Worklogs from 'containers/worklogs/worklogs';
+import ListOfPerformers from './listOfPerformers/listOfPerformers';
 import TasksTracker from 'containers/tasksTracker/tasksTracker';
 
 // styles
