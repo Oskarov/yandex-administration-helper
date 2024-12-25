@@ -31,7 +31,7 @@ interface Iresult {
   tasks: ITrackerQueueTask[];
 }
 
-export const Stats: React.FC = () => {
+const Stats: React.FC = () => {
   const dispatch = useDispatch();
 
   // local state
@@ -279,3 +279,5 @@ export const Stats: React.FC = () => {
     </div>
   );
 };
+
+export default Stats;

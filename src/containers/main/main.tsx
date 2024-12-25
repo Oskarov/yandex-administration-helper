@@ -1,10 +1,19 @@
 import { FC, useState, useEffect } from 'react';
 
 // parts
-import { Stats } from './stats/stats';
+// Статистика по спринту
+import Stats from 'containers/stats/stats';
+
+// Создание задач на спринт
 import CreateTasks from 'containers/createTasks/createTasks';
-import Worklogs from 'containers/worklogs/worklogs';
+
+// Заведение исполнителей
 import ListOfPerformers from './listOfPerformers/listOfPerformers';
+
+// Ворклоги
+import Worklogs from 'containers/worklogs/worklogs';
+
+// Отслеживание задач
 import TasksTracker from 'containers/tasksTracker/tasksTracker';
 
 // styles
