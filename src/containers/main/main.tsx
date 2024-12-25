@@ -8,7 +8,7 @@ import Stats from 'containers/stats/stats';
 import CreateTasks from 'containers/createTasks/createTasks';
 
 // Заведение исполнителей
-import ListOfPerformers from './listOfPerformers/listOfPerformers';
+import ListOfPerformers from 'containers/listOfPerformers/listOfPerformers';
 
 // Ворклоги
 import Worklogs from 'containers/worklogs/worklogs';
