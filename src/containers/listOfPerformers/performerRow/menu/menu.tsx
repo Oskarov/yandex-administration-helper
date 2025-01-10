@@ -1,31 +1,13 @@
 import React, { useContext } from 'react';
-import {
-  Menu,
-  Divider,
-  ListItemIcon,
-  ListItemText,
-  MenuItem,
-  MenuList,
-  Paper,
-  Typography,
-} from '@mui/material';
-import {
-  Cloud,
-  ContentCopy,
-  ContentCut,
-  ContentPaste,
-} from '@mui/icons-material';
+import { Menu, Divider, MenuItem } from '@mui/material';
 import { useDispatch } from 'react-redux';
-import { IPerformerItem } from '../../../../../interfaces/IPerformers';
-import { setConfirmationOpen } from '../../../../../slices/modal';
-import {
-  removePerformer,
-  removePerformerTask,
-} from '../../../../../slices/performers';
-import { PerformerModalContextChanger } from '../../../../../contexts/performerModalContext/performerContext';
-import { projectsList, TASK_TYPES_ENUM } from '../../../../../interfaces/ITask';
+import { IPerformerItem } from 'interfaces/IPerformers';
+import { PerformerModalContextChanger } from 'contexts/performerModalContext/performerContext';
+import { TASK_TYPES_ENUM } from 'interfaces/ITask';
+import { setConfirmationOpen } from 'slices/modal';
+import { removePerformer } from 'slices/performers';
 
-interface menuProps {
+interface IMenuProps {
   contextMenu: { mouseX: number; mouseY: number } | null;
   setContextMenu: React.Dispatch<
     React.SetStateAction<{ mouseX: number; mouseY: number } | null>
@@ -33,7 +15,7 @@ interface menuProps {
   performer: IPerformerItem;
 }
 
-const PerformerMenu: React.FC<menuProps> = ({
+const PerformerMenu: React.FC<IMenuProps> = ({
   contextMenu,
   setContextMenu,
   performer,
@@ -72,6 +54,7 @@ const PerformerMenu: React.FC<menuProps> = ({
     try {
       document.execCommand('copy');
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.error('Unable to copy to clipboard', err);
     }
     document.body.removeChild(textArea);
