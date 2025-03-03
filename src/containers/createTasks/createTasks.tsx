@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { TStore } from '../../store/store';
+import {useEffect, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {TStore} from '../../store/store';
 import {
   createTasksInSprint,
   getAllBoardsAction,
@@ -9,10 +9,12 @@ import {
   // getAllTasksByQueueKey,
   // getAllTasksBySprintId,
 } from '../../effects/trackerEffect';
-import { Autocomplete, Checkbox, TextField } from '@mui/material';
+import {Autocomplete, Checkbox, TextField} from '@mui/material';
 import styles2 from '../main/header/toTracker/toTracker.module.scss';
 import Button from '@mui/material/Button';
 import styles from './createTasks.module.scss';
+import {taskTypes} from "../../interfaces/ITask";
+import {TrackerTaskTypes} from "../../interfaces/ITasksTracker";
 // import { setLastQueue } from '../../slices/app';
 
 const CreateTasks = () => {
@@ -21,14 +23,23 @@ const CreateTasks = () => {
   const [chosenSprint, setChosenSprint] = useState<number | null>(null);
   const [trackerIds, setTrackerIds] = useState<number[]>([]);
   const [name, setName] = useState('Администрирование');
+  const [type, setType] = useState<string>('organizational');
   const [targetQueue, setTargetQueue] = useState(
     localStorage.getItem('lastTargetQueue')
       ? localStorage.getItem('lastTargetQueue')
       : '',
   );
 
+  const [bundle, setBundle] = useState([
+    {
+      type: 'organizational',
+      name: 'Администрирование'
+    },
+
+  ]);
+
   // selectors
-  const { boards, sprints, performers } = useSelector((state: TStore) => ({
+  const {boards, sprints, performers} = useSelector((state: TStore) => ({
     boards: state.trackerNoMemo.boards,
     sprints: state.trackerNoMemo.sprints,
     performers: state.performers.items,
@@ -57,6 +68,7 @@ const CreateTasks = () => {
             let performer = performers.find(j => j.trackerId === i);
             return {
               taskName: `${chosenSprintText} - ${name} - ${performer?.lastName} ${performer?.firstName}`,
+              type: type,
               id: i,
             };
           }),
@@ -104,7 +116,7 @@ const CreateTasks = () => {
             }
           }}
           disabled={newBoards.length === 0}
-          renderInput={params => <TextField {...params} label='Доски' />}
+          renderInput={params => <TextField {...params} label='Доски'/>}
         />
 
         {/* Спринты */}
@@ -123,7 +135,7 @@ const CreateTasks = () => {
             }
           }}
           disabled={sprints.length === 0}
-          renderInput={params => <TextField {...params} label='Спринты' />}
+          renderInput={params => <TextField {...params} label='Спринты'/>}
         />
       </div>
 
@@ -170,6 +182,28 @@ const CreateTasks = () => {
               onChange={e => setName(e.target.value)}
             />
             <div> - Фамилия Имя</div>
+            <div>
+              <Autocomplete
+                disablePortal
+                id='combo-box-demo'
+                className={styles2.dropTypes}
+                value={TrackerTaskTypes.find(i => i.key === type) ? TrackerTaskTypes.filter(i => i.key === type).map(i => ({
+                  label: `${i.display}`,
+                  key: i.key,
+                }))[0] : {key: 'organizational', label: 'Организационная'}}
+                options={TrackerTaskTypes.map(i => ({
+                  label: `${i.display}`,
+                  key: i.key,
+                }))}
+                onChange={(e, value) => {
+                  if (value?.key) {
+                    setType(value.key)
+                  }
+                }}
+                disabled={newBoards.length === 0}
+                renderInput={params => <TextField {...params} label='Тип задачи'/>}
+              />
+            </div>
           </div>
 
           {/* Создать */}
@@ -185,6 +219,7 @@ const CreateTasks = () => {
           </div>
         </div>
       )}
+
     </div>
   );
 };
