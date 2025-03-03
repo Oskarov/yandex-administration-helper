@@ -170,7 +170,7 @@ export const getAllTasksBySprintId = (
 
 export const createTasksInSprint = (
   targetSprintId: number,
-  performersData: { taskName: string; id: number }[],
+  performersData: { taskName: string; id: number, type: string }[],
   queueKey: string,
 ) => {
   return async function (dispatch: Dispatch<any>) {
@@ -185,6 +185,7 @@ export const createTasksInSprint = (
             task.taskName,
             targetSprintId,
             queueKey,
+            task.type,
           );
           if (!response) {
             console.log('bad');

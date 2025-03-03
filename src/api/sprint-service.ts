@@ -36,7 +36,7 @@ const SprintService = {
             }
         }
     },
-    createTaskForSprint: async (performerId: number, taskName: string, sprintId: number, queueKey:string): Promise<{ success: boolean }> => {
+    createTaskForSprint: async (performerId: number, taskName: string, sprintId: number, queueKey:string, type:string): Promise<{ success: boolean }> => {
         try {
             const {status, data, headers} = await httpClient.post(`/issues/`,
                 {
@@ -44,7 +44,7 @@ const SprintService = {
                     sprint: [sprintId],
                     assignee: performerId,
                     queue: queueKey,
-                    type: "organizational"
+                    type: type
                 },);
 
             return {
