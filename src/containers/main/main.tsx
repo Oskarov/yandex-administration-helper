@@ -19,6 +19,7 @@ import TasksTracker from 'containers/tasksTracker/tasksTracker';
 // styles
 import cn from 'classnames';
 import styles from './main.module.scss';
+import CreateTasksForMngmt from "../createTasksForMngmt/createTasksForMngmt";
 
 export const tabs: string[] = [
   'Статистика по спринту',
@@ -30,6 +31,7 @@ export const tabs: string[] = [
 
 const Main: FC = () => {
   const [tab, setTab] = useState<number>(1);
+  const [secretTabsCount, setSecretTabsCount] = useState(0)
 
   // title
   useEffect(() => {
@@ -49,6 +51,9 @@ const Main: FC = () => {
       case 5:
         document.title = 'Я.Трекер - Отслеживание задач';
         return;
+      case 6:
+        document.title = 'Я.Трекер - Заведение задач MGMNT';
+        return;
 
       default:
         document.title = 'Я.Трекер';
@@ -56,13 +61,23 @@ const Main: FC = () => {
     }
   }, [tab]);
 
+  useEffect(() => {
+    if (secretTabsCount == 10){
+      tabs.push('Заведение задач в MGMNT')
+    }
+  }, [secretTabsCount]);
+
   return (
     <div className={styles.main}>
       <div className={styles.tabs}>
         {tabs.map((item, index) => (
           <div
             key={`${index + 1} - ${item}`}
-            onClick={() => setTab(index + 1)}
+            onClick={() => {
+              if (tab === 1){
+                setSecretTabsCount(s=>++s)
+              }
+              setTab(index + 1)}}
             className={cn({ [styles.active]: tab === index + 1 })}
           >
             <span>{item}</span>
@@ -85,6 +100,9 @@ const Main: FC = () => {
 
         {/* Отслеживание задач */}
         {tab === 5 && <TasksTracker />}
+
+        {/* Заведение MGMNT */}
+        {tab === 6 && <CreateTasksForMngmt />}
       </div>
     </div>
   );
